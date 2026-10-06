@@ -1,0 +1,7 @@
+{
+  "name": "Proyecto_Nasa",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}

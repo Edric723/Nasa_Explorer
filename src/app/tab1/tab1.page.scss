@@ -1,0 +1,32 @@
+ion-title {
+    text-align: center;
+    font-size: 32px;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+
+ion-card {
+    width: 90%;
+    max-width: 500px;
+    margin: 20px auto;
+  
+    text-align: center;
+  }
+  
+  ion-card img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+  }
+  
+  ion-card-title {
+    font-size: 22px;
+  }
+  
+  ion-card-content {
+    color: #666;
+  }
+
+  ion-content {
+    --background: url('/assets/backgrounds/Fondo_1.jpg') no-repeat center center / cover;
+  }
