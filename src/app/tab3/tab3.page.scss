@@ -6,5 +6,5 @@ ion-title {
   }
 
   ion-content {
-    --background: url('/assets/backgrounds/Fondo_3.jpg') center / contain no-repeat;
+    --background: url('/assets/backgrounds/Fondo_3.jpg') no-repeat center center / cover;
   }
