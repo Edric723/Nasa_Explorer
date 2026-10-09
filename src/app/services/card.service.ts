@@ -1,28 +1,60 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
+import { Tarjeta } from '../models/tarjeta.model';
 
 @Injectable({
     providedIn: 'root'
 })
 export class CardService {
-    private tarjetas: any[] = [];
-    constructor() { }
-
-    crearTarjeta(nombreTarjeta: string) {
-        let ObjetoTarjeta = {
-            id: 0,
-            titulo: nombreTarjeta,
-            creadaEn: new Date(),
-            terminadaEn: null,
-            completada: false,
-            actividades: []
-        };
-        this.tarjetas.push(ObjetoTarjeta);
-        console.log("Tarjeta creada:", this.tarjetas);
-        this.guardarStorage();
+    private readonly estadoTarjetas = signal<Tarjeta[]>([]);
+    readonly tarjetas = this.estadoTarjetas.asReadonly();
+    constructor() {
+        this.cargarStorage();
     }
+
+    validarInput(input: any): boolean {
+        return input && input.titulo && input.titulo.trim() !== '';
+    }
+    crearTarjeta(nombreTarjeta: string) {
+        const objetoTarjeta = new Tarjeta(nombreTarjeta);
+        this.estadoTarjetas.update((tarjetas) => [...tarjetas, objetoTarjeta]);
+        this.persistirStorage();
+
+        return objetoTarjeta.titulo;
+    }
+
 
     private guardarStorage() {
-        let stringTarjetas: string = JSON.stringify(this.tarjetas);
+        this.estadoTarjetas.update((tarjetas) => [...tarjetas]);
+        this.persistirStorage();
+    }
+    private persistirStorage() {
+        const stringTarjetas = JSON.stringify(this.estadoTarjetas());
         localStorage.setItem('tarjetas', stringTarjetas);
     }
+
+    private cargarStorage() {
+        const tarjetaStorage = localStorage.getItem('tarjetas');
+
+        if (tarjetaStorage === null) {
+            this.estadoTarjetas.set([]);
+            return;
+        }
+
+        const objTarjeta: any[] = JSON.parse(tarjetaStorage);
+        this.estadoTarjetas.set(objTarjeta);
+    }
+
+
+    eliminarTarjeta(tarjeta: Tarjeta) {
+        this.estadoTarjetas.update((tarjetas) => tarjetas.filter((tarjeta) => tarjeta.id !== tarjeta.id));
+        this.persistirStorage();
+    }
+
+    editarTarjeta(tarjeta: Tarjeta) { 
+    let tarjetaEditar = this.tarjetas().find((tarjeta) => tarjeta.id === tarjeta.id); 
+        if (tarjetaEditar) { 
+            tarjetaEditar.titulo = tarjeta.titulo; 
+            this.guardarStorage(); 
+        } 
+ } 
 }
