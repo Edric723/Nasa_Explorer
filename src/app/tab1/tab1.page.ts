@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { AlertController } from '@ionic/angular/lazy';
 import { ToastController } from '@ionic/angular/lazy';
 import { CardService } from '../services/card.service';
+import { Tarjeta } from '../models/tarjeta.model';
 
 @Component({
   selector: 'app-tab1',
@@ -10,6 +11,15 @@ import { CardService } from '../services/card.service';
   styleUrls: ['tab1.page.scss'],
   standalone: false,
 })
+
+
+/** 
+ * LA TAB SE ENCARGA DE LA INTERFAZ DE USUARIO, 
+ * POR ESO TIENE ALERTAS Y TOASTS, 
+ * QUE SON PARA LA INTERFAZ DE USUARIO, 
+ * NO PARA EL SERVICIO 
+ */
+
 export class Tab1Page {
 
   constructor(
@@ -19,15 +29,16 @@ export class Tab1Page {
   ) { }
 
 
-  /** 
-   * @function agregarCard 
-   * @description Crea y muestra una alerta para ingresar el nombre de una nueva tarjeta. 
-   * @param No recibe parámetros. 
-   * @return No retorna ningún valor. La función es asincrónica. 
-   */
 
+  /**
+   * @function agregarCard
+   * @description Crea una alerta para ingresar el nombre de la tarjeta y llama a la función crearTarjeta del servicio CardService.
+   * @return No retorna ningún valor. La función es asíncrona.
+   * OK PORQUE ES LA INTERFAZ QUE TIENE QUE VER CON EL USUARIO, NO CON EL SERVICIO
+   * TIENE TODAS LAS ALERTAS Y TOASTS QUE SON PARA LA INTERFAZ DE USUARIO, NO PARA EL SERVICIO.
+   */
   async agregarCard() {
-    let alerta = await this.alertController.create({
+    const alerta = await this.alertController.create({
       header: "Agregar tarjeta",
       inputs: [
         {
@@ -44,33 +55,34 @@ export class Tab1Page {
         {
           text: "Crear",
           handler: (data: any) => {
-            if (this.validarInput(data)) {
-              this.cardService.crearTarjeta(data.titulo);
-              this.presentToast('Tarjeta creada correctamente', 'success');
-            };
-            console.log(data);
+            if (this.cardService.validarInput(data)) {
+              const creadaOk = this.cardService.crearTarjeta(data.titulo);
+              if (creadaOk) { //Se verifica si la variable tiene un valor, es decir, que fue creada 
+                this.presentToast('Tarjeta creada correctamente', 'success');
+              }
+            }
           }
         }
       ]
     })
     await alerta.present();
+    console.log("Click en el boton");
   }
 
 
-  /** 
-   * @function validarInput
-   * @description Verifica que el input exista y que el campo titulo no esté vacío.
-   * @param input Objeto de tipo any que contiene el valor del campo titulo.
-   * @returns Retorna un booleano: true si el campo titulo contiene un valor; de lo contrario, muestra un mensaje de error y retorna false.
-   */
-
-validarInput(input: any): boolean {
-  if (input && input.titulo) {
-    return true;
-  }
-  this.presentToast('Debe ingresar un valor', 'danger');
-  return false;
-}
+  // /** 
+  //  * @function validarInput
+  //  * @description Verifica que el input exista y que el campo titulo no esté vacío.
+  //  * @param input Objeto de tipo any que contiene el valor del campo titulo.
+  //  * @returns Retorna un booleano: true si el campo titulo contiene un valor; de lo contrario, muestra un mensaje de error y retorna false.
+  //  */
+  // validarInput(input: any): boolean {
+  //   if (input && input.titulo) {
+  //     return true;
+  //   }
+  //   this.presentToast('Debe ingresar un valor', 'danger');
+  //   return false;
+  // }
 
 
 
@@ -80,16 +92,27 @@ validarInput(input: any): boolean {
    @param mensaje Texto que se mostrará en el mensaje emergente. 
    @param color Color que tendrá el mensaje emergente. 
    @return No retorna ningún valor. La función es asíncrona.
-  */  
-
+   VA ACA ES INTERAZ QUE TIENE QUE VER CON EL USUARIO, NO CON EL SERVICIO
+  */
   async presentToast(mensaje: string, color: string) {
-  let toast = await this.toastController.create({
-    message: mensaje,
-    duration: 2000,
-    color: color,
-  });
-  toast.present();
-}
+    let toast = await this.toastController.create({
+      message: mensaje,
+      duration: 2000,
+      color: color,
+    });
+    toast.present();
+  }
+
+
+  
+  editarTarjeta(tarjeta: Tarjeta) {
+    console.log("Editar tarjeta:", tarjeta);
+  }
+
+  
+  eliminarTarjeta(tarjeta: Tarjeta) {
+    console.log("Eliminar tarjeta:", tarjeta);
+  }
 
 }
 
