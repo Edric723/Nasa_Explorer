@@ -11,6 +11,15 @@ import { Tarjeta } from '../models/tarjeta.model';
   styleUrls: ['tab1.page.scss'],
   standalone: false,
 })
+
+
+/** 
+ * LA TAB SE ENCARGA DE LA INTERFAZ DE USUARIO, 
+ * POR ESO TIENE ALERTAS Y TOASTS, 
+ * QUE SON PARA LA INTERFAZ DE USUARIO, 
+ * NO PARA EL SERVICIO 
+ */
+
 export class Tab1Page {
 
   constructor(
@@ -25,7 +34,9 @@ export class Tab1Page {
    * @function agregarCard
    * @description Crea una alerta para ingresar el nombre de la tarjeta y llama a la función crearTarjeta del servicio CardService.
    * @return No retorna ningún valor. La función es asíncrona.
-  */
+   * OK PORQUE ES LA INTERFAZ QUE TIENE QUE VER CON EL USUARIO, NO CON EL SERVICIO
+   * TIENE TODAS LAS ALERTAS Y TOASTS QUE SON PARA LA INTERFAZ DE USUARIO, NO PARA EL SERVICIO.
+   */
   async agregarCard() {
     const alerta = await this.alertController.create({
       header: "Agregar tarjeta",
@@ -59,19 +70,19 @@ export class Tab1Page {
   }
 
 
-  /** 
-   * @function validarInput
-   * @description Verifica que el input exista y que el campo titulo no esté vacío.
-   * @param input Objeto de tipo any que contiene el valor del campo titulo.
-   * @returns Retorna un booleano: true si el campo titulo contiene un valor; de lo contrario, muestra un mensaje de error y retorna false.
-   */
-  validarInput(input: any): boolean {
-    if (input && input.titulo) {
-      return true;
-    }
-    this.presentToast('Debe ingresar un valor', 'danger');
-    return false;
-  }
+  // /** 
+  //  * @function validarInput
+  //  * @description Verifica que el input exista y que el campo titulo no esté vacío.
+  //  * @param input Objeto de tipo any que contiene el valor del campo titulo.
+  //  * @returns Retorna un booleano: true si el campo titulo contiene un valor; de lo contrario, muestra un mensaje de error y retorna false.
+  //  */
+  // validarInput(input: any): boolean {
+  //   if (input && input.titulo) {
+  //     return true;
+  //   }
+  //   this.presentToast('Debe ingresar un valor', 'danger');
+  //   return false;
+  // }
 
 
 
@@ -81,6 +92,7 @@ export class Tab1Page {
    @param mensaje Texto que se mostrará en el mensaje emergente. 
    @param color Color que tendrá el mensaje emergente. 
    @return No retorna ningún valor. La función es asíncrona.
+   VA ACA ES INTERAZ QUE TIENE QUE VER CON EL USUARIO, NO CON EL SERVICIO
   */
   async presentToast(mensaje: string, color: string) {
     let toast = await this.toastController.create({
@@ -92,22 +104,12 @@ export class Tab1Page {
   }
 
 
-  /**
-   * @function editarTarjeta
-   * @description Muestra en consola la tarjeta que se desea editar.  
-   * @param tarjeta Objeto de tipo Tarjeta que contiene la información de la tarjeta a editar.
-   * @return No retorna ningún valor.
-   */ 
+  
   editarTarjeta(tarjeta: Tarjeta) {
     console.log("Editar tarjeta:", tarjeta);
   }
 
-  /**
-   * @function eliminarTarjeta
-   * @description Muestra en consola la tarjeta que se desea eliminar.  
-   * @param tarjeta Objeto de tipo Tarjeta que contiene la información de la tarjeta a eliminar.
-   * @return No retorna ningún valor.
-   */ 
+  
   eliminarTarjeta(tarjeta: Tarjeta) {
     console.log("Eliminar tarjeta:", tarjeta);
   }
