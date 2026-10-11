@@ -48,17 +48,33 @@ export class CardService {
     }
 
 
+    /**
+   * @function guardarStorage
+   * @description Guarda el estado actual de las tarjetas en el almacenamiento local del navegador.  
+   * @return No retorna ningún valor.
+   */
     private guardarStorage() {
         this.estadoTarjetas.update((tarjetas) => [...tarjetas]);
         this.persistirStorage();
     }
 
+
+    /**
+   * @function persistirStorage
+   * @description Persiste el estado actual de las tarjetas en el almacenamiento local del navegador.  
+   * @return No retorna ningún valor.
+   */
     private persistirStorage() {
         const stringTarjetas = JSON.stringify(this.estadoTarjetas());
         localStorage.setItem('tarjetas', stringTarjetas);
     }
 
 
+    /**
+   * @function cargarStorage
+   * @description Carga el estado de las tarjetas desde el almacenamiento local del navegador.
+   * @return No retorna ningún valor.
+   */          
     private cargarStorage() {
         const tarjetaStorage = localStorage.getItem('tarjetas');
 

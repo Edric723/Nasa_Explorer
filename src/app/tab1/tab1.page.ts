@@ -70,19 +70,19 @@ export class Tab1Page {
   }
 
 
-  // /** 
-  //  * @function validarInput
-  //  * @description Verifica que el input exista y que el campo titulo no esté vacío.
-  //  * @param input Objeto de tipo any que contiene el valor del campo titulo.
-  //  * @returns Retorna un booleano: true si el campo titulo contiene un valor; de lo contrario, muestra un mensaje de error y retorna false.
-  //  */
-  // validarInput(input: any): boolean {
-  //   if (input && input.titulo) {
-  //     return true;
-  //   }
-  //   this.presentToast('Debe ingresar un valor', 'danger');
-  //   return false;
-  // }
+  /** 
+    * @function validarInput
+    * @description Verifica que el input exista y que el campo titulo no esté vacío.
+    * @param input Objeto de tipo any que contiene el valor del campo titulo.
+    * @returns Retorna un booleano: true si el campo titulo contiene un valor; de lo contrario, muestra un mensaje de error y retorna false.
+    */
+  validarInput(input: any): boolean {
+    if (input && input.titulo) {
+      return true;
+    }
+    this.presentToast('Debe ingresar un valor', 'danger');
+    return false;
+  }
 
 
 
@@ -104,12 +104,42 @@ export class Tab1Page {
   }
 
 
-  
-  editarTarjeta(tarjeta: Tarjeta) {
-    console.log("Editar tarjeta:", tarjeta);
+
+  async editarTarjeta(tarjeta: Tarjeta) {
+    let alerta = await this.alertController.create({
+      header: "Editar tarjeta",
+      inputs: [
+        {
+          type: "text",
+          name: "titulo",
+          placeholder: "Ingresar nuevo nombre de la lista",
+          value: tarjeta.titulo
+        }
+      ],
+      buttons: [
+        {
+          text: "Cancelar",
+          role: "cancel"
+        },
+        {
+          text: "Editar",
+          handler: (data: any) => {
+            let esValido: boolean = this.validarInput(data);
+            if (esValido) {
+              tarjeta.titulo = data.titulo,
+                this.cardService.editarTarjeta(tarjeta);
+
+              this.presentToast('Tarjeta editada correctamente!', 'success');
+            }
+          }
+        }
+      ]
+    })
+
+    await alerta.present();
   }
 
-  
+
   eliminarTarjeta(tarjeta: Tarjeta) {
     console.log("Eliminar tarjeta:", tarjeta);
   }
