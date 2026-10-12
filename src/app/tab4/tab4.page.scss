@@ -1,42 +1,52 @@
-ion-title {
-    text-align: center;
-    font-size: 32px;
-    font-weight: bold;
-    margin-bottom: 20px;
-  }
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100%;
+  padding: 24px;
+  text-align: center;
+}
 
-  .login-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  
-    height: 100%;
-    text-align: center;
-  }
-  
-  h1 {
-    font-size: 36px;
-    font-weight: 700;
-    margin-bottom: 12px;
-  }
-  
-  p {
-    font-size: 18px;
-    color: #8c8c8c;
-    margin-bottom: 35px;
-  }
-  
-  ion-button {
-    width: 100%;
-    max-width: 350px;
-  
-    --background: #26679f;
-    --color: white;
-    --border-radius: 12px;
-    --box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-  }
+.login-panel {
+  width: 100%;
+  max-width: 420px;
+  padding: 32px 24px;
 
-  ion-content {
-    --background: url('/assets/backgrounds/Fondo_4.jpg') center;
-  }
+  background: rgba(7, 17, 31, 0.25);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  border: 1px solid rgba(139, 92, 246, 0.4);
+  border-radius: 20px;
+
+  box-shadow: 0 0 25px rgba(139, 92, 246, 0.15);
+}
+
+h1 {
+  font-family: 'Nasalization', sans-serif;
+  font-size: 36px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+p {
+  font-family: 'Nasalization', sans-serif;
+  font-size: 18px;
+  color: #ffffff;
+  margin-bottom: 35px;
+  line-height: 1.6;
+}
+
+ion-button {
+  width: 100%;
+  margin-inline: 0;
+  font-family: 'Nasalization', sans-serif;
+  --background: #26679f;
+  --color: white;
+  --border-radius: 12px;
+  --box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+ion-content {
+  --background: url('/assets/img/backgrounds/Fondo_4.jpg') center;
+}

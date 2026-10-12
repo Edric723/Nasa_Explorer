@@ -35,3 +35,45 @@
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
 @import "@ionic/angular/css/palettes/dark.system.css";
+
+
+// Estilo global para el header de cada tab
+
+ion-header ion-toolbar {
+  --background: rgba(7, 17, 31, 0.92);
+  --border-color: rgba(139, 92, 246, 0.35);
+  --min-height: 70px;
+
+  border-bottom: 1px solid rgba(139, 92, 246, 0.3);
+  box-shadow: 0 4px 18px rgba(139, 92, 246, 0.08);
+}
+
+ion-header ion-toolbar ion-title {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+
+  font-family: 'Nasalization', sans-serif;
+  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+  color: #8B5CF6;
+
+  text-shadow: 0 0 10px rgba(139, 92, 246, 0.35);
+
+  --padding-start: 48px;
+  --padding-end: 48px;
+}
+
+  
+
+  // Fuente global
+  @font-face {
+    font-family: 'Nasalization';
+    src: url('/assets/fonts/Nasalization.otf') format('opentype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+  }
