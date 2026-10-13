@@ -1,5 +1,5 @@
 
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Apod, ApodService } from '../services/apod';
 
 
@@ -9,35 +9,48 @@ import { Apod, ApodService } from '../services/apod';
   styleUrls: ['tab1.page.scss'],
   standalone: false,
 })
+
 export class Tab1Page implements OnInit {
 
   apod: Apod | null = null;
   cargando = true;
   error = '';
 
-  constructor(private apodService: ApodService) {}
+  imagenAmpliada = false;
+
+  constructor(
+    private apodService: ApodService,
+    private cdr: ChangeDetectorRef
+  ) { }
+
+  get imagenUrl(): string {
+    const url = this.apod?.hdurl;
+    if (!url) return '';
+    return url.replace(/w=\d+/, 'w=1200').replace(/&h=\d+/, '');
+  }
 
   ngOnInit() {
     this.apodService.obtenerApod().subscribe({
       next: (respuesta) => {
-        if (Array.isArray(respuesta)) {
-          this.apod = respuesta.length > 0 ? respuesta[0] : null;
-        } else {
-          this.apod = respuesta;
-        }
-
-        if (!this.apod) {
-          this.error = 'No se encontraron datos para la fecha de hoy.';
-        }
-
+        this.apod = Array.isArray(respuesta) ? (respuesta[0] ?? null) : respuesta;
         this.cargando = false;
+        this.cdr.detectChanges();
       },
       error: (err) => {
         console.error('Error al consultar APOD:', err);
         this.error = 'No se pudo cargar la imagen astronómica.';
         this.cargando = false;
+        this.cdr.detectChanges();
       }
     });
+  }
+
+  ampliarImagen() {
+    this.imagenAmpliada = true;
+  }
+
+  cerrarImagen() {
+    this.imagenAmpliada = false;
   }
 }
 

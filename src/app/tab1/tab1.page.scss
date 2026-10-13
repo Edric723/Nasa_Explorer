@@ -1,27 +1,162 @@
+/* Tarjeta principal */
+ion-card {
+  width: 90%;
+  max-width: 500px;
+  margin: 24px auto;
+
+  background: rgba(16, 24, 39, 0.92);
+  color: var(--color-texto);
+
+  border: 1px solid rgba(114, 215, 255, 0.28);
+  border-radius: 18px;
+
+  box-shadow:
+    0 0 18px rgba(0, 0, 0, 0.35),
+    0 0 12px rgba(114, 215, 255, 0.08);
+
+  overflow: hidden;
+}
+
+/* Contenedor de la imagen */
+.contenedor-imagen {
+  width: 100%;
+  background: #050912;
+  overflow: hidden;
+  border-bottom: 1px solid rgba(114, 215, 255, 0.25);
+}
+
+/* Imagen astronómica */
+.contenedor-imagen img {
+  display: block;
+  width: 100%;
+  max-height: 400px;
+  object-fit: contain;
+  margin: 0 auto;
+}
+
+/* Fecha */
+ion-card-subtitle {
+  color: var(--color-acento);
+  font-size: 12px;
+  letter-spacing: 1.5px;
+  margin-bottom: 10px;
+}
+
+/* Título de la imagen */
+ion-card-title {
+  color: var(--color-texto);
+  font-family: 'Nasalization', sans-serif;
+  font-size: 21px;
+  font-weight: bold;
+  line-height: 1.4;
+}
+
+/* Contenido */
+ion-card-content {
+  color: var(--color-secundario);
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+/* Descripción recibida de la API */
+.descripcion {
+  color: var(--color-secundario);
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+}
+
+.descripcion strong {
+  color: var(--color-texto);
+}
+
+.descripcion a,
+.creditos a {
+  color: var(--color-acento);
+  text-decoration: none;
+}
+
+/* Créditos y copyright */
+.creditos {
+  margin-top: 20px;
+  padding-top: 14px;
+
+  border-top: 1px solid rgba(114, 215, 255, 0.18);
+
+  color: var(--color-secundario);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.creditos strong {
+  color: var(--color-acento);
+}
+
+/* Loading y errores */
 .estado {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 32px 20px;
+
+  padding: 40px 20px;
+  margin: 24px auto;
+
+  color: var(--color-acento);
   text-align: center;
 }
 
-ion-card {
-  margin: 16px;
+.estado ion-spinner {
+  width: 38px;
+  height: 38px;
+  color: var(--color-acento);
 }
 
-ion-card img {
-  width: 100%;
-  max-height: 400px;
-  object-fit: contain;
+.estado ion-icon {
+  font-size: 42px;
+  color: var(--color-acento);
 }
 
-ion-card-content p {
-  line-height: 1.6;
+.estado p {
+  color: var(--color-texto);
+  font-size: 14px;
+  line-height: 1.5;
 }
 
+.estado.error ion-icon {
+  color: #ff7185;
+}
 
+.estado.error p {
+  color: #ffb4bf;
+}
+
+/* Pantallas chicas */
+@media (max-width: 480px) {
+  ion-header ion-toolbar ion-title {
+    font-size: 17px;
+    letter-spacing: 0.5px;
+  }
+
+  ion-card {
+    width: 92%;
+    margin: 18px auto;
+  }
+
+  ion-card-title {
+    font-size: 18px;
+  }
+
+  ion-card-content {
+    font-size: 14px;
+  }
+
+  .contenedor-imagen img {
+    max-height: 320px;
+  }
+}
+
+// Fondo de la tab.
 ion-content {
+  --padding-bottom: 120px;
   --background: url('/assets/img/backgrounds/Fondo_1.jpg') no-repeat center center / cover;
 }

@@ -37,6 +37,16 @@
 @import "@ionic/angular/css/palettes/dark.system.css";
 
 
+:root {
+  --color-fondo: #070b14;
+  --color-superficie: #101827;
+  --color-acento: #72d7ff;
+  --color-texto: #f1f5f9;
+  --color-secundario: #a1adbf;
+}
+
+
+
 // Estilo global para el header de cada tab
 
 ion-header ion-toolbar {

@@ -1,4 +1,3 @@
-
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>
@@ -9,18 +8,19 @@
 
 <ion-content [fullscreen]="true">
 
+  <!-- Estado de carga -->
   <div *ngIf="cargando" class="estado">
     <ion-spinner name="crescent"></ion-spinner>
-    <p>Cargando imagen astronómica...</p>
+    <p>Recibiendo transmisión astronómica...</p>
   </div>
 
+  <!-- Card de APOD -->
   <ion-card *ngIf="apod && !cargando">
 
-    <img
-      *ngIf="apod.media_type === 'image' && apod.hdurl"
-      [src]="apod.hdurl"
-      [alt]="apod.alt || apod.title"
-    >
+    <!-- Imagen astronómica -->
+    <div class="contenedor-imagen" *ngIf="apod.media_type === 'image' && imagenUrl">
+      <img [src]="imagenUrl" [alt]="apod.alt || apod.title" loading="lazy" decoding="async" (click)="ampliarImagen()">
+    </div>
 
     <ion-card-header>
       <ion-card-subtitle>
@@ -34,32 +34,22 @@
 
     <ion-card-content>
 
-      <p>{{ apod.explanation }}</p>
+      <!-- Descripción -->
+      <div class="descripcion" [innerHTML]="apod.explanation"></div>
 
-      <p *ngIf="apod.copyright">
-        <strong>Copyright:</strong> {{ apod.copyright }}
-      </p>
-
-      <p *ngIf="apod.credit">
-        <strong>Créditos:</strong> {{ apod.credit }}
-      </p>
-
-      <ion-button
-        *ngIf="apod.media_type !== 'image' && apod.permalink"
-        [href]="apod.permalink"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        Ver contenido multimedia
-      </ion-button>
+      <!-- Créditos -->
+      <div class="creditos" *ngIf="apod.copyright">
+        <strong>Copyright: </strong>
+        <span [innerHTML]="apod.copyright"></span>
+      </div>
 
     </ion-card-content>
-
   </ion-card>
 
-  <div *ngIf="error && !cargando" class="estado">
+  <!-- Estado de error -->
+  <div *ngIf="error && !cargando" class="estado error">
     <ion-icon name="alert-circle-outline"></ion-icon>
     <p>{{ error }}</p>
   </div>
-
+  
 </ion-content>
