@@ -13,6 +13,11 @@ export class Tab4Page {
     private oidcSecurityService: OidcSecurityService
   ) {}
 
+/**
+ * @function cerrarSesion
+ * @description función encargada del log out.
+ * @return void
+ */
   cerrarSesion() {
     this.oidcSecurityService.logoffLocal();
   
