@@ -1,3 +1,4 @@
+
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>
@@ -8,16 +9,57 @@
 
 <ion-content [fullscreen]="true">
 
-  <ion-card>
-    <img src="https://placehold.co/600x400" alt="Imagen astronómica">
+  <div *ngIf="cargando" class="estado">
+    <ion-spinner name="crescent"></ion-spinner>
+    <p>Cargando imagen astronómica...</p>
+  </div>
+
+  <ion-card *ngIf="apod && !cargando">
+
+    <img
+      *ngIf="apod.media_type === 'image' && apod.hdurl"
+      [src]="apod.hdurl"
+      [alt]="apod.alt || apod.title"
+    >
 
     <ion-card-header>
-      <ion-card-title>Imagen Astronómica del Día</ion-card-title>
+      <ion-card-subtitle>
+        {{ apod.date }}
+      </ion-card-subtitle>
+
+      <ion-card-title>
+        {{ apod.title }}
+      </ion-card-title>
     </ion-card-header>
 
     <ion-card-content>
-      Imagen astronómica de ejemplo.
+
+      <p>{{ apod.explanation }}</p>
+
+      <p *ngIf="apod.copyright">
+        <strong>Copyright:</strong> {{ apod.copyright }}
+      </p>
+
+      <p *ngIf="apod.credit">
+        <strong>Créditos:</strong> {{ apod.credit }}
+      </p>
+
+      <ion-button
+        *ngIf="apod.media_type !== 'image' && apod.permalink"
+        [href]="apod.permalink"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Ver contenido multimedia
+      </ion-button>
+
     </ion-card-content>
+
   </ion-card>
+
+  <div *ngIf="error && !cargando" class="estado">
+    <ion-icon name="alert-circle-outline"></ion-icon>
+    <p>{{ error }}</p>
+  </div>
 
 </ion-content>
