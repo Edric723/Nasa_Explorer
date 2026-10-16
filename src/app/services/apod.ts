@@ -3,6 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 
+
+// debería ser un modelo, hay que generar la carpeta models
 export interface Apod {
   date: string;
   post_id: number;
@@ -20,7 +22,7 @@ export interface Apod {
 @Injectable({ providedIn: 'root' })
 export class ApodService {
   private apiUrl = 'https://science.nasa.gov/wp-json/wp/v2/apod-basic/';
-  private apiKey = environment.nasaApiKey;
+  private apiKey = environment.nasaApiKey; // proteger la api del acceso público.
 
   constructor(private http: HttpClient) { }
 

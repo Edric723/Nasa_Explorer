@@ -1,7 +1,7 @@
 
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Apod, ApodService } from '../services/apod';
-
+import { SIGNAL } from '@angular/core/primitives/signals';
 
 @Component({
   selector: 'app-tab1',
