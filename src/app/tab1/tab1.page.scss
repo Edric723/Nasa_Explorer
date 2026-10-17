@@ -1,8 +1,15 @@
+/* Fondo de la tab */
+ion-content {
+  --background: url('/assets/img/backgrounds/Fondo_1.jpg') no-repeat center center / cover;
+  --padding-bottom: 120px;
+}
+
 /* Tarjeta principal */
 ion-card {
   width: 90%;
   max-width: 500px;
   margin: 24px auto;
+  overflow: hidden;
 
   background: rgba(16, 24, 39, 0.92);
   color: var(--color-texto);
@@ -13,36 +20,52 @@ ion-card {
   box-shadow:
     0 0 18px rgba(0, 0, 0, 0.35),
     0 0 12px rgba(114, 215, 255, 0.08);
-
-  overflow: hidden;
 }
 
-/* Contenedor de la imagen */
-.contenedor-imagen {
+/* Contenido multimedia */
+.contenedor-imagen,
+.contenedor-video {
   width: 100%;
-  background: #050912;
   overflow: hidden;
+  background: #050912;
+}
+
+/* Separación entre multimedia y contenido */
+.contenedor-imagen {
   border-bottom: 1px solid rgba(114, 215, 255, 0.25);
 }
 
-/* Imagen astronómica */
 .contenedor-imagen img {
   display: block;
   width: 100%;
   max-height: 400px;
-  object-fit: contain;
   margin: 0 auto;
+  object-fit: contain;
+}
+
+/* Video */
+.contenedor-video {
+  background: #010101;
+  line-height: 0;
+
+  video {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-height: 65vh;
+    background: #010101;
+  }
 }
 
 /* Fecha */
 ion-card-subtitle {
+  margin-bottom: 10px;
   color: var(--color-acento);
   font-size: 12px;
   letter-spacing: 1.5px;
-  margin-bottom: 10px;
 }
 
-/* Título de la imagen */
+/* Título */
 ion-card-title {
   color: var(--color-texto);
   font-family: 'Nasalization', sans-serif;
@@ -51,14 +74,13 @@ ion-card-title {
   line-height: 1.4;
 }
 
-/* Contenido */
+/* Contenido y descripción */
 ion-card-content {
   color: var(--color-secundario);
   font-size: 15px;
   line-height: 1.7;
 }
 
-/* Descripción recibida de la API */
 .descripcion {
   color: var(--color-secundario);
   line-height: 1.7;
@@ -69,6 +91,7 @@ ion-card-content {
   color: var(--color-texto);
 }
 
+/* Enlaces */
 .descripcion a,
 .creditos a {
   color: var(--color-acento);
@@ -79,7 +102,6 @@ ion-card-content {
 .creditos {
   margin-top: 20px;
   padding-top: 14px;
-
   border-top: 1px solid rgba(114, 215, 255, 0.18);
 
   color: var(--color-secundario);
@@ -91,15 +113,14 @@ ion-card-content {
   color: var(--color-acento);
 }
 
-/* Loading y errores */
+/* Carga y errores */
 .estado {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-
-  padding: 40px 20px;
   margin: 24px auto;
+  padding: 40px 20px;
 
   color: var(--color-acento);
   text-align: center;
@@ -130,7 +151,7 @@ ion-card-content {
   color: #ffb4bf;
 }
 
-/* Pantallas chicas */
+/* Adaptación a pantallas chicas */
 @media (max-width: 480px) {
   ion-header ion-toolbar ion-title {
     font-size: 17px;
@@ -153,10 +174,4 @@ ion-card-content {
   .contenedor-imagen img {
     max-height: 320px;
   }
-}
-
-// Fondo de la tab.
-ion-content {
-  --padding-bottom: 120px;
-  --background: url('/assets/img/backgrounds/Fondo_1.jpg') no-repeat center center / cover;
 }

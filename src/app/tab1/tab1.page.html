@@ -9,47 +9,65 @@
 <ion-content [fullscreen]="true">
 
   <!-- Estado de carga -->
-  <div *ngIf="cargando" class="estado">
+  <div *ngIf="cargando()" class="estado">
     <ion-spinner name="crescent"></ion-spinner>
     <p>Recibiendo transmisión astronómica...</p>
   </div>
 
   <!-- Card de APOD -->
-  <ion-card *ngIf="apod && !cargando">
+  <ion-card *ngIf="apod() && !cargando()">
 
-    <!-- Imagen astronómica -->
-    <div class="contenedor-imagen" *ngIf="apod.media_type === 'image' && imagenUrl">
-      <img [src]="imagenUrl" [alt]="apod.alt || apod.title" loading="lazy" decoding="async" (click)="ampliarImagen()">
+    <!-- Imagen -->
+    <div class="contenedor-imagen"
+         *ngIf="apod()?.media_type === 'image' && imagenUrl">
+      <img
+        [src]="imagenUrl"
+        [alt]="apod()?.alt || apod()?.title"
+        loading="lazy"
+        decoding="async"
+        (click)="ampliarImagen()">
     </div>
 
+    <!-- Video -->
+    <div class="contenedor-video"
+         *ngIf="apod()?.media_type === 'video' && videoUrl()">
+      <video
+        [src]="videoUrl()"
+        controls
+        playsinline
+        preload="metadata">
+      </video>
+    </div>
+
+    <!-- Fecha -->
     <ion-card-header>
       <ion-card-subtitle>
-        {{ apod.date }}
+        {{ apod()?.date }}
       </ion-card-subtitle>
 
       <ion-card-title>
-        {{ apod.title }}
+        {{ apod()?.title }}
       </ion-card-title>
     </ion-card-header>
 
     <ion-card-content>
 
       <!-- Descripción -->
-      <div class="descripcion" [innerHTML]="apod.explanation"></div>
+      <div class="descripcion" [innerHTML]="apod()?.explanation"></div>
 
       <!-- Créditos -->
-      <div class="creditos" *ngIf="apod.copyright">
+      <div class="creditos" *ngIf="apod()?.copyright">
         <strong>Copyright: </strong>
-        <span [innerHTML]="apod.copyright"></span>
+        <span [innerHTML]="apod()?.copyright"></span>
       </div>
 
     </ion-card-content>
   </ion-card>
 
   <!-- Estado de error -->
-  <div *ngIf="error && !cargando" class="estado error">
+  <div *ngIf="error() && !cargando()" class="estado error">
     <ion-icon name="alert-circle-outline"></ion-icon>
-    <p>{{ error }}</p>
+    <p>{{ error() }}</p>
   </div>
-  
+
 </ion-content>
