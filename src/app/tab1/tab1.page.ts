@@ -1,8 +1,20 @@
 
-import { Component } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Component, inject, signal } from '@angular/core';
 import { AlertController } from '@ionic/angular/lazy';
 import { ToastController } from '@ionic/angular/lazy';
+import { firstValueFrom } from 'rxjs';
 import { CardService } from '../services/card.service';
+
+interface ApodResponse {
+  date: string;
+  explanation: string;
+  media_type: 'image';
+  title: string;
+  url: string;
+  hdurl?: string;
+  copyright?: string;
+}
 
 @Component({
   selector: 'app-tab1',
@@ -11,13 +23,47 @@ import { CardService } from '../services/card.service';
   standalone: false,
 })
 export class Tab1Page {
+  readonly imagenDelDia = signal<ApodResponse | null>(null);
+  readonly cargandoImagen = signal(false);
+  readonly errorImagen = signal('');
+  public alertController = inject(AlertController);
+  public toastController = inject(ToastController);
+  public cardService = inject(CardService);
+  private readonly http = inject(HttpClient);
 
-  constructor(
-    public alertController: AlertController,
-    public toastController: ToastController,
-    public cardService: CardService,
-  ) { }
+  ionViewWillEnter(): void {
+    void this.cargarImagenDelDia();
+  }
 
+  async cargarImagenDelDia(): Promise<void> {
+    if (this.cargandoImagen() || this.imagenDelDia()) {
+      return;
+    }
+
+    this.cargandoImagen.set(true);
+    this.errorImagen.set('');
+
+    try {
+      const imagen = await firstValueFrom(
+        this.http.get<ApodResponse>(
+          'https://api.nasa.gov/planetary/apod?api_key=' + 'yQMSrKyjqTf6iwezcVxDgu72dfaBefnejKxXfbZw'
+          
+        ),
+      );
+
+      if (imagen.media_type !== 'image' || !imagen.url || !imagen.title) {
+        throw new Error('La respuesta de APOD no contiene una imagen válida.');
+      }
+
+      this.imagenDelDia.set(imagen);
+      console.log('Respuesta de APOD:', imagen);
+    } catch (error) {
+      console.error('No se pudo cargar la imagen del día de NASA.', error);
+      this.errorImagen.set('No se pudo cargar la imagen. Comprueba tu conexión e inténtalo de nuevo.');
+    } finally {
+      this.cargandoImagen.set(false);
+    }
+  }
 
   /** 
    * @function agregarCard 
@@ -92,4 +138,3 @@ validarInput(input: any): boolean {
 }
 
 }
-

@@ -9,24 +9,33 @@ ion-card {
     width: 90%;
     max-width: 500px;
     margin: 20px auto;
-  
     text-align: center;
+    color: var(--ion-text-color);
+    background: var(--ion-background-color);
   }
   
-  ion-card img {
+  .apod-image {
+    display: block;
     width: 100%;
-    height: 250px;
-    object-fit: cover;
+    max-height: 55vh;
+    object-fit: contain;
+    background: #101820;
   }
   
   ion-card-title {
     font-size: 22px;
+    color: var(--ion-text-color);
   }
   
   ion-card-content {
-    color: #666;
+    color: var(--ion-text-color);
   }
 
-  ion-content {
-    --background: url('/assets/backgrounds/Fondo_1.jpg') no-repeat center center / cover;
+  .apod-explanation {
+    line-height: 1.6;
+    white-space: pre-line;
   }
+
+ /* ion-content {
+    --background: url('/assets/backgrounds/Fondo_1.jpg') no-repeat center center / cover;
+  }*/

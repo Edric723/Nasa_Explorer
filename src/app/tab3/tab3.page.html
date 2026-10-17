@@ -7,5 +7,68 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Eventos naturales cerca de ti</ion-card-title>
+      <ion-card-subtitle>Consulta el evento activo más cercano registrado por NASA</ion-card-subtitle>
+    </ion-card-header>
 
+    <ion-card-content>
+      @if (ubicacion(); as posicion) {
+        <p class="location">
+          <strong>Tu ubicación GPS</strong><br>
+          Latitud: {{ posicion.latitude | number:'1.4-4' }}<br>
+          Longitud: {{ posicion.longitude | number:'1.4-4' }}
+        </p>
+      } @else {
+        <p>Presiona “Eventos” para compartir tu ubicación y buscar sucesos activos.</p>
+      }
+
+      <div class="actions">
+        <ion-button (click)="buscarEventos()" [disabled]="cargando()">
+          @if (cargando()) {
+            Buscando…
+          } @else {
+            Eventos
+          }
+        </ion-button>
+        <ion-button color="medium" fill="outline" (click)="salir()">Salir</ion-button>
+      </div>
+
+      @if (cargando()) {
+        <div class="status" aria-live="polite">
+          <ion-spinner aria-label="Buscando eventos de NASA"></ion-spinner>
+          <p>Obteniendo ubicación y buscando eventos activos cercanos…</p>
+        </div>
+      }
+
+      @if (error()) {
+        <p class="message" role="alert">{{ error() }}</p>
+      }
+
+      @if (evento(); as suceso) {
+        <section class="event">
+          <h2>{{ suceso.title }}</h2>
+          <p>Categoría: {{ suceso.categories[0]?.title ?? 'Evento natural' }}</p>
+          @if (suceso.geometry[0]; as geometria) {
+            <p>Evento activo desde: <time [attr.datetime]="geometria.date">{{ geometria.date }}</time></p>
+          }
+          @if (imagen(); as foto) {
+            <p>Imagen relacionada de NASA; no necesariamente capturada en directo.</p>
+            <a [href]="'https://images.nasa.gov/details/' + foto.nasaId" target="_blank" rel="noopener noreferrer">
+              <img [src]="foto.url" [alt]="foto.title">
+            </a>
+            <p><strong>{{ foto.title }}</strong></p>
+            @if (foto.dateCreated) {
+              <p>Imagen publicada: <time [attr.datetime]="foto.dateCreated">{{ foto.dateCreated | date:'mediumDate' }}</time></p>
+            }
+            @if (foto.description) {
+              <p>{{ foto.description }}</p>
+            }
+          }
+          <a [href]="suceso.link" target="_blank" rel="noopener noreferrer">Ver detalles del evento en NASA</a>
+        </section>
+      }
+    </ion-card-content>
+  </ion-card>
 </ion-content>
