@@ -28,16 +28,32 @@
         (click)="ampliarImagen()">
     </div>
 
+  
     <!-- Video -->
     <div class="contenedor-video"
-         *ngIf="apod()?.media_type === 'video' && videoUrl()">
+         *ngIf="apod()?.media_type === 'video'">
+    
+      <!-- Video MP4 -->
       <video
+        *ngIf="videoUrl() && !esVideoYoutube()"
         [src]="videoUrl()"
         controls
         playsinline
         preload="metadata">
       </video>
+    
+      <!-- Video de YouTube -->
+      <iframe
+        *ngIf="esVideoYoutube() && videoYoutubeUrl()"
+        [src]="videoYoutubeUrl()"
+        title="Video astronómico del día"
+        loading="lazy"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowfullscreen>
+      </iframe>
+    
     </div>
+
 
     <!-- Fecha -->
     <ion-card-header>
