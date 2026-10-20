@@ -12,6 +12,9 @@ import { AuthModule } from 'angular-auth-oidc-client';
             clientId: '15kgev445afv48084b5q26fed1',
             scope: 'openid email',
             responseType: 'code',
+            customParamsAuthRequest: {
+                lang: 'es'
+              }
           }
       })],
     exports: [AuthModule],

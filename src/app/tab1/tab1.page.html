@@ -7,37 +7,69 @@
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  @if (cargandoImagen()) {
-  <div class="ion-text-center">
-    <ion-spinner aria-label="Cargando imagen astronómica"></ion-spinner>
-    <p>Cargando la imagen del día...</p>
-  </div>
-  }
 
-  @if (imagenDelDia(); as imagen) {
-  <ion-card>
+  <!-- Estado de carga -->
+  <div *ngIf="cargando()" class="estado">
+    <ion-spinner name="crescent"></ion-spinner>
+    <p>Recibiendo transmisión astronómica...</p>
+  </div>
+
+  <!-- Card de APOD -->
+  <ion-card *ngIf="apod() && !cargando()">
+
+    <!-- Imagen -->
+    <div class="contenedor-imagen"
+         *ngIf="apod()?.media_type === 'image' && imagenUrl">
+      <img
+        [src]="imagenUrl"
+        [alt]="apod()?.alt || apod()?.title"
+        loading="lazy"
+        decoding="async"
+        (click)="ampliarImagen()">
+    </div>
+
+    <!-- Video -->
+    <div class="contenedor-video"
+         *ngIf="apod()?.media_type === 'video' && videoUrl()">
+      <video
+        [src]="videoUrl()"
+        controls
+        playsinline
+        preload="metadata">
+      </video>
+    </div>
+
+    <!-- Fecha -->
     <ion-card-header>
-      <ion-card-title>{{ imagen.title }}</ion-card-title>
       <ion-card-subtitle>
-        Fecha: <time [attr.datetime]="imagen.date">{{ imagen.date }}</time>
+        {{ apod()?.date }}
       </ion-card-subtitle>
+
+      <ion-card-title>
+        {{ apod()?.title }}
+      </ion-card-title>
     </ion-card-header>
 
     <img class="apod-image" [src]="imagen.url" [alt]="imagen.title">
 
     <ion-card-content>
-      <p class="apod-explanation">{{ imagen.explanation }}</p>
-      @if (imagen.copyright) {
-      <p>Crédito: {{ imagen.copyright }}</p>
-      }
+
+      <!-- Descripción -->
+      <div class="descripcion" [innerHTML]="apod()?.explanation"></div>
+
+      <!-- Créditos -->
+      <div class="creditos" *ngIf="apod()?.copyright">
+        <strong>Copyright: </strong>
+        <span [innerHTML]="apod()?.copyright"></span>
+      </div>
+
     </ion-card-content>
   </ion-card>
-  }
 
-  @if (errorImagen()) {
-  <div class="ion-text-center">
-    <p role="alert">{{ errorImagen() }}</p>
-    <ion-button (click)="cargarImagenDelDia()">Reintentar</ion-button>
+  <!-- Estado de error -->
+  <div *ngIf="error() && !cargando()" class="estado error">
+    <ion-icon name="alert-circle-outline"></ion-icon>
+    <p>{{ error() }}</p>
   </div>
-  }
+
 </ion-content>
