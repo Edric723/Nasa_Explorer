@@ -1,6 +1,6 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { ApodService } from '../services/apod.service';
-import { Apod } from '../models/apod.model';
+import { Apod } from '../models/apod.models';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 

@@ -14,10 +14,10 @@ export class AppComponent {
   ) {
     this.oidcSecurityService.checkAuth().subscribe({
       next: result => {
-        console.log('Usuario autenticado:', result.isAuthenticated);
+        // console.log('Usuario autenticado:', result.isAuthenticated);
       },
       error: error => {
-        console.error('Error al comprobar autenticación:', error);
+        // console.error('Error al comprobar autenticación:', error);
       }
     });
   }
