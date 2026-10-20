@@ -1,11 +1,62 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
-    <ion-title>
-      Eventos Globales
-    </ion-title>
+    <ion-title>Eventos globales</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
+<ion-content class="ion-padding">
+
+  <ion-button expand="block" (click)="obtenerUbicacion()">
+    Usar mi ubicación
+  </ion-button>
+  
+  <p *ngIf="ubicacion()">
+    Ubicación obtenida correctamente.
+  </p>
+  
+  <p *ngIf="errorUbicacion()">
+    {{ errorUbicacion() }}
+  </p>
+
+  <div *ngIf="cargando()" class="estado">
+    <ion-spinner name="crescent"></ion-spinner>
+    <p>Cargando eventos naturales...</p>
+  </div>
+
+  <div *ngIf="error()" class="estado">
+    <p>{{ error() }}</p>
+
+    <ion-button (click)="cargarEventos()">
+      Reintentar
+    </ion-button>
+  </div>
+
+  <ion-card *ngFor="let evento of eventos()">
+
+    <ion-card-header>
+      <ion-card-title>
+        {{ evento.title }}
+      </ion-card-title>
+
+      <ion-card-subtitle>
+        {{ evento.categories[0]?.title || 'Categoría no disponible' }}
+      </ion-card-subtitle>
+    </ion-card-header>
+
+    <ion-card-content>
+      <p>
+        <strong>Fecha de inicio:</strong>
+        {{ evento.geometry[0]?.date || 'Sin fecha disponible' }}
+      </p>
+    </ion-card-content>
+
+  </ion-card>
+
+  <div
+    *ngIf="!cargando() && !error() && eventos().length === 0"
+    class="estado"
+  >
+    <p>No hay eventos naturales para mostrar.</p>
+  </div>
 
 </ion-content>

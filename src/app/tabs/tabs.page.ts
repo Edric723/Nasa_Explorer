@@ -13,7 +13,7 @@ export class TabsPage {
     private oidcSecurityService: OidcSecurityService
   ) {
     this.oidcSecurityService.isAuthenticated$.subscribe(result => {
-      console.log('TABS - ¿Autenticado?', result);
+      // console.log('TABS - ¿Autenticado?', result);
     });
   }
 
