@@ -1,53 +1,330 @@
+:host {
+  --fondo: var(--color-fondo);
+  --panel: rgba(15, 22, 42, 0.68);
+  --violeta: #9b7bff;
+  --cian: var(--color-acento);
+  --texto: var(--color-texto);
+  --texto-secundario: var(--color-secundario);
+}
+
+/* Fondo y estructura */
+
+.login-content {
+  --background: var(--fondo);
+  font-family: 'Nasalization', sans-serif;
+}
+
 .login-container {
+  position: relative;
+  isolation: isolate;
   display: flex;
+  flex-direction: column;
   justify-content: center;
-  align-items: center;
+  width: 100%;
+  max-width: 430px;
   min-height: 100%;
-  padding: 24px;
+  margin: auto;
+  padding: 36px 20px;
+  box-sizing: border-box;
+}
+
+.login-container::before {
+  position: fixed;
+  z-index: -1;
+  content: "";
+  inset: 0;
+  background:
+    linear-gradient(rgba(7, 11, 24, 0.35), rgba(7, 11, 24, 0.55)),
+    url('/assets/img/backgrounds/login.jpg') center / cover no-repeat;
+}
+
+/*  NASA Explorer intento de identidad de marca */
+
+.login-brand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 28px;
   text-align: center;
 }
 
+.brand-icon,
+.confirmation-icon {
+  display: grid;
+  place-items: center;
+}
+
+.brand-icon {
+  width: 64px;
+  height: 64px;
+  margin-bottom: 15px;
+  border: 1px solid rgba(114, 215, 255, 0.38);
+  border-radius: 20px;
+  background: rgba(114, 215, 255, 0.07);
+  box-shadow: 0 0 35px rgba(114, 215, 255, 0.1);
+
+  ion-icon {
+    color: var(--cian);
+    font-size: 36px;
+  }
+}
+
+.brand-name {
+  color: var(--texto);
+  font-size: 22px;
+  letter-spacing: 4px;
+
+  strong {
+    color: var(--cian);
+    font-weight: 700;
+  }
+}
+
+.brand-subtitle {
+  margin-top: 9px;
+  color: var(--texto-secundario);
+  font-size: 10px;
+  letter-spacing: 3px;
+}
+
+/* Panel del login */
+
 .login-panel {
   width: 100%;
-  max-width: 420px;
-  padding: 32px 24px;
-
-  background: rgba(7, 17, 31, 0.25);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-
-  border: 1px solid rgba(139, 92, 246, 0.4);
-  border-radius: 20px;
-
-  box-shadow: 0 0 25px rgba(139, 92, 246, 0.15);
+  box-sizing: border-box;
+  padding: 34px 30px 25px;
+  border: 1px solid rgba(139, 157, 208, 0.25);
+  border-radius: 22px;
+  background: var(--panel);
+  box-shadow:
+    0 24px 70px rgba(0, 0, 0, 0.32),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
 }
 
-h1 {
-  font-family: 'Nasalization', sans-serif;
-  font-size: 36px;
-  font-weight: 700;
-  margin-bottom: 12px;
-}
+.panel-heading {
+  margin-bottom: 28px;
+  text-align: center;
 
-p {
-  font-family: 'Nasalization', sans-serif;
-  font-size: 18px;
-  color: #ffffff;
-  margin-bottom: 35px;
-  line-height: 1.6;
-}
-
-ion-button {
-  width: 100%;
-  margin-inline: 0;
-  font-family: 'Nasalization', sans-serif;
-  --background: #26679f;
-  --color: white;
-  --border-radius: 12px;
-  --box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-}
-
- .ion-padding {
-    --background: url('/assets/img/backgrounds/login.jpg') center center / cover no-repeat;
-     ;
+  h1 {
+    margin: 0;
+    color: var(--texto);
+    font-size: 29px;
+    font-weight: 650;
+    letter-spacing: -0.8px;
   }
+
+  p {
+    margin: 12px 0 0;
+    color: var(--texto-secundario);
+    font-size: 13px;
+    line-height: 1.7;
+  }
+}
+
+.eyebrow {
+  display: inline-block;
+  margin-bottom: 13px;
+  color: var(--cian);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+/* Campos del formulario */
+
+.field {
+  display: block;
+  width: 100%;
+  margin-bottom: 20px;
+  color: #c4cce2;
+  font-family: Arial, sans-serif;
+  font-size: 12px;
+}
+
+.field>span {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.custom-input {
+  display: block;
+  width: 100%;
+  height: 48px;
+  box-sizing: border-box;
+
+  --background: rgba(7, 12, 27, 0.82);
+  --color: var(--texto);
+  --placeholder-color: #8792b0;
+  --placeholder-opacity: 1;
+  --border-color: rgba(139, 157, 208, 0.3);
+  --border-radius: 11px;
+  --highlight-color-focused: var(--cian);
+  --highlight-color-valid: var(--cian);
+  --padding-start: 15px;
+  --padding-end: 12px;
+  --padding-top: 0;
+  --padding-bottom: 0;
+
+  border: 1px solid rgba(139, 157, 208, 0.2);
+  border-radius: 11px;
+  font-size: 14px;
+}
+
+.custom-input.ion-focused {
+  --border-color: var(--cian);
+  box-shadow: 0 0 12px rgba(114, 215, 255, 0.12);
+}
+
+.code-input {
+  text-align: center;
+  letter-spacing: 3px;
+}
+
+/* Botón principal (iniciar o registrar) */
+
+.primary-button {
+  margin: 27px 0 0;
+  --background: linear-gradient(105deg, #7455e8, #4d8cf7);
+  --background-hover: linear-gradient(105deg, #866bfa, #61a4ff);
+  --background-activated: #6246ce;
+  --color: #ffffff;
+  --border-radius: 11px;
+  --box-shadow: 0 8px 25px rgba(106, 83, 235, 0.24);
+  --padding-top: 19px;
+  --padding-bottom: 19px;
+
+  font-family: 'Nasalization', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: none;
+
+  ion-spinner {
+    width: 21px;
+    height: 21px;
+    color: #ffffff;
+  }
+}
+
+/* Mensajes de estado, para el feedback del formulario */
+
+.form-feedback {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  margin-top: 17px;
+  padding: 12px;
+  border: 1px solid transparent;
+  border-radius: 10px;
+  font-size: 12px;
+  line-height: 1.6;
+
+  ion-icon {
+    flex-shrink: 0;
+    margin-top: 1px;
+    font-size: 18px;
+  }
+}
+
+.error-message {
+  border-color: rgba(255, 111, 132, 0.22);
+  background: rgba(255, 75, 105, 0.08);
+  color: #ff9cac;
+}
+
+.success-message {
+  border-color: rgba(72, 220, 174, 0.22);
+  background: rgba(72, 220, 174, 0.08);
+  color: #76e9c3;
+}
+
+/* Enlaces del footer de login */
+
+.panel-footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 6px;
+  margin-top: 26px;
+  padding-top: 22px;
+  border-top: 1px solid rgba(139, 157, 208, 0.14);
+  color: var(--texto-secundario);
+  font-family: Arial, sans-serif;
+  font-size: 12px;
+  text-align: center;
+}
+
+.text-button {
+  padding: 4px;
+  border: 0;
+  background: transparent;
+  color: var(--cian);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+
+  &:hover {
+    color: #b1ebff;
+  }
+}
+
+/* Confirmación de cuenta */
+
+.confirmation-icon {
+  width: 66px;
+  height: 66px;
+  margin: 6px auto 20px;
+  border: 1px solid rgba(155, 123, 255, 0.35);
+  border-radius: 50%;
+  background: rgba(155, 123, 255, 0.1);
+
+  ion-icon {
+    color: var(--violeta);
+    font-size: 30px;
+  }
+}
+
+/* Footer debajo del login */
+
+.login-footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin-top: 25px;
+  color: #65708d;
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  text-align: center;
+
+  span:first-child {
+    color: #929bb8;
+    font-weight: 700;
+  }
+}
+
+/* Tamaño móviles */
+
+@media (max-width: 480px) {
+  .login-container {
+    padding: 28px 15px;
+  }
+
+  .login-panel {
+    padding: 29px 21px 23px;
+    border-radius: 18px;
+  }
+
+  .brand-name {
+    font-size: 20px;
+    letter-spacing: 3px;
+  }
+
+  .panel-heading h1 {
+    font-size: 26px;
+  }
+}
+

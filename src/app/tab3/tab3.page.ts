@@ -43,7 +43,8 @@ export class Tab3Page implements OnInit {
   }
 
   // Método para pedirle la ubicación al usuario.
-  
+  // Ya que la pc no cuenta con gps tenemos que ver de testear por ip, y cuando estemos en app móvil testear la ubicación.
+  // Por ahora no influye en ninguna cosa.
   obtenerUbicacion() {
     console.log('Se presionó el botón');
     this.errorUbicacion.set('Solicitando ubicación...');

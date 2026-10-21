@@ -1,22 +1,158 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>NASA Explorer</ion-title>
-  </ion-toolbar>
-</ion-header>
+<ion-content [fullscreen]="true" class="login-content">
+  <main class="login-container">
 
-<ion-content class="ion-padding">
+    <header class="login-brand">
+      <div class="brand-icon">
+        <ion-icon name="planet-outline"></ion-icon>
+      </div>
+      <div class="brand-name">NASA <strong>EXPLORER</strong></div>
+      <span class="brand-subtitle">EXPLORÁ EL UNIVERSO</span>
+    </header>
 
-  <div class="login-container">
-    <div class="login-panel">
+    <!-- Inicio de sesión, una sola página que alterna entre modos según la acción -->
+    <section class="login-panel" *ngIf="modo === 'login'">
+      <header class="panel-heading">
+        <span class="eyebrow">ACCEDÉ A LA APP</span>
+        <h1>Bienvenido</h1>
+        <p>Iniciá sesión para descubrir el universo.</p>
+      </header>
 
-      <h1>Bienvenido</h1>
+      <form (ngSubmit)="login()">
+        <label class="field">
+          <span>Correo electrónico</span>
+          <ion-input class="custom-input" type="email" placeholder="tu@email.com" [(ngModel)]="email" name="email"
+            autocomplete="email" required>
+          </ion-input>
+        </label>
 
-      <p>Iniciá sesión para acceder a NASA Explorer.</p>
+        <label class="field">
+          <span>Contraseña</span>
+          <ion-input class="custom-input" type="password" placeholder="Ingresá tu contraseña" [(ngModel)]="password"
+            name="password" autocomplete="current-password" required>
+            <ion-input-password-toggle slot="end"></ion-input-password-toggle>
+          </ion-input>
+        </label>
 
-      <ion-button expand="block" (click)="login()">
-        Iniciar sesión
-      </ion-button>
+        <ion-button class="primary-button" type="submit" expand="block" [disabled]="cargando()">
+          <span *ngIf="!cargando()">Iniciar sesión</span>
+          <ion-spinner *ngIf="cargando()" name="crescent"></ion-spinner>
+        </ion-button>
+      </form>
+
+      <ng-container *ngTemplateOutlet="feedback"></ng-container>
+
+      <footer class="panel-footer">
+        ¿No te registraste?
+        <button type="button" class="text-button" (click)="mostrarRegistro()">
+          Crear cuenta
+        </button>
+      </footer>
+    </section>
+
+    <!-- Registro , una sola página que alterna entre modos según la acción-->
+    <section class="login-panel" *ngIf="modo === 'registro'">
+      <header class="panel-heading">
+        <span class="eyebrow">NUEVA MISIÓN</span>
+        <h1>Crear cuenta</h1>
+        <p>Registrate para comenzar tu aventura espacial.</p>
+      </header>
+
+      <form (ngSubmit)="registrar()">
+        <label class="field">
+          <span>Correo electrónico</span>
+          <ion-input class="custom-input" type="email" placeholder="tu@email.com" [(ngModel)]="email"
+            name="emailRegistro" autocomplete="email" required>
+          </ion-input>
+        </label>
+
+        <label class="field">
+          <span>Nombre de usuario</span>
+          <ion-input class="custom-input" type="text" placeholder="Cómo querés que te llamemos" [(ngModel)]="nickname"
+            name="nickname" autocomplete="nickname" required>
+          </ion-input>
+        </label>
+
+        <label class="field">
+          <span>Fecha de nacimiento</span>
+          <ion-input class="custom-input" type="date" [(ngModel)]="fechaNacimiento" name="fechaNacimiento" required>
+          </ion-input>
+        </label>
+
+        <label class="field">
+          <span>Contraseña</span>
+          <ion-input class="custom-input" type="password" placeholder="Creá una contraseña" [(ngModel)]="password"
+            name="passwordRegistro" autocomplete="new-password" required>
+            <ion-input-password-toggle slot="end"></ion-input-password-toggle>
+          </ion-input>
+        </label>
+
+        <ion-button class="primary-button" type="submit" expand="block" [disabled]="cargando()">
+          <span *ngIf="!cargando()">Crear mi cuenta</span>
+          <ion-spinner *ngIf="cargando()" name="crescent"></ion-spinner>
+        </ion-button>
+      </form>
+
+      <ng-container *ngTemplateOutlet="feedback"></ng-container>
+
+      <footer class="panel-footer">
+        ¿Ya tenés una cuenta?
+        <button type="button" class="text-button" (click)="mostrarLogin()">
+          Iniciar sesión
+        </button>
+      </footer>
+    </section>
+
+    <!-- Confirmación de registro -->
+    <section class="login-panel" *ngIf="modo === 'confirmacion'">
+      <header class="panel-heading">
+        <div class="confirmation-icon">
+          <ion-icon name="mail-open-outline"></ion-icon>
+        </div>
+        <span class="eyebrow">VERIFICACIÓN DE IDENTIDAD</span>
+        <h1>Revisá tu correo</h1>
+        <p>Ingresá el código que te enviamos para activar tu cuenta.</p>
+      </header>
+
+      <form (ngSubmit)="confirmarRegistro()">
+        <label class="field">
+          <span>Código de confirmación</span>
+          <ion-input class="custom-input code-input" type="text" placeholder="Ingresá el código" [(ngModel)]="codigo"
+            name="codigo" autocomplete="one-time-code" required>
+          </ion-input>
+        </label>
+
+        <ion-button class="primary-button" type="submit" expand="block" [disabled]="cargando()">
+          <span *ngIf="!cargando()">Confirmar cuenta</span>
+          <ion-spinner *ngIf="cargando()" name="crescent"></ion-spinner>
+        </ion-button>
+      </form>
+
+      <ng-container *ngTemplateOutlet="feedback"></ng-container>
+
+      <footer class="panel-footer">
+        <button type="button" class="text-button" (click)="mostrarLogin()">
+          Volver al inicio de sesión
+        </button>
+      </footer>
+    </section>
+
+    <footer class="login-footer">
+      <span>NASA EXPLORER</span>
+      <span>PARA ENTUSIASTAS DE LAS ESTRELLAS</span>
+    </footer>
+
+  </main>
+
+  <!-- Feedback de los formularios -->
+  <ng-template #feedback>
+    <div class="form-feedback error-message" *ngIf="error()">
+      <ion-icon name="alert-circle-outline"></ion-icon>
+      <span>{{ error() }}</span>
     </div>
-  </div>
 
+    <div class="form-feedback success-message" *ngIf="mensaje()">
+      <ion-icon name="checkmark-circle-outline"></ion-icon>
+      <span>{{ mensaje() }}</span>
+    </div>
+  </ng-template>
 </ion-content>
