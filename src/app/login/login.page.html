@@ -33,6 +33,7 @@
           </ion-input>
         </label>
 
+        <!-- Botón de iniciar sesión -->
         <ion-button class="primary-button" type="submit" expand="block" [disabled]="cargando()">
           <span *ngIf="!cargando()">Iniciar sesión</span>
           <ion-spinner *ngIf="cargando()" name="crescent"></ion-spinner>
@@ -86,6 +87,7 @@
           </ion-input>
         </label>
 
+        <!-- Botón del registro -->
         <ion-button class="primary-button" type="submit" expand="block" [disabled]="cargando()">
           <span *ngIf="!cargando()">Crear mi cuenta</span>
           <ion-spinner *ngIf="cargando()" name="crescent"></ion-spinner>
