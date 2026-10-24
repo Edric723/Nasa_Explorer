@@ -1,6 +1,7 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { EonetService } from '../services/eonet.service';
 import { EventoEonet } from '../models/event-eonet.model';
+import { GeolocationService, UbicacionIP } from '../services/geolocation.service';
 
 @Component({
   selector: 'app-tab3',
@@ -14,11 +15,14 @@ export class Tab3Page implements OnInit {
   eventos = signal<EventoEonet[]>([]);
   cargando = signal<boolean>(false);
   error = signal<string>('');
-
-  ubicacion = signal<GeolocationCoordinates | null>(null);
+  ubicacion = signal<UbicacionIP | null>(null);
   errorUbicacion = signal<string>('');
+  distancias = signal<Map<string, number>>(new Map());
 
-  constructor(private eonetService: EonetService) { }
+  constructor(
+    private eonetService: EonetService,
+    private geolocationService: GeolocationService
+  ) { }
 
   ngOnInit() {
     this.cargarEventos();
@@ -45,32 +49,96 @@ export class Tab3Page implements OnInit {
   // Método para pedirle la ubicación al usuario.
   // Ya que la pc no cuenta con gps tenemos que ver de testear por ip, y cuando estemos en app móvil testear la ubicación.
   // Por ahora no influye en ninguna cosa.
-  obtenerUbicacion() {
-    console.log('Se presionó el botón');
-    this.errorUbicacion.set('Solicitando ubicación...');
+  async obtenerUbicacion() {
+    this.errorUbicacion.set('Buscando ubicación aproximada por IP...');
 
-    if (!navigator.geolocation) {
-      this.errorUbicacion.set(
-        'El navegador no admite geolocalización.'
-      );
-      return;
-    }
+    try {
+      const ubicacion = await this.geolocationService.obtenerUbicacionPorIP();
 
-    navigator.geolocation.getCurrentPosition(
-      (posicion) => {
-        console.log('Ubicación obtenida:', posicion.coords);
+      this.ubicacion.set(ubicacion);
 
-        this.ubicacion.set(posicion.coords);
-        this.errorUbicacion.set('Ubicación obtenida correctamente.');
-      },
-      (error) => {
-        console.error('Error de geolocalización:', error.code, error.message);
+      const distancias = new Map<string, number>();
 
-        this.errorUbicacion.set(
-          'No se pudo obtener la ubicación. Código: ' + error.code
-        );
+      for (const evento of this.eventos()) {
+        for (const geometria of evento.geometry) {
+          const coordenadas = geometria.coordinates;
+
+          if (
+            geometria.type === 'Point' &&
+            Array.isArray(coordenadas) &&
+            typeof coordenadas[0] === 'number' &&
+            typeof coordenadas[1] === 'number'
+          ) {
+            const distancia = this.calcularDistancia(
+              ubicacion.latitude,
+              ubicacion.longitude,
+              coordenadas[1],
+              coordenadas[0]
+            );
+
+            distancias.set(evento.id, distancia);
+            break;
+          }
+        }
       }
-    );
+
+      this.distancias.set(distancias);
+
+      this.eventos.update(eventos =>
+        [...eventos].sort((a, b) => {
+          const distanciaA = distancias.get(a.id);
+          const distanciaB = distancias.get(b.id);
+
+          if (distanciaA === undefined) return 1;
+          if (distanciaB === undefined) return -1;
+
+          return distanciaA - distanciaB;
+        })
+      );
+
+      this.errorUbicacion.set(
+        'Ubicación obtenida. Eventos ordenados por cercanía.'
+      );
+    } catch (error) {
+      console.error('Error al consultar ubicación por IP:', error);
+
+      this.errorUbicacion.set(
+        'No se pudo obtener la ubicación por IP.'
+      );
+    }
   }
+
+  private calcularDistancia(
+    latitud1: number,
+    longitud1: number,
+    latitud2: number,
+    longitud2: number
+  ): number {
+    const radioTierra = 6371;
+
+    const diferenciaLatitud =
+      (latitud2 - latitud1) * Math.PI / 180;
+
+    const diferenciaLongitud =
+      (longitud2 - longitud1) * Math.PI / 180;
+
+    const a =
+      Math.sin(diferenciaLatitud / 2) *
+      Math.sin(diferenciaLatitud / 2) +
+      Math.cos(latitud1 * Math.PI / 180) *
+      Math.cos(latitud2 * Math.PI / 180) *
+      Math.sin(diferenciaLongitud / 2) *
+      Math.sin(diferenciaLongitud / 2);
+
+    const angulo = 2 * Math.atan2(
+      Math.sqrt(a),
+      Math.sqrt(1 - a)
+    );
+
+    return radioTierra * angulo;
+  }
+
+
+
 
 }

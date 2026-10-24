@@ -17,6 +17,8 @@ export class Tab2Page implements OnInit {
   cargando = signal<boolean>(false);
   error = signal<string>('');
 
+  limiteObjetos = 10;
+
   constructor(private neoService: NeoService) { }
 
   /** Al abrir la pantalla se cargan los objetos automáticamente. */
@@ -45,7 +47,7 @@ export class Tab2Page implements OnInit {
             (b.close_approach_data[0]?.epoch_date_close_approach ?? 0)
           );
 
-          this.objetos.set(lista);
+          this.objetos.set(lista.slice(0, this.limiteObjetos));
           this.cargando.set(false);
         },
         error: () => {

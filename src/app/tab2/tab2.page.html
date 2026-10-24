@@ -37,7 +37,7 @@
         <ion-icon [name]="objeto.is_potentially_hazardous_asteroid ? 'warning-outline' : 'checkmark-circle-outline'">
         </ion-icon>
         <span>
-          {{ objeto.is_potentially_hazardous_asteroid ? 'Potencialmente peligroso' : 'Sin riesgo conocido' }}
+          {{ objeto.is_potentially_hazardous_asteroid ? 'Potencialmente peligroso' : 'No clasificado como potencialmente peligroso' }}
         </span>
       </div>
 
@@ -52,14 +52,14 @@
       </div>
 
       <div class="dato">
-        <span class="dato-nombre">Velocidad</span>
+        <span class="dato-nombre">Velocidad relativa</span>
         <span class="dato-valor">
           {{ objeto.close_approach_data[0]?.relative_velocity?.kilometers_per_hour | number:'1.0-0' }} km/h
         </span>
       </div>
 
       <div class="dato">
-        <span class="dato-nombre">Pasa a</span>
+        <span class="dato-nombre">Distancia mínima a la Tierra</span>
         <span class="dato-valor">
           {{ objeto.close_approach_data[0]?.miss_distance?.kilometers | number:'1.0-0' }} km
         </span>
@@ -67,16 +67,16 @@
 
       <!-- La misma distancia de arriba, expresada en distancias Tierra-Luna -->
       <div class="dato">
-        <span class="dato-nombre">Equivale a</span>
+        <span class="dato-nombre">Distancia equivalente a</span>
         <span class="dato-valor">
-          {{ objeto.close_approach_data[0]?.miss_distance?.lunar | number:'1.1-1' }} veces Tierra-Luna
+          {{ objeto.close_approach_data[0]?.miss_distance?.lunar | number:'1.1-1' }} distancias lunares
         </span>
       </div>
 
       <!-- Ficha oficial en el sitio de la NASA -->
       <div class="creditos">
         <a [href]="objeto.nasa_jpl_url" target="_blank" rel="noopener">
-          Ver ficha oficial de la NASA
+          Consultar ficha orbital en JPL/NASA
         </a>
       </div>
 
