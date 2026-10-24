@@ -1,11 +1,92 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>
-       Objetos cercanos a la Tierra
+      Objetos cercanos a la Tierra
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
+
+  <!-- Estado de carga -->
+  <div *ngIf="cargando()" class="estado">
+    <ion-spinner name="crescent"></ion-spinner>
+    <p>Rastreando objetos cercanos...</p>
+  </div>
+
+  <!-- Una tarjeta por cada objeto -->
+  <ion-card *ngFor="let objeto of objetos(); trackBy: trackPorId">
+
+    <ion-card-header>
+      <!-- Fecha y hora del máximo acercamiento -->
+      <ion-card-subtitle>
+        {{ objeto.close_approach_data[0]?.epoch_date_close_approach | date:'dd/MM/yyyy HH:mm' }} hs
+      </ion-card-subtitle>
+
+      <ion-card-title>
+        {{ objeto.name }}
+      </ion-card-title>
+      <!-- Año de descubrimiento y estado de la órbita -->
+      <p class="designacion">{{ etiquetaObjeto(objeto.name) }}</p>
+    </ion-card-header>
+
+    <ion-card-content>
+
+      <!-- Indicador de peligrosidad según la NASA -->
+      <div class="etiqueta" [class.peligroso]="objeto.is_potentially_hazardous_asteroid">
+        <ion-icon [name]="objeto.is_potentially_hazardous_asteroid ? 'warning-outline' : 'checkmark-circle-outline'">
+        </ion-icon>
+        <span>
+          {{ objeto.is_potentially_hazardous_asteroid ? 'Potencialmente peligroso' : 'Sin riesgo conocido' }}
+        </span>
+      </div>
+
+      <!-- Datos del objeto -->
+      <div class="dato">
+        <span class="dato-nombre">Diámetro estimado</span>
+        <span class="dato-valor">
+          {{ objeto.estimated_diameter.meters.estimated_diameter_min | number:'1.0-0' }}
+          -
+          {{ objeto.estimated_diameter.meters.estimated_diameter_max | number:'1.0-0' }} m
+        </span>
+      </div>
+
+      <div class="dato">
+        <span class="dato-nombre">Velocidad</span>
+        <span class="dato-valor">
+          {{ objeto.close_approach_data[0]?.relative_velocity?.kilometers_per_hour | number:'1.0-0' }} km/h
+        </span>
+      </div>
+
+      <div class="dato">
+        <span class="dato-nombre">Pasa a</span>
+        <span class="dato-valor">
+          {{ objeto.close_approach_data[0]?.miss_distance?.kilometers | number:'1.0-0' }} km
+        </span>
+      </div>
+
+      <!-- La misma distancia de arriba, expresada en distancias Tierra-Luna -->
+      <div class="dato">
+        <span class="dato-nombre">Equivale a</span>
+        <span class="dato-valor">
+          {{ objeto.close_approach_data[0]?.miss_distance?.lunar | number:'1.1-1' }} veces Tierra-Luna
+        </span>
+      </div>
+
+      <!-- Ficha oficial en el sitio de la NASA -->
+      <div class="creditos">
+        <a [href]="objeto.nasa_jpl_url" target="_blank" rel="noopener">
+          Ver ficha oficial de la NASA
+        </a>
+      </div>
+
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Estado de error -->
+  <div *ngIf="error() && !cargando()" class="estado error">
+    <ion-icon name="alert-circle-outline"></ion-icon>
+    <p>{{ error() }}</p>
+  </div>
 
 </ion-content>
