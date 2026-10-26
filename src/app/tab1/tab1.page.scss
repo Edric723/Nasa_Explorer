@@ -1,28 +1,27 @@
-/* Fondo de la tab */
+
+/* ========================================
+   FONDO DE LA PÁGINA
+======================================== */
+
 ion-content {
   --background: url('/assets/img/backgrounds/Fondo_1.jpg') no-repeat center center / cover;
   --padding-bottom: 120px;
 }
 
-/* Tarjeta principal */
+
+/* ========================================
+   TARJETA APOD
+======================================== */
+
 ion-card {
-  width: 90%;
-  max-width: 500px;
-  margin: 24px auto;
   overflow: hidden;
-
-  background: rgba(16, 24, 39, 0.92);
-  color: var(--color-texto);
-
-  border: 1px solid rgba(114, 215, 255, 0.28);
-  border-radius: 18px;
-
-  box-shadow:
-    0 0 18px rgba(0, 0, 0, 0.35),
-    0 0 12px rgba(114, 215, 255, 0.08);
 }
 
-/* Contenido */
+
+/* ========================================
+   IMAGEN
+======================================== */
+
 .contenedor-imagen,
 .contenedor-video {
   width: 100%;
@@ -30,7 +29,8 @@ ion-card {
   background: #050912;
 }
 
-/* Separación entre multimedia y contenido */
+/* Separación entre imagen y contenido */
+
 .contenedor-imagen {
   border-bottom: 1px solid rgba(114, 215, 255, 0.25);
 }
@@ -41,62 +41,31 @@ ion-card {
   max-height: 400px;
   margin: 0 auto;
   object-fit: contain;
+  cursor: pointer;
 }
 
-/* Video */
-// .contenedor-video {
-//   background: #010101;
-//   line-height: 0;
 
-//   video {
-//     display: block;
-//     width: 100%;
-//     height: auto;
-//     max-height: 65vh;
-//     background: #010101;
-//   }
-// }
+/* ========================================
+   VIDEO
+======================================== */
 
 .contenedor-video {
-  width: 100%;
   aspect-ratio: 16 / 9;
-  overflow: hidden;
   background: #010101;
 }
 
 .contenedor-video video,
 .contenedor-video iframe {
+  display: block;
   width: 100%;
   height: 100%;
-  display: block;
   border: 0;
 }
 
 
-
-/* Fecha */
-ion-card-subtitle {
-  margin-bottom: 10px;
-  color: var(--color-acento);
-  font-size: 12px;
-  letter-spacing: 1.5px;
-}
-
-/* Título */
-ion-card-title {
-  color: var(--color-texto);
-  font-family: 'Nasalization', sans-serif;
-  font-size: 21px;
-  font-weight: bold;
-  line-height: 1.4;
-}
-
-/* Contenido y descripción */
-ion-card-content {
-  color: var(--color-secundario);
-  font-size: 15px;
-  line-height: 1.7;
-}
+/* ========================================
+   DESCRIPCIÓN
+======================================== */
 
 .descripcion {
   color: var(--color-secundario);
@@ -108,14 +77,17 @@ ion-card-content {
   color: var(--color-texto);
 }
 
-/* Enlaces */
+
+/* ========================================
+   ENLACES Y CRÉDITOS
+======================================== */
+
 .descripcion a,
 .creditos a {
   color: var(--color-acento);
   text-decoration: none;
 }
 
-/* Créditos y copyright */
 .creditos {
   margin-top: 20px;
   padding-top: 14px;
@@ -130,64 +102,12 @@ ion-card-content {
   color: var(--color-acento);
 }
 
-/* Carga y errores */
-.estado {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  margin: 24px auto;
-  padding: 40px 20px;
 
-  color: var(--color-acento);
-  text-align: center;
-}
+/* ========================================
+   ADAPTACIÓN A PANTALLAS CHICAS
+======================================== */
 
-.estado ion-spinner {
-  width: 38px;
-  height: 38px;
-  color: var(--color-acento);
-}
-
-.estado ion-icon {
-  font-size: 42px;
-  color: var(--color-acento);
-}
-
-.estado p {
-  color: var(--color-texto);
-  font-size: 14px;
-  line-height: 1.5;
-}
-
-.estado.error ion-icon {
-  color: #ff7185;
-}
-
-.estado.error p {
-  color: #ffb4bf;
-}
-
-/* Adaptación a pantallas chicas */
 @media (max-width: 480px) {
-  ion-header ion-toolbar ion-title {
-    font-size: 17px;
-    letter-spacing: 0.5px;
-  }
-
-  ion-card {
-    width: 92%;
-    margin: 18px auto;
-  }
-
-  ion-card-title {
-    font-size: 18px;
-  }
-
-  ion-card-content {
-    font-size: 14px;
-  }
-
   .contenedor-imagen img {
     max-height: 320px;
   }

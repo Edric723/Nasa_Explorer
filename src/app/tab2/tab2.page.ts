@@ -2,17 +2,17 @@ import { Component, OnInit, signal } from '@angular/core';
 import { NeoService } from '../services/neo.service';
 import { ObjetoCercano } from '../models/neo.model';
 
-/*Muestra los asteroides que pasan cerca de la Tierra hoy y
- en los 2 días siguientes, ordenados por fecha de acercamiento*/
+
 @Component({
   selector: 'app-tab2',
   templateUrl: 'tab2.page.html',
   styleUrls: ['tab2.page.scss'],
   standalone: false,
 })
+
 export class Tab2Page implements OnInit {
 
-  // Señales (mismo patrón que tab1 y tab3)
+  // Señales
   objetos = signal<ObjetoCercano[]>([]);
   cargando = signal<boolean>(false);
   error = signal<string>('');
@@ -21,7 +21,6 @@ export class Tab2Page implements OnInit {
 
   constructor(private neoService: NeoService) { }
 
-  /** Al abrir la pantalla se cargan los objetos automáticamente. */
   ngOnInit() {
     this.cargarObjetos();
   }
@@ -41,7 +40,7 @@ export class Tab2Page implements OnInit {
           // La API agrupa los objetos por fecha: los unimos en una sola lista
           const lista = Object.values(respuesta.near_earth_objects).flat();
 
-          // Orden cronológico usando la fecha en milisegundos
+          // Orden por fecha-hora
           lista.sort((a, b) =>
             (a.close_approach_data[0]?.epoch_date_close_approach ?? 0) -
             (b.close_approach_data[0]?.epoch_date_close_approach ?? 0)
@@ -57,7 +56,6 @@ export class Tab2Page implements OnInit {
       });
   }
 
-  /* Identifica cada tarjeta por su id para que Angular no la redibuje de más. */
   trackPorId(_indice: number, objeto: ObjetoCercano): string {
     return objeto.id;
   }

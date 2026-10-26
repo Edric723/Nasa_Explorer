@@ -1,4 +1,6 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, OnDestroy, signal } from '@angular/core';
+import * as L from 'leaflet';
+
 import { EonetService } from '../services/eonet.service';
 import { EventoEonet } from '../models/event-eonet.model';
 import { GeolocationService, UbicacionIP } from '../services/geolocation.service';
@@ -9,24 +11,47 @@ import { GeolocationService, UbicacionIP } from '../services/geolocation.service
   styleUrls: ['tab3.page.scss'],
   standalone: false
 })
-export class Tab3Page implements OnInit {
 
-  // Señales
+export class Tab3Page implements OnInit, OnDestroy {
+
   eventos = signal<EventoEonet[]>([]);
   cargando = signal<boolean>(false);
   error = signal<string>('');
+
   ubicacion = signal<UbicacionIP | null>(null);
   errorUbicacion = signal<string>('');
   distancias = signal<Map<string, number>>(new Map());
 
+  categoriaSeleccionada = signal<string>('Todos');
+
+  private mapa?: L.Map;
+  private marcadores = L.layerGroup();
+
+  private categorias: Record<string, string> = {
+    'Incendios': 'Wildfires',
+    'Tormentas': 'Severe Storms',
+    'Volcanes': 'Volcanoes'
+  };
+
   constructor(
     private eonetService: EonetService,
     private geolocationService: GeolocationService
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.cargarEventos();
   }
+
+  ngOnDestroy() {
+    this.mapa?.remove();
+    this.mapa = undefined;
+  }
+
+  ionViewDidEnter() {
+    this.inicializarMapa();
+    this.actualizarMarcadores();
+  }
+
 
   cargarEventos() {
     this.cargando.set(true);
@@ -35,77 +60,208 @@ export class Tab3Page implements OnInit {
     this.eonetService.obtenerEventos().subscribe({
       next: (respuesta) => {
         this.eventos.set(respuesta.events);
+
+        const lugar = this.ubicacion();
+
+        if (lugar) {
+          this.calcularDistancias(lugar);
+        }
+
         this.cargando.set(false);
+        this.actualizarMarcadores();
       },
       error: () => {
         this.error.set(
           'No se pudieron cargar los eventos naturales.'
         );
+
         this.cargando.set(false);
       }
     });
   }
 
-  // Método para pedirle la ubicación al usuario.
-  // Ya que la pc no cuenta con gps tenemos que ver de testear por ip, y cuando estemos en app móvil testear la ubicación.
-  // Por ahora no influye en ninguna cosa.
-  async obtenerUbicacion() {
-    this.errorUbicacion.set('Buscando ubicación aproximada por IP...');
+  private inicializarMapa() {
+    if (this.mapa) {
+      this.mapa.invalidateSize();
+      return;
+    }
 
-    try {
-      const ubicacion = await this.geolocationService.obtenerUbicacionPorIP();
+    const elemento = document.getElementById('mapa-eventos');
 
-      this.ubicacion.set(ubicacion);
+    if (!elemento) {
+      return;
+    }
 
-      const distancias = new Map<string, number>();
+    this.mapa = L.map(elemento).setView([0, 0], 2);
 
-      for (const evento of this.eventos()) {
-        for (const geometria of evento.geometry) {
-          const coordenadas = geometria.coordinates;
+    L.tileLayer(
+      'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+      {
+        attribution: '&copy; OpenStreetMap contributors',
+        maxZoom: 19
+      }
+    ).addTo(this.mapa);
 
-          if (
-            geometria.type === 'Point' &&
-            Array.isArray(coordenadas) &&
-            typeof coordenadas[0] === 'number' &&
-            typeof coordenadas[1] === 'number'
-          ) {
-            const distancia = this.calcularDistancia(
-              ubicacion.latitude,
-              ubicacion.longitude,
-              coordenadas[1],
-              coordenadas[0]
-            );
+    this.marcadores.addTo(this.mapa);
+  }
 
-            distancias.set(evento.id, distancia);
-            break;
-          }
-        }
+  private actualizarMarcadores() {
+    if (!this.mapa) {
+      return;
+    }
+
+    this.marcadores.clearLayers();
+
+    for (const evento of this.eventosFiltrados()) {
+      const coordenadas = this.obtenerCoordenadas(evento);
+
+      if (!coordenadas) {
+        continue;
       }
 
-      this.distancias.set(distancias);
+      const icono = L.divIcon({
+        className: '',
+        html: '<div class="marcador-nasa"></div>',
+        iconSize: [14, 14],
+        iconAnchor: [7, 7]
+      });
 
-      this.eventos.update(eventos =>
-        [...eventos].sort((a, b) => {
-          const distanciaA = distancias.get(a.id);
-          const distanciaB = distancias.get(b.id);
-
-          if (distanciaA === undefined) return 1;
-          if (distanciaB === undefined) return -1;
-
-          return distanciaA - distanciaB;
-        })
+      const marcador = L.marker(
+        [coordenadas.latitud, coordenadas.longitud],
+        { icon: icono }
       );
+
+      const categoria =
+        evento.categories[0]?.title || 'Sin categoría';
+
+      const fecha =
+        coordenadas.fecha || 'Sin fecha';
+
+      let contenido = `
+        <strong>${this.escaparHtml(evento.title)}</strong>
+        <br>
+        ${this.escaparHtml(categoria)}
+        <br>
+        Fecha: ${this.escaparHtml(fecha)}
+      `;
+
+      const distancia = this.distancias().get(evento.id);
+
+      if (distancia !== undefined) {
+        contenido += `
+          <br>
+          Distancia aproximada: ${distancia.toFixed(1)} km
+        `;
+      }
+
+      marcador.bindPopup(contenido);
+      marcador.addTo(this.marcadores);
+    }
+
+    this.mapa.invalidateSize();
+  }
+
+  private obtenerCoordenadas(
+    evento: EventoEonet
+  ): { latitud: number; longitud: number; fecha: string } | null {
+
+    for (const geometria of evento.geometry) {
+      const coordenadas = geometria.coordinates;
+
+      if (
+        geometria.type === 'Point' &&
+        Array.isArray(coordenadas) &&
+        typeof coordenadas[0] === 'number' &&
+        typeof coordenadas[1] === 'number'
+      ) {
+        return {
+          longitud: coordenadas[0],
+          latitud: coordenadas[1],
+          fecha: geometria.date || 'Sin fecha'
+        };
+      }
+    }
+
+    return null;
+  }
+
+  filtrarPorCategoria(categoria: string) {
+    this.categoriaSeleccionada.set(categoria);
+    this.actualizarMarcadores();
+  }
+
+  eventosFiltrados(): EventoEonet[] {
+    const categoria = this.categoriaSeleccionada();
+
+    if (categoria === 'Todos') {
+      return this.eventos();
+    }
+
+    const categoriaApi = this.categorias[categoria];
+
+    if (!categoriaApi) {
+      return this.eventos();
+    }
+
+    return this.eventos().filter(evento =>
+      evento.categories.some(elemento =>
+        elemento.title.toLowerCase().includes(
+          categoriaApi.toLowerCase()
+        )
+      )
+    );
+  }
+
+  async obtenerUbicacion() {
+    this.errorUbicacion.set(
+      'Buscando ubicación aproximada por IP...'
+    );
+
+    try {
+      const lugar =
+        await this.geolocationService.obtenerUbicacionPorIP();
+
+      this.ubicacion.set(lugar);
+      this.calcularDistancias(lugar);
+      this.actualizarMarcadores();
 
       this.errorUbicacion.set(
-        'Ubicación obtenida. Eventos ordenados por cercanía.'
+        'Ubicación obtenida. Se calcularon las distancias a los eventos.'
       );
+
     } catch (error) {
-      console.error('Error al consultar ubicación por IP:', error);
+      console.error(
+        'Error al consultar ubicación por IP:',
+        error
+      );
 
       this.errorUbicacion.set(
         'No se pudo obtener la ubicación por IP.'
       );
     }
+  }
+
+  private calcularDistancias(lugar: UbicacionIP) {
+    const distancias = new Map<string, number>();
+
+    for (const evento of this.eventos()) {
+      const coordenadas = this.obtenerCoordenadas(evento);
+
+      if (!coordenadas) {
+        continue;
+      }
+
+      const distancia = this.calcularDistancia(
+        lugar.latitude,
+        lugar.longitude,
+        coordenadas.latitud,
+        coordenadas.longitud
+      );
+
+      distancias.set(evento.id, distancia);
+    }
+
+    this.distancias.set(distancias);
   }
 
   private calcularDistancia(
@@ -114,6 +270,7 @@ export class Tab3Page implements OnInit {
     latitud2: number,
     longitud2: number
   ): number {
+
     const radioTierra = 6371;
 
     const diferenciaLatitud =
@@ -122,13 +279,14 @@ export class Tab3Page implements OnInit {
     const diferenciaLongitud =
       (longitud2 - longitud1) * Math.PI / 180;
 
+    const senoLatitud = Math.sin(diferenciaLatitud / 2);
+    const senoLongitud = Math.sin(diferenciaLongitud / 2);
+
     const a =
-      Math.sin(diferenciaLatitud / 2) *
-      Math.sin(diferenciaLatitud / 2) +
+      senoLatitud * senoLatitud +
       Math.cos(latitud1 * Math.PI / 180) *
       Math.cos(latitud2 * Math.PI / 180) *
-      Math.sin(diferenciaLongitud / 2) *
-      Math.sin(diferenciaLongitud / 2);
+      senoLongitud * senoLongitud;
 
     const angulo = 2 * Math.atan2(
       Math.sqrt(a),
@@ -138,7 +296,17 @@ export class Tab3Page implements OnInit {
     return radioTierra * angulo;
   }
 
+  private escaparHtml(texto: string): string {
+    const caracteres: Record<string, string> = {
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#39;'
+    };
 
-
-
+    return texto.replace(/[&<>"']/g, caracter =>
+      caracteres[caracter]
+    );
+  }
 }

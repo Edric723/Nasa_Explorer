@@ -1,135 +1,136 @@
+
 <ion-header class="page-header">
   <ion-toolbar>
-    <ion-title>Eventos globales</ion-title>
+    <ion-title>El planeta en observación</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding eventos-page">
 
+  <!-- Introducción -->
   <section class="intro">
     <span class="eyebrow">NASA · EONET</span>
+
     <h1>Eventos naturales</h1>
+
     <p>
-      Explorá fenómenos naturales registrados en distintas partes del planeta.
+      Explorá los fenómenos naturales registrados en nuestro planeta.
     </p>
   </section>
 
-  <!-- Ubicación -->
-  <ion-card class="location-card">
-    <ion-card-header>
-      <div class="section-heading">
-        <div class="heading-icon">
-          <ion-icon name="navigate-outline"></ion-icon>
-        </div>
+  <!-- Mapa y filtros -->
+  <section class="map-section">
 
-        <div>
-          <ion-card-title>Mi ubicación</ion-card-title>
-          <ion-card-subtitle>Posición aproximada por IP</ion-card-subtitle>
-        </div>
+    <div class="map-heading">
+      <div>
+        <span class="eyebrow">OBSERVACIÓN TERRESTRE</span>
+        <h2>Mapa de eventos</h2>
       </div>
-    </ion-card-header>
 
-    <ion-card-content>
-      <ion-button expand="block" class="location-button" (click)="obtenerUbicacion()">
-        <ion-icon name="locate-outline" slot="start"></ion-icon>
-        Usar mi ubicación
+      <ion-icon name="globe-outline"></ion-icon>
+    </div>
+
+    <!-- Filtros por categoría -->
+    <div class="category-filters">
+      <ion-button
+        *ngFor="let categoria of ['Todos', 'Incendios', 'Tormentas', 'Volcanes']"
+        [fill]="categoriaSeleccionada() === categoria ? 'solid' : 'outline'"
+        (click)="filtrarPorCategoria(categoria)">
+
+        {{ categoria }}
       </ion-button>
+    </div>
 
-      <p *ngIf="errorUbicacion()" class="location-message" aria-live="polite">
-        {{ errorUbicacion() }}
-      </p>
+    <!-- Mapa interactivo -->
+    <div id="mapa-eventos"></div>
 
-      <div *ngIf="ubicacion() as lugar" class="location-details">
-        <div class="location-city">
-          <ion-icon name="location-outline"></ion-icon>
-          <div>
-            <span>Ubicación detectada</span>
-            <h2>{{ lugar.city }}, {{ lugar.country_name }}</h2>
-          </div>
-        </div>
+    <p class="map-caption">
+      <ion-icon name="information-circle-outline"></ion-icon>
+      Seleccioná un marcador para explorar un evento.
+    </p>
 
-        <div class="coordinates">
-          <div class="coordinate">
-            <span>Latitud</span>
-            <strong>{{ lugar.latitude }}</strong>
-          </div>
+  </section>
 
-          <div class="coordinate">
-            <span>Longitud</span>
-            <strong>{{ lugar.longitude }}</strong>
-          </div>
-        </div>
+  <!-- Controles de ubicación -->
+  <section class="location-controls">
 
-        <p class="location-disclaimer">
-          <ion-icon name="information-circle-outline"></ion-icon>
-          La ubicación por IP es aproximada y puede no coincidir con tu posición exacta.
+    <div class="location-description">
+      <ion-icon name="navigate-outline"></ion-icon>
+
+      <div>
+        <h2>Eventos cercanos</h2>
+
+        <p *ngIf="!ubicacion()">
+          Explorá los eventos según su ubicación geográfica.
+        </p>
+
+        <p *ngIf="ubicacion() as lugar">
+          Ubicación aproximada: {{ lugar.city }}, {{ lugar.country_name }}
         </p>
       </div>
-    </ion-card-content>
-  </ion-card>
-
-  <!-- Listado de eventos -->
-  <section class="events-section">
-    <div class="events-heading">
-      <div>
-        <span class="eyebrow">MONITOREO PLANETARIO</span>
-        <h2>Eventos detectados</h2>
-      </div>
-
-      <span class="event-count">{{ eventos().length }}</span>
     </div>
 
-    <div *ngIf="cargando()" class="state-card">
-      <ion-spinner name="crescent"></ion-spinner>
-      <p>Consultando eventos naturales...</p>
-    </div>
+    <ion-button
+      class="location-button"
+      fill="outline"
+      (click)="obtenerUbicacion()">
 
-    <div *ngIf="error()" class="state-card error-state">
-      <ion-icon name="alert-circle-outline"></ion-icon>
-      <p>{{ error() }}</p>
+      <ion-icon name="locate-outline" slot="start"></ion-icon>
 
-      <ion-button fill="outline" (click)="cargarEventos()">
-        Reintentar
-      </ion-button>
-    </div>
+      {{ ubicacion() ? 'Actualizar ubicación' : 'Cerca de mí' }}
+    </ion-button>
 
-    <ion-card *ngFor="let evento of eventos()" class="event-card">
-      <ion-card-header>
-        <div class="event-category">
-          <ion-icon name="earth-outline"></ion-icon>
-          <span>
-            {{ evento.categories[0]?.title || 'Categoría no disponible' }}
-          </span>
-        </div>
+    <!-- Error de ubicación -->
+    <p
+      *ngIf="errorUbicacion()"
+      class="location-message"
+      aria-live="polite">
 
-        <ion-card-title>{{ evento.title }}</ion-card-title>
-      </ion-card-header>
+      {{ errorUbicacion() }}
+    </p>
 
-      <ion-card-content>
-        <div class="event-info">
-          <ion-icon name="calendar-outline"></ion-icon>
-          <span>
-            <strong>Fecha de inicio</strong>
-            {{ evento.geometry[0]?.date || 'Sin fecha disponible' }}
-          </span>
-        </div>
+    <p class="location-disclaimer">
+      La ubicación por IP es aproximada y puede no coincidir con tu posición exacta.
+    </p>
 
-        <div *ngIf="distancias().has(evento.id)" class="event-distance">
-          <ion-icon name="navigate-outline"></ion-icon>
-          <div>
-            <span>Distancia aproximada</span>
-            <strong>
-              {{ distancias().get(evento.id) | number:'1.0-1' }} km
-            </strong>
-          </div>
-        </div>
-      </ion-card-content>
-    </ion-card>
+  </section>
 
-    <div *ngIf="!cargando() && !error() && eventos().length === 0" class="state-card">
-      <ion-icon name="planet-outline"></ion-icon>
-      <p>No hay eventos naturales para mostrar.</p>
-    </div>
+  <!-- Estado de carga -->
+  <section
+    *ngIf="cargando()"
+    class="nasa-state">
+
+    <ion-spinner name="crescent"></ion-spinner>
+
+    <p>Consultando eventos naturales...</p>
+  </section>
+
+  <!-- Estado de error -->
+  <section
+    *ngIf="error()"
+    class="nasa-state error">
+
+    <ion-icon name="alert-circle-outline"></ion-icon>
+
+    <p>{{ error() }}</p>
+
+    <ion-button
+      class="nasa-button"
+      fill="outline"
+      (click)="cargarEventos()">
+
+      Reintentar
+    </ion-button>
+  </section>
+
+  <!-- Sin resultados -->
+  <section
+    *ngIf="!cargando() && !error() && eventos().length === 0"
+    class="nasa-state">
+
+    <ion-icon name="planet-outline"></ion-icon>
+
+    <p>No hay eventos naturales para mostrar.</p>
   </section>
 
 </ion-content>
