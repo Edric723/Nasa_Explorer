@@ -1,5 +1,7 @@
+
 import { Component } from '@angular/core';
-import { OidcSecurityService } from 'angular-auth-oidc-client';
+import { Router } from '@angular/router';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-tab4',
@@ -10,21 +12,15 @@ import { OidcSecurityService } from 'angular-auth-oidc-client';
 export class Tab4Page {
 
   constructor(
-    private oidcSecurityService: OidcSecurityService
+    private authService: AuthService,
+    private router: Router
   ) {}
 
-/**
- * @function cerrarSesion
- * @description función encargada del log out.
- * @return void
- */
   cerrarSesion() {
-    this.oidcSecurityService.logoffLocal();
-  
-    window.location.href =
-      'https://us-east-2ghuflw2f3.auth.us-east-2.amazoncognito.com/logout' +
-      '?client_id=15kgev445afv48084b5q26fed1' +
-      '&logout_uri=' + encodeURIComponent('http://localhost:8100/login');
-  }
+    this.authService.cerrarSesion();
 
+    this.router.navigateByUrl('/login', {
+      replaceUrl: true
+    });
+  }
 }
