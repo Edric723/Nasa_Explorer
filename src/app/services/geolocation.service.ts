@@ -20,6 +20,8 @@ export class GeolocationService {
 
   constructor(private http: HttpClient) { }
 
+
+  // Comprobar en movile luego---
   // async obtenerUbicacion() {
   //   return await Geolocation.getCurrentPosition({
   //     enableHighAccuracy: true,

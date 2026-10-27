@@ -3,7 +3,8 @@ export type CoordenadasEonet = number | CoordenadasEonet[];
 export interface EventoEonet {
   id: string;
   title: string;
-
+  description?: string;
+  link?: string;
   categories: {
     title: string;
   }[];

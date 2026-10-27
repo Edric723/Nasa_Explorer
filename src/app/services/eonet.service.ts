@@ -16,7 +16,7 @@ export class EonetService {
     return this.http.get<RespuestaEonet>(this.apiUrl, {
       params: {
         status: 'open',
-        limit: '10'
+        limit: '1200'
       }
     });
   }

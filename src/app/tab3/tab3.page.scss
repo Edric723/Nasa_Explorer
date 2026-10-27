@@ -266,13 +266,13 @@ ion-content {
   width: 14px;
   height: 14px;
 
-  background: #72d7ff;
+  background: var(--color-marcador, #72d7ff);
   border: 2px solid #ffffff;
   border-radius: 50%;
 
   box-shadow:
-    0 0 8px #72d7ff,
-    0 0 16px rgba(114, 215, 255, 0.7);
+    0 0 8px var(--color-marcador, #72d7ff),
+    0 0 16px var(--color-marcador, rgba(114, 215, 255, 0.7));
 }
 
 

@@ -39,6 +39,8 @@ export class AuthService {
     this.recuperarSesion();
   }
 
+  // GUARDADO Y PERSISTENCIA DE SESION/TOKEN
+  // Guardado en storage para testeo web...
   guardarSesion(respuesta: any) {
     this.sesion = respuesta;
 
@@ -214,6 +216,7 @@ export class AuthService {
     );
   }
 
+  // REGISTRACION  método post
   registrar(
     email: string,
     password: string,
@@ -241,6 +244,7 @@ export class AuthService {
     );
   }
 
+  // ENVIO DE CÓDIGO AL MAIL
   confirmarRegistro(
     email: string,
     codigo: string
@@ -261,6 +265,7 @@ export class AuthService {
     );
   }
 
+  // INICIA LA SESIÓN EN LA APP.
   iniciarSesion(
     email: string,
     password: string

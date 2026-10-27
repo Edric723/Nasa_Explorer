@@ -1,4 +1,3 @@
-
 <ion-header class="page-header">
   <ion-toolbar>
     <ion-title>El planeta en observación</ion-title>
@@ -32,13 +31,18 @@
 
     <!-- Filtros por categoría -->
     <div class="category-filters">
-      <ion-button
-        *ngFor="let categoria of ['Todos', 'Incendios', 'Tormentas', 'Volcanes']"
-        [fill]="categoriaSeleccionada() === categoria ? 'solid' : 'outline'"
-        (click)="filtrarPorCategoria(categoria)">
 
-        {{ categoria }}
+      <ion-button *ngFor="let categoria of categorias"
+        [fill]="categoriaSeleccionada() === categoria.nombre ? 'solid' : 'outline'"
+        (click)="filtrarPorCategoria(categoria.nombre)">
+        {{ categoria.nombre }}
       </ion-button>
+
+      <ion-button [fill]="categoriaSeleccionada() === 'Todos' ? 'solid' : 'outline'"
+        (click)="filtrarPorCategoria('Todos')">
+        Todos
+      </ion-button>
+
     </div>
 
     <!-- Mapa interactivo -->
@@ -70,22 +74,14 @@
       </div>
     </div>
 
-    <ion-button
-      class="location-button"
-      fill="outline"
-      (click)="obtenerUbicacion()">
-
+    <ion-button class="location-button" fill="outline" (click)="obtenerUbicacion()">
       <ion-icon name="locate-outline" slot="start"></ion-icon>
 
       {{ ubicacion() ? 'Actualizar ubicación' : 'Cerca de mí' }}
     </ion-button>
 
     <!-- Error de ubicación -->
-    <p
-      *ngIf="errorUbicacion()"
-      class="location-message"
-      aria-live="polite">
-
+    <p *ngIf="errorUbicacion()" class="location-message" aria-live="polite">
       {{ errorUbicacion() }}
     </p>
 
@@ -96,41 +92,85 @@
   </section>
 
   <!-- Estado de carga -->
-  <section
-    *ngIf="cargando()"
-    class="nasa-state">
-
+  <section *ngIf="cargando()" class="nasa-state">
     <ion-spinner name="crescent"></ion-spinner>
 
     <p>Consultando eventos naturales...</p>
   </section>
 
   <!-- Estado de error -->
-  <section
-    *ngIf="error()"
-    class="nasa-state error">
-
+  <section *ngIf="error()" class="nasa-state error">
     <ion-icon name="alert-circle-outline"></ion-icon>
 
     <p>{{ error() }}</p>
 
-    <ion-button
-      class="nasa-button"
-      fill="outline"
-      (click)="cargarEventos()">
-
+    <ion-button class="nasa-button" fill="outline" (click)="cargarEventos()">
       Reintentar
     </ion-button>
   </section>
 
-  <!-- Sin resultados -->
   <section
-    *ngIf="!cargando() && !error() && eventos().length === 0"
-    class="nasa-state">
+  *ngIf="ubicacion() && !cargando() && !error()"
+  class="map-section nearby-events">
 
-    <ion-icon name="planet-outline"></ion-icon>
+  <div class="map-heading">
+    <div>
+      <span class="eyebrow">SEGÚN TU UBICACIÓN</span>
+      <h2>Eventos en un radio de {{ radioMaximo }} km</h2>
+    </div>
 
-    <p>No hay eventos naturales para mostrar.</p>
+    <ion-icon name="radar-outline"></ion-icon>
+  </div>
+
+  <p>
+    Estos son los eventos naturales más cercanos,
+    ordenados por distancia.
+  </p>
+
+  <ion-card *ngFor="let evento of eventosCercanos()">
+    <ion-card-header>
+      <ion-card-subtitle>
+        {{ evento.categories[0]?.title || 'Sin categoría' }}
+      </ion-card-subtitle>
+
+      <ion-card-title>
+        {{ evento.title }}
+      </ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <p>
+        {{ evento.description ||
+           'No hay una descripción adicional disponible para este evento.' }}
+      </p>
+
+      <p>
+        <ion-icon name="navigate-outline"></ion-icon>
+        {{ distancias().get(evento.id)?.toFixed(1) }} km
+      </p>
+
+      <p *ngIf="evento.geometry.length > 0">
+        <ion-icon name="calendar-outline"></ion-icon>
+        {{ evento.geometry[evento.geometry.length - 1].date | date:'dd/MM/yyyy' }}
+      </p>
+
+      <ion-button
+        *ngIf="evento.link"
+        [href]="evento.link"
+        target="_blank"
+        rel="noopener noreferrer"
+        fill="clear">
+        Más información
+        <ion-icon name="open-outline" slot="end"></ion-icon>
+      </ion-button>
+    </ion-card-content>
+  </ion-card>
+
+  <p *ngIf="eventosCercanos().length === 0">
+    No se encontraron eventos dentro de este radio
+    con la categoría seleccionada.
+  </p>
+
   </section>
 
 </ion-content>
