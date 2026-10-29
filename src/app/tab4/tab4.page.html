@@ -1,21 +1,38 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Cuenta</ion-title>
+    <ion-title>IFTS N° 11</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="ion-padding">
+  <div class="account-cards">
+    <ion-card class="team-card">
+      <ion-card-header>
+        <ion-card-title>NASA App</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <h2>Integrantes del grupo:</h2>
 
-  <div class="login-container">
-    <div class="login-panel">
-      <h1>See you space cowboy!</h1>
+        <ul>
+          <li>PUENTES, Kevin</li>
+          <li>PAOLETTI, Eleonora</li>
+          <li>MARTIN, Julio Cesar</li>
+          <li>QUISPE, George</li>
+        </ul>
+      </ion-card-content>
+    </ion-card>
 
-      <p>A continuación haz click en cerrar sesión si deseas abandonar la app.</p>
+    <ion-card class="logout-card">
+      <ion-card-header>
+        <ion-card-title>See you space cowboy!</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <p>A continuación haz click en cerrar sesión si deseas abandonar la app.</p>
 
-      <ion-button expand="block" (click)="cerrarSesion()">
-        Cerrar sesión
-      </ion-button>
-    </div>
+        <ion-button expand="block" (click)="cerrarSesion()">
+          Cerrar sesión
+        </ion-button>
+      </ion-card-content>
+    </ion-card>
   </div>
-
 </ion-content>

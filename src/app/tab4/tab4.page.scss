@@ -1,39 +1,78 @@
-.login-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100%;
-  padding: 24px;
+.account-cards {
+  display: grid;
+  gap: 20px;
+  width: 100%;
+  max-width: 560px;
+  margin: 0 auto;
+}
+
+.team-card,
+.logout-card {
+  width: 100%;
+  margin: 0;
+  overflow: hidden;
+  border: 1px solid rgba(139, 92, 246, 0.4);
+  border-radius: 20px;
+}
+
+.team-card {
+  --background:
+    linear-gradient(rgba(7, 17, 31, 0.45), rgba(7, 17, 31, 0.72)),
+    url('/assets/img/backgrounds/Fondo_4.jpg') center / cover;
+  --color: #ffffff;
+
+  box-shadow: 0 0 25px rgba(39, 103, 159, 0.25);
+}
+
+.team-card ion-card-header {
   text-align: center;
 }
 
-.login-panel {
-  width: 100%;
-  max-width: 420px;
-  padding: 32px 24px;
+.team-card ion-card-title,
+.team-card h2,
+.team-card li {
+  color: #ffffff;
+}
 
-  background: rgba(7, 17, 31, 0.25);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+.team-card ion-card-title,
+.logout-card ion-card-title {
+  font-family: 'Nasalization', sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+}
 
-  border: 1px solid rgba(139, 92, 246, 0.4);
-  border-radius: 20px;
+.team-card h2 {
+  margin-top: 0;
+  font-size: 18px;
+}
+
+.team-card ul {
+  margin-bottom: 0;
+  padding-inline-start: 20px;
+  line-height: 1.8;
+}
+
+.logout-card {
+  --background: rgba(7, 17, 31, 0.72);
+  --color: #ffffff;
 
   box-shadow: 0 0 25px rgba(139, 92, 246, 0.15);
+  text-align: center;
 }
 
-h1 {
-  font-family: 'Nasalization', sans-serif;
-  font-size: 36px;
-  font-weight: 700;
-  margin-bottom: 12px;
+.logout-card ion-card-header {
+  padding-bottom: 8px;
 }
 
-p {
+.logout-card ion-card-title {
+  color: #ffffff;
+}
+
+.logout-card p {
   font-family: 'Nasalization', sans-serif;
   font-size: 18px;
   color: #ffffff;
-  margin-bottom: 35px;
+  margin: 0 0 24px;
   line-height: 1.6;
 }
 
