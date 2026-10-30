@@ -1,3 +1,69 @@
 ion-content {
   --background: url('/assets/img/backgrounds/Fondo_4.jpg') center;
 }
+
+.team-photo-card {
+  width: 100%;
+  max-width: 440px;
+  margin: 24px auto;
+  border: 1px solid rgba(139, 92, 246, 0.4);
+  border-radius: 18px;
+  --background: rgba(7, 17, 31, 0.88);
+  --color: #ffffff;
+  box-shadow: 0 0 25px rgba(39, 103, 159, 0.25);
+}
+
+.team-photo-card ion-card-header {
+  padding-bottom: 8px;
+  text-align: center;
+}
+
+.team-photo-card ion-card-title {
+  color: #ffffff;
+  font-family: 'Nasalization', sans-serif;
+  font-size: 17px;
+}
+
+.team-photo-card ion-card-content {
+  padding-top: 8px;
+}
+
+.team-photos {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.team-member {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  color: #ffffff;
+  font-size: 11px;
+  text-align: center;
+}
+
+.team-member img {
+  width: 56px;
+  height: 56px;
+  border: 2px solid rgba(114, 215, 255, 0.7);
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+@media (max-width: 380px) {
+  .team-photos {
+    gap: 4px;
+  }
+
+  .team-member {
+    font-size: 10px;
+  }
+
+  .team-member img {
+    width: 48px;
+    height: 48px;
+  }
+}
