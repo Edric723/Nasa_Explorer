@@ -5,20 +5,6 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-  <div class="account-cards">
-    <ion-card class="logout-card">
-      <ion-card-header>
-        <ion-card-title>See you space cowboy!</ion-card-title>
-      </ion-card-header>
-      <ion-card-content>
-        <p>A continuación haz click en cerrar sesión si deseas abandonar la app.</p>
-
-        <ion-button expand="block" (click)="cerrarSesion()">
-          Cerrar sesión
-        </ion-button>
-      </ion-card-content>
-    </ion-card>
-  </div>
   <ion-fab slot="fixed" vertical="bottom" horizontal="end" (click)="agregarLista()">
     <ion-fab-button>
       <ion-icon name="chevron-up-circle"></ion-icon>
@@ -30,7 +16,7 @@
       <ion-fab-button>
         <ion-icon name="color-palette"></ion-icon>
       </ion-fab-button>
-      <ion-fab-button>
+      <ion-fab-button routerLink="/tabs/tab4/globe">
         <ion-icon name="globe"></ion-icon>
       </ion-fab-button>
     </ion-fab-list>
