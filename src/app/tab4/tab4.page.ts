@@ -23,4 +23,7 @@ export class Tab4Page {
       replaceUrl: true
     });
   }
+  agregarLista() {
+
+  }
 }

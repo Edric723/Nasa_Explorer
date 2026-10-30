@@ -6,22 +6,6 @@
 
 <ion-content class="ion-padding">
   <div class="account-cards">
-    <ion-card class="team-card">
-      <ion-card-header>
-        <ion-card-title>NASA App</ion-card-title>
-      </ion-card-header>
-      <ion-card-content>
-        <h2>Integrantes del grupo:</h2>
-
-        <ul>
-          <li>PUENTES, Kevin</li>
-          <li>PAOLETTI, Eleonora</li>
-          <li>MARTIN, Julio Cesar</li>
-          <li>QUISPE, George</li>
-        </ul>
-      </ion-card-content>
-    </ion-card>
-
     <ion-card class="logout-card">
       <ion-card-header>
         <ion-card-title>See you space cowboy!</ion-card-title>
@@ -35,4 +19,20 @@
       </ion-card-content>
     </ion-card>
   </div>
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end" (click)="agregarLista()">
+    <ion-fab-button>
+      <ion-icon name="chevron-up-circle"></ion-icon>
+    </ion-fab-button>
+    <ion-fab-list side="top">
+      <ion-fab-button routerLink="/tabs/tab4/document">
+        <ion-icon name="document"></ion-icon>
+      </ion-fab-button>
+      <ion-fab-button>
+        <ion-icon name="color-palette"></ion-icon>
+      </ion-fab-button>
+      <ion-fab-button>
+        <ion-icon name="globe"></ion-icon>
+      </ion-fab-button>
+    </ion-fab-list>
+  </ion-fab>
 </ion-content>

@@ -7,6 +7,7 @@ import { IonicModule } from '@ionic/angular/lazy';
 import { Tab4PageRoutingModule } from './tab4-routing.module';
 
 import { Tab4Page } from './tab4.page';
+import { DocumentPage } from './document.page';
 
 @NgModule({
   imports: [
@@ -15,6 +16,6 @@ import { Tab4Page } from './tab4.page';
     IonicModule,
     Tab4PageRoutingModule
   ],
-  declarations: [Tab4Page]
+  declarations: [Tab4Page, DocumentPage]
 })
 export class Tab4PageModule {}
