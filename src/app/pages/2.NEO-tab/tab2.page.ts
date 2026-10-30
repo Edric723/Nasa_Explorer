@@ -1,6 +1,6 @@
 import { Component, OnInit, signal } from '@angular/core';
-import { NeoService } from '../services/neo.service';
-import { ObjetoCercano } from '../models/neo.model';
+import { NeoService } from '../../services/neo.service';
+import { ObjetoCercano } from '../../models/neo.model';
 
 
 @Component({

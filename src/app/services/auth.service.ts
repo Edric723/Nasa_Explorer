@@ -1,14 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
-import {
-    Observable,
-    of,
-    tap,
-    map,
-    catchError,
-    throwError
-} from 'rxjs';
+import { Observable, of, tap, map, catchError, throwError } from 'rxjs';
 
 import {
   COGNITO_URL,

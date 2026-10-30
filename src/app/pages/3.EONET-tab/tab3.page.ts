@@ -1,10 +1,10 @@
 import { Component, OnInit, OnDestroy, signal } from '@angular/core';
 import * as L from 'leaflet';
 
-import { EonetService } from '../services/eonet.service';
-import { GeolocationService, UbicacionIP } from '../services/geolocation.service';
-import { EventoEonet } from '../models/event-eonet.model';
-import { CATEGORIAS_EONET } from '../models/categoria-eonet.model';
+import { EonetService } from '../../services/eonet.service';
+import { GeolocationService, UbicacionIP } from '../../services/geolocation.service';
+import { EventoEonet } from '../../models/event-eonet.model';
+import { CATEGORIAS_EONET } from '../../models/categoria-eonet.model';
 
 
 @Component({

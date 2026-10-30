@@ -1,7 +1,7 @@
 import { Component, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
-import { AuthService } from '../services/auth.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -146,4 +146,5 @@ export class LoginPage {
     this.error.set('');
     this.mensaje.set('');
   }
+
 }
