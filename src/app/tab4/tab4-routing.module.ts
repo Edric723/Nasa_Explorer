@@ -4,6 +4,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { Tab4Page } from './tab4.page';
 import { DocumentPage } from './document.page';
 import { GlobePage } from './globe.page';
+import { AboutPage } from './about.page';
 
 const routes: Routes = [
   {
@@ -13,6 +14,10 @@ const routes: Routes = [
   {
     path: 'globe',
     component: GlobePage
+  },
+  {
+    path: 'about',
+    component: AboutPage
   },
   {
     path: '',

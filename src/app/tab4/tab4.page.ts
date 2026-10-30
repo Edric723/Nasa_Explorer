@@ -7,8 +7,4 @@ import { Component } from '@angular/core';
   styleUrls: ['./tab4.page.scss'],
   standalone: false
 })
-export class Tab4Page {
-  agregarLista() {
-
-  }
-}
+export class Tab4Page {}
