@@ -31,6 +31,7 @@
             name="password" autocomplete="current-password" required>
             <ion-input-password-toggle slot="end"></ion-input-password-toggle>
           </ion-input>
+         <span (click)="recuperarContrasena()">¿Olvidaste tu contraseña?</span>
         </label>
 
         <!-- Botón de iniciar sesión -->
@@ -158,3 +159,54 @@
     </div>
   </ng-template>
 </ion-content>
+
+<!-- Recuperación de contraseña -->
+<section class="login-panel" *ngIf="modo === 'recuperacion'">
+  <header class="panel-heading">
+    <span class="eyebrow">RECUPERAR ACCESO</span>
+    <h1>Nueva contraseña</h1>
+    <p>Ingresá el código que recibiste por correo y tu nueva contraseña.</p>
+  </header>
+
+  <form (ngSubmit)="confirmarRecuperacion()">
+
+    <label class="field">
+      <span>Código de recuperación</span>
+      <ion-input
+        class="custom-input"
+        type="text"
+        placeholder="Ingresá el código"
+        [(ngModel)]="codigo"
+        name="codigoRecuperacion"
+        required>
+      </ion-input>
+    </label>
+
+    <label class="field">
+      <span>Nueva contraseña</span>
+      <ion-input
+        class="custom-input"
+        type="password"
+        placeholder="Ingresá tu nueva contraseña"
+        [(ngModel)]="nuevaPassword"
+        name="nuevaPassword"
+        required>
+        <ion-input-password-toggle slot="end"></ion-input-password-toggle>
+      </ion-input>
+    </label>
+
+    <ion-button class="primary-button" type="submit" expand="block" [disabled]="cargando()">
+      <span *ngIf="!cargando()">Cambiar contraseña</span>
+      <ion-spinner *ngIf="cargando()" name="crescent"></ion-spinner>
+    </ion-button>
+
+  </form>
+
+  <ng-container *ngTemplateOutlet="feedback"></ng-container>
+
+  <footer class="panel-footer">
+    <button type="button" class="text-button" (click)="mostrarLogin()">
+      Volver al inicio de sesión
+    </button>
+  </footer>
+</section>

@@ -289,4 +289,43 @@ export class AuthService {
       })
     );
   }
+   // RECUPERACIÓN DE CONTRASEÑA
+  recuperarContrasena(email: string): Observable<any> {
+    return this.http.post(
+      this.url,
+      {
+        ClientId: this.clientId,
+        Username: email
+      },
+      {
+        headers: this.headers.set(
+          'X-Amz-Target',
+          'AWSCognitoIdentityProviderService.ForgotPassword'
+        )
+      }
+    );
+  }
+
+  // CONFIRMAR RECUPERACIÓN DE CONTRASEÑA
+confirmarRecuperacion(
+  email: string,
+  codigo: string,
+  nuevaPassword: string
+): Observable<any> {
+  return this.http.post(
+    this.url,
+    {
+      ClientId: this.clientId,
+      Username: email,
+      ConfirmationCode: codigo,
+      Password: nuevaPassword
+    },
+    {
+      headers: this.headers.set(
+        'X-Amz-Target',
+        'AWSCognitoIdentityProviderService.ConfirmForgotPassword'
+      )
+    }
+  );
+}
 }

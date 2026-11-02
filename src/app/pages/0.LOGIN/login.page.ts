@@ -11,13 +11,14 @@ import { AuthService } from '../../services/auth.service';
 })
 export class LoginPage {
 
-  modo: 'login' | 'registro' | 'confirmacion' = 'login';
+  modo: 'login' | 'registro' | 'confirmacion' | 'recuperacion' = 'login';
 
   email = '';
   password = '';
   nickname = '';
   fechaNacimiento = '';
   codigo = '';
+  nuevaPassword = '';
 
   cargando = signal(false);
   error = signal('');
@@ -26,7 +27,7 @@ export class LoginPage {
   constructor(
     private authService: AuthService,
     private router: Router
-  ) {}
+  ) { }
 
   mostrarLogin() {
     this.modo = 'login';
@@ -145,6 +146,58 @@ export class LoginPage {
   private limpiarMensajes() {
     this.error.set('');
     this.mensaje.set('');
+  }
+
+
+  recuperarContrasena() {
+    this.limpiarMensajes();
+
+    if (!this.email.trim()) {
+      this.error.set('Ingresá tu correo electrónico para recuperar tu contraseña.');
+      return;
+    }
+
+    this.cargando.set(true);
+
+    this.authService.recuperarContrasena(
+      this.email
+    ).subscribe({
+      next: () => {
+        this.cargando.set(false);
+        this.modo = 'recuperacion';
+
+        this.mensaje.set(
+          'Te enviaremos un código de recuperación a tu correo electrónico.'
+        );
+      },
+      error: (error: HttpErrorResponse) => {
+        this.cargando.set(false);
+        this.mostrarError(error);
+      }
+    });
+  }
+
+  confirmarRecuperacion() {
+    this.cargando.set(true);
+
+    this.authService.confirmarRecuperacion(
+      this.email,
+      this.codigo,
+      this.nuevaPassword
+    ).subscribe({
+      next: () => {
+        this.cargando.set(false);
+        this.modo = 'login';
+        this.password = '';
+        this.codigo = '';
+        this.nuevaPassword = '';
+        this.mensaje.set('Contraseña actualizada correctamente.');
+      },
+      error: (error: HttpErrorResponse) => {
+        this.cargando.set(false);
+        this.mostrarError(error);
+      }
+    });
   }
 
 }
