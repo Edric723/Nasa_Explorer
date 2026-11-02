@@ -21,10 +21,6 @@ const routes: Routes = [
         loadChildren: () => import('../pages/3.EONET-tab/tab3.module').then(m => m.Tab3PageModule)
       },
       {
-        path: 'tab4',
-        loadChildren: () => import('../Modificar para eliminar/tab4.module').then(m => m.Tab4PageModule)
-      },
-      {
         path: '',
         redirectTo: 'tab1',
         pathMatch: 'full'

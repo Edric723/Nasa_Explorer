@@ -6,13 +6,15 @@ import { Tab2Page } from './tab2.page';
 
 import { Tab2PageRoutingModule } from './tab2-routing.module';
 import { SimuladorNeoComponent } from '../../components/simulador-neo/simulador-neo.component';
+import { MenuGlobalModule } from '../../components/menu-global/menu-global.module';
 
 @NgModule({
   imports: [
     IonicModule,
     CommonModule,
     FormsModule,
-    Tab2PageRoutingModule
+    Tab2PageRoutingModule,
+    MenuGlobalModule
   ],
   declarations: [Tab2Page, SimuladorNeoComponent]
 })

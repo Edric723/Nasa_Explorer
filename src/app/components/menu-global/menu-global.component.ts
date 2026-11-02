@@ -1,15 +1,14 @@
-
 import { Component } from '@angular/core';
+import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
-import { AuthService } from '../services/auth.service';
 
 @Component({
-  selector: 'app-tab4',
-  templateUrl: './tab4.page.html',
-  styleUrls: ['./tab4.page.scss'],
+  selector: 'app-menu-global',
+  templateUrl: './menu-global.component.html',
+  styleUrls: ['./menu-global.component.scss'],
   standalone: false
 })
-export class Tab4Page {
+export class MenuGlobalComponent {
 
   constructor(
     private authService: AuthService,
@@ -18,9 +17,6 @@ export class Tab4Page {
 
   cerrarSesion() {
     this.authService.cerrarSesion();
-
-    this.router.navigateByUrl('/login', {
-      replaceUrl: true
-    });
+    this.router.navigate(['/login']);
   }
 }
