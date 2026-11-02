@@ -10,6 +10,8 @@ import { ObjetoCercano } from '../../models/neo.model';
   standalone: false,
 })
 
+
+
 export class Tab2Page implements OnInit {
 
   // Señales
@@ -18,6 +20,8 @@ export class Tab2Page implements OnInit {
   error = signal<string>('');
 
   limiteObjetos = 10;
+
+  objetoSeleccionado: ObjetoCercano | null = null;
 
   constructor(private neoService: NeoService) { }
 
@@ -82,5 +86,9 @@ export class Tab2Page implements OnInit {
     const mes = String(fecha.getMonth() + 1).padStart(2, '0');
     const dia = String(fecha.getDate()).padStart(2, '0');
     return `${fecha.getFullYear()}-${mes}-${dia}`;
+  }
+
+  seleccionarObjeto(objeto: ObjetoCercano) {
+    this.objetoSeleccionado = objeto;
   }
 }

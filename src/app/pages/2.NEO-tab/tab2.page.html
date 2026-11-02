@@ -15,6 +15,31 @@
     <p>Rastreando objetos cercanos...</p>
   </div>
 
+  <!-- Simulador de trayectoria -->
+  <ion-card class="nasa-card">
+    <ion-card-header>
+      <ion-card-subtitle>Simulación de aproximación</ion-card-subtitle>
+      <ion-card-title>Visor de trayectorias NEO</ion-card-title>
+    </ion-card-header>
+  
+    <ion-card-content>
+      <app-simulador-neo
+        [objeto]="objetoSeleccionado">
+      </app-simulador-neo>
+  
+      <ion-button
+        *ngIf="objetoSeleccionado"
+        expand="block"
+        fill="outline"
+        color="medium"
+        (click)="objetoSeleccionado = null">
+  
+        <ion-icon name="close-outline" slot="start"></ion-icon>
+        Cerrar simulador
+      </ion-button>
+    </ion-card-content>
+  </ion-card>
+
   <!-- Una tarjeta por cada objeto -->
   <ion-card
     *ngFor="let objeto of objetos(); trackBy: trackPorId"
@@ -40,7 +65,7 @@
 
     <ion-card-content>
 
-      <!-- Indicador de peligrosidad según la NASA -->
+      <!-- Indicador de peligrosidad -->
       <div
         class="etiqueta"
         [class.peligroso]="objeto.is_potentially_hazardous_asteroid">
@@ -88,7 +113,7 @@
         </span>
       </div>
 
-      <!-- Distancia expresada en distancias Tierra-Luna -->
+      <!-- Distancia Tierra-Luna -->
       <div class="dato">
         <span class="dato-nombre">Distancia equivalente a</span>
 
@@ -97,7 +122,21 @@
         </span>
       </div>
 
-      <!-- Ficha oficial de la NASA -->
+      <!-- Abrir simulador -->
+      <ion-button
+        expand="block"
+        (click)="seleccionarObjeto(objeto)">
+
+        <ion-icon
+          name="orbit-outline"
+          slot="start">
+        </ion-icon>
+
+        Visualizar trayectoria
+
+      </ion-button>
+
+      <!-- Ficha oficial NASA -->
       <div class="creditos">
         <a
           [href]="objeto.nasa_jpl_url"
@@ -118,6 +157,7 @@
 
     <ion-icon name="alert-circle-outline"></ion-icon>
     <p>{{ error() }}</p>
+
   </div>
 
 </ion-content>
