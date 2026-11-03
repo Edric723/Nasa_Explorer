@@ -1,12 +1,17 @@
 import { TestBed } from '@angular/core/testing';
-import { Apod } from './apod.service';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 
-describe('Apod', () => {
-  let service: Apod;
+import { ApodService } from './apod.service';
+
+describe('ApodService', () => {
+  let service: ApodService;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
-    service = TestBed.inject(Apod);
+    TestBed.configureTestingModule({
+      providers: [provideHttpClient(), provideHttpClientTesting()]
+    });
+    service = TestBed.inject(ApodService);
   });
 
   it('should be created', () => {

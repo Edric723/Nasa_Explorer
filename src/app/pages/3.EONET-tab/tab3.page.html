@@ -1,10 +1,10 @@
-<ion-header class="page-header">
+<ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>Observatorio de Eventos Naturales</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="ion-padding eventos-page">
+<ion-content [fullscreen]="true">
 
   <!-- Introducción -->
   <section class="intro">
@@ -32,7 +32,7 @@
     <!-- Filtros por categoría -->
     <div class="category-filters">
 
-      @for (categoria of categorias; track categoria) {
+      @for (categoria of categorias; track categoria.nombre) {
         <ion-button
           [fill]="categoriaSeleccionada() === categoria.nombre ? 'solid' : 'outline'"
           (click)="filtrarPorCategoria(categoria.nombre)">
@@ -87,9 +87,9 @@
     </ion-button>
 
     <!-- Error de ubicación -->
-    @if (errorUbicacion()) {
+    @if (mensajeUbicacion()) {
       <p class="location-message" aria-live="polite">
-        {{ errorUbicacion() }}
+        {{ mensajeUbicacion() }}
       </p>
     }
 
@@ -132,7 +132,7 @@
         Estos son los eventos naturales más cercanos,
         ordenados por distancia.
       </p>
-      @for (evento of eventosCercanos(); track evento) {
+      @for (evento of eventosCercanos(); track evento.id) {
         <ion-card>
           <ion-card-header>
             <ion-card-subtitle>

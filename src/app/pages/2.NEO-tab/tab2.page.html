@@ -1,4 +1,3 @@
-
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>
@@ -43,7 +42,7 @@
   </ion-card>
 
   <!-- Una tarjeta por cada objeto -->
-  @for (objeto of objetos(); track trackPorId($index, objeto)) {
+  @for (objeto of objetos(); track objeto.id) {
     <ion-card
       class="nasa-card">
       <ion-card-header>

@@ -1,12 +1,17 @@
 import { TestBed } from '@angular/core/testing';
-import { Eonet } from './eonet.service';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 
-describe('Eonet', () => {
-  let service: Eonet;
+import { EonetService } from './eonet.service';
+
+describe('EonetService', () => {
+  let service: EonetService;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
-    service = TestBed.inject(Eonet);
+    TestBed.configureTestingModule({
+      providers: [provideHttpClient(), provideHttpClientTesting()]
+    });
+    service = TestBed.inject(EonetService);
   });
 
   it('should be created', () => {

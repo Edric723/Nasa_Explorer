@@ -60,10 +60,6 @@ export class Tab2Page implements OnInit {
       });
   }
 
-  trackPorId(_indice: number, objeto: ObjetoCercano): string {
-    return objeto.id;
-  }
-
   //Año de descubrimiento, estado de la órbita
   etiquetaObjeto(nombre: string): string {
     const texto = nombre.trim();

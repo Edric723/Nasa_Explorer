@@ -49,10 +49,6 @@ export class LoginPage {
         this.cargando.set(false);
 
         if (respuesta.AuthenticationResult) {
-          this.authService.guardarSesion(
-            respuesta.AuthenticationResult
-          );
-
           this.router.navigateByUrl('/tabs/tab1');
         } else {
           this.error.set(
@@ -127,19 +123,6 @@ export class LoginPage {
     }
   }
 
-  cumpleRequisitosPassword(): boolean {
-    if (!this.password) {
-      return false;
-    }
-
-    const longitud = this.password.length >= 8;
-    const mayuscula = /[A-Z]/.test(this.password);
-    const minuscula = /[a-z]/.test(this.password);
-    const numero = /[0-9]/.test(this.password);
-    const especial = /[^A-Za-z0-9]/.test(this.password);
-
-    return longitud && mayuscula && minuscula && numero && especial;
-  }
 
   private limpiarMensajes() {
     this.error.set('');

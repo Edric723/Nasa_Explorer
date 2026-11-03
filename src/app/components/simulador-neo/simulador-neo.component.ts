@@ -1,11 +1,4 @@
-import {
-  Component,
-  Input,
-  OnChanges,
-  OnDestroy,
-  SimpleChanges,
-  signal
-} from '@angular/core';
+import { Component, Input, OnChanges, OnDestroy, SimpleChanges, signal, computed } from '@angular/core';
 
 import { ObjetoCercano } from '../../models/neo.model';
 
@@ -27,10 +20,45 @@ export class SimuladorNeoComponent implements OnChanges, OnDestroy {
   intervalo: ReturnType<typeof setInterval> | null = null;
 
   // Parámetros de la trayectoria
-  angulo = 0;
-  curvatura = 0;
-  sentido = 1;
-  distanciaVisual = 0;
+  private parametros = signal({ angulo: 0, curvatura: 0, sentido: 1 });
+
+  // Puntos de la curva (inicio, control y final)
+  private puntos = computed(() => {
+    const { angulo, curvatura, sentido } = this.parametros();
+
+    return {
+      inicioX: 15,
+      finalX: 345,
+      controlX: 180,
+      inicioY: 120 + angulo * sentido,
+      finalY: 120 - angulo * sentido,
+      controlY: 120 + curvatura * sentido
+    };
+  });
+
+  // Recorrido SVG
+  trayectoria = computed(() => {
+    const p = this.puntos();
+
+    return `M ${p.inicioX} ${p.inicioY} Q ${p.controlX} ${p.controlY} ${p.finalX} ${p.finalY}`;
+  });
+
+  // Posición actual del asteroide
+  posicion = computed(() => {
+    const t = this.progreso() / 100;
+    const p = this.puntos();
+
+    const x = Math.pow(1 - t, 2) * p.inicioX
+      + 2 * (1 - t) * t * p.controlX
+      + Math.pow(t, 2) * p.finalX;
+
+    const y = Math.pow(1 - t, 2) * p.inicioY
+      + 2 * (1 - t) * t * p.controlY
+      + Math.pow(t, 2) * p.finalY;
+
+    return { x, y };
+  });
+
 
 
   // Detecta la selección de un asteroide
@@ -99,71 +127,23 @@ export class SimuladorNeoComponent implements OnChanges, OnDestroy {
   }
 
 
-  // Calcula la posición actual del asteroide
-  obtenerPosicion() {
-
-    const t = this.progreso() / 100;
-
-    const inicioX = 15;
-    const finalX = 345;
-
-    const inicioY = 120 + (this.angulo * this.sentido);
-    const finalY = 120 - (this.angulo * this.sentido);
-
-    const controlX = 180;
-    const controlY = 120 + (this.curvatura * this.sentido);
-
-    const x = Math.pow(1 - t, 2) * inicioX
-      + 2 * (1 - t) * t * controlX
-      + Math.pow(t, 2) * finalX;
-
-    const y = Math.pow(1 - t, 2) * inicioY
-      + 2 * (1 - t) * t * controlY
-      + Math.pow(t, 2) * finalY;
-
-    return { x, y };
-  }
-
-
-  // Genera el recorrido SVG
-  obtenerTrayectoria() {
-
-    const inicioX = 15;
-    const finalX = 345;
-
-    const inicioY = 120 + (this.angulo * this.sentido);
-    const finalY = 120 - (this.angulo * this.sentido);
-
-    const controlX = 180;
-    const controlY = 120 + (this.curvatura * this.sentido);
-
-    return `M ${inicioX} ${inicioY} Q ${controlX} ${controlY} ${finalX} ${finalY}`;
-  }
-
-
   // Calcula los parámetros de la trayectoria
   generarTrayectoria() {
-
     const id = Number(this.objeto?.id);
 
-    this.angulo = (id % 60) - 30;
-
-    this.sentido = 1;
-
-    if (id % 2 !== 0) {
-      this.sentido = -1;
-    }
+    const angulo = (id % 60) - 30;
+    const sentido = id % 2 !== 0 ? -1 : 1;
 
     const distancia = Number(
       this.objeto?.close_approach_data[0]?.miss_distance?.lunar
     ) || 0;
 
-    this.distanciaVisual = Math.min(
+    const curvatura = Math.min(
       Math.max(distancia * 5, 35),
       100
     );
 
-    this.curvatura = this.distanciaVisual;
+    this.parametros.set({ angulo, curvatura, sentido });
   }
 
 

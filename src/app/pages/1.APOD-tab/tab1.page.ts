@@ -3,18 +3,16 @@ import { ApodService } from '../../services/apod.service';
 import { Apod } from '../../models/apod.model';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
-
-
 @Component({
   selector: 'app-tab1',
   templateUrl: 'tab1.page.html',
   styleUrls: ['tab1.page.scss'],
   standalone: false,
 })
+
 export class Tab1Page implements OnInit {
   private apodService = inject(ApodService);
   private sanitizer = inject(DomSanitizer);
-
 
   apod = signal<Apod | null>(null);
   videoUrl = signal('');
@@ -24,11 +22,11 @@ export class Tab1Page implements OnInit {
   videoYoutubeUrl = signal<SafeResourceUrl | null>(null);
   esVideoYoutube = signal(false);
 
-  imagenAmpliada = false;
-
+  
   // Achicar la imagen del día por si es de un tamaño desmesurado.
   get imagenUrl(): string {
-    const url = this.apod()?.hdurl;
+    const apod = this.apod();
+    const url = apod?.hdurl || apod?.url;
 
     if (!url) return '';
 
@@ -45,7 +43,6 @@ export class Tab1Page implements OnInit {
 
           const apod = respuesta[0];
 
-          console.log(respuesta);
           this.apod.set(apod);
 
           this.detectarVideo(apod);
@@ -117,18 +114,5 @@ export class Tab1Page implements OnInit {
 
   this.esVideoYoutube.set(true);
 
-  }
-
-
-
-
-
-  // Por ahora sin uso...
-  ampliarImagen() {
-    this.imagenAmpliada = true;
-  }
-
-  cerrarImagen() {
-    this.imagenAmpliada = false;
   }
 }

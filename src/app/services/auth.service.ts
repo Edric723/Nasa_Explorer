@@ -34,7 +34,7 @@ export class AuthService {
 
   // GUARDADO Y PERSISTENCIA DE SESION/TOKEN
   // Guardado en storage para testeo web...
-  guardarSesion(respuesta: any) {
+  private guardarSesion(respuesta: any) {
     this.sesion = respuesta;
 
     const duracion = respuesta.ExpiresIn || 3600;
@@ -44,10 +44,6 @@ export class AuthService {
 
     this.guardarSesionEnStorage();
     this.programarRenovacion();
-  }
-
-  obtenerSesion() {
-    return this.sesion;
   }
 
   recuperarSesion() {
@@ -132,22 +128,13 @@ export class AuthService {
       );
     }
 
-    return this.http.post<any>(
-      this.url,
-      {
-        AuthFlow: 'REFRESH_TOKEN_AUTH',
-        ClientId: this.clientId,
-        AuthParameters: {
-          REFRESH_TOKEN: this.sesion.RefreshToken
-        }
-      },
-      {
-        headers: this.headers.set(
-          'X-Amz-Target',
-          'AWSCognitoIdentityProviderService.InitiateAuth'
-        )
+        return this.llamarCognito('InitiateAuth', {
+      AuthFlow: 'REFRESH_TOKEN_AUTH',
+      ClientId: this.clientId,
+      AuthParameters: {
+        REFRESH_TOKEN: this.sesion.RefreshToken
       }
-    ).pipe(
+    }).pipe(
       map(respuesta => {
         if (!respuesta.AuthenticationResult) {
           throw new Error(
@@ -209,123 +196,76 @@ export class AuthService {
     );
   }
 
-  // REGISTRACION  método post
+  // Llamada genérica a la API de Cognito
+  private llamarCognito<T = any>(accion: string, cuerpo: object): Observable<T> {
+    return this.http.post<T>(this.url, cuerpo, {
+      headers: this.headers.set(
+        'X-Amz-Target',
+        `AWSCognitoIdentityProviderService.${accion}`
+      )
+    });
+  }
+
   registrar(
     email: string,
     password: string,
     nickname: string,
     fechaNacimiento: string
   ): Observable<any> {
-    return this.http.post(
-      this.url,
-      {
-        ClientId: this.clientId,
-        Username: email,
-        Password: password,
-        UserAttributes: [
-          { Name: 'email', Value: email },
-          { Name: 'nickname', Value: nickname },
-          { Name: 'birthdate', Value: fechaNacimiento }
-        ]
-      },
-      {
-        headers: this.headers.set(
-          'X-Amz-Target',
-          'AWSCognitoIdentityProviderService.SignUp'
-        )
-      }
-    );
+    return this.llamarCognito('SignUp', {
+      ClientId: this.clientId,
+      Username: email,
+      Password: password,
+      UserAttributes: [
+        { Name: 'email', Value: email },
+        { Name: 'nickname', Value: nickname },
+        { Name: 'birthdate', Value: fechaNacimiento }
+      ]
+    });
   }
 
-  // ENVIO DE CÓDIGO AL MAIL
-  confirmarRegistro(
-    email: string,
-    codigo: string
-  ): Observable<any> {
-    return this.http.post(
-      this.url,
-      {
-        ClientId: this.clientId,
-        Username: email,
-        ConfirmationCode: codigo
-      },
-      {
-        headers: this.headers.set(
-          'X-Amz-Target',
-          'AWSCognitoIdentityProviderService.ConfirmSignUp'
-        )
-      }
-    );
+  confirmarRegistro(email: string, codigo: string): Observable<any> {
+    return this.llamarCognito('ConfirmSignUp', {
+      ClientId: this.clientId,
+      Username: email,
+      ConfirmationCode: codigo
+    });
   }
 
-  // INICIA LA SESIÓN EN LA APP.
-  iniciarSesion(
-    email: string,
-    password: string
-  ): Observable<any> {
-    return this.http.post<any>(
-      this.url,
-      {
-        AuthFlow: 'USER_PASSWORD_AUTH',
-        ClientId: this.clientId,
-        AuthParameters: {
-          USERNAME: email,
-          PASSWORD: password
-        }
-      },
-      {
-        headers: this.headers.set(
-          'X-Amz-Target',
-          'AWSCognitoIdentityProviderService.InitiateAuth'
-        )
+  iniciarSesion(email: string, password: string): Observable<any> {
+    return this.llamarCognito('InitiateAuth', {
+      AuthFlow: 'USER_PASSWORD_AUTH',
+      ClientId: this.clientId,
+      AuthParameters: {
+        USERNAME: email,
+        PASSWORD: password
       }
-    ).pipe(
+    }).pipe(
       tap(respuesta => {
         if (respuesta.AuthenticationResult) {
-          this.guardarSesion(
-            respuesta.AuthenticationResult
-          );
+          this.guardarSesion(respuesta.AuthenticationResult);
         }
       })
     );
   }
-   // RECUPERACIÓN DE CONTRASEÑA
+
   recuperarContrasena(email: string): Observable<any> {
-    return this.http.post(
-      this.url,
-      {
-        ClientId: this.clientId,
-        Username: email
-      },
-      {
-        headers: this.headers.set(
-          'X-Amz-Target',
-          'AWSCognitoIdentityProviderService.ForgotPassword'
-        )
-      }
-    );
+    return this.llamarCognito('ForgotPassword', {
+      ClientId: this.clientId,
+      Username: email
+    });
   }
 
-  // CONFIRMAR RECUPERACIÓN DE CONTRASEÑA
-confirmarRecuperacion(
-  email: string,
-  codigo: string,
-  nuevaPassword: string
-): Observable<any> {
-  return this.http.post(
-    this.url,
-    {
+  confirmarRecuperacion(
+    email: string,
+    codigo: string,
+    nuevaPassword: string
+  ): Observable<any> {
+    return this.llamarCognito('ConfirmForgotPassword', {
       ClientId: this.clientId,
       Username: email,
       ConfirmationCode: codigo,
       Password: nuevaPassword
-    },
-    {
-      headers: this.headers.set(
-        'X-Amz-Target',
-        'AWSCognitoIdentityProviderService.ConfirmForgotPassword'
-      )
-    }
-  );
-}
+    });
+  }
 }

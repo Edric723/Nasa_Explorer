@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, signal, inject } from '@angular/core';
+import { computed, Component, OnInit, OnDestroy, signal, inject } from '@angular/core';
 import * as L from 'leaflet';
 
 import { EonetService } from '../../services/eonet.service';
@@ -25,7 +25,7 @@ export class Tab3Page implements OnInit, OnDestroy {
   error = signal<string>('');
 
   ubicacion = signal<UbicacionIP | null>(null);
-  errorUbicacion = signal<string>('');
+  mensajeUbicacion = signal<string>('');
   distancias = signal<Map<string, number>>(new Map());
 
   categoriaSeleccionada = signal<string>('Todos');
@@ -37,6 +37,47 @@ export class Tab3Page implements OnInit, OnDestroy {
   private marcadores = L.layerGroup();
 
   radioMaximo = 1200;
+
+  eventosFiltrados = computed<EventoEonet[]>(() => {
+    const categoria = this.categoriaSeleccionada();
+
+    if (categoria === 'Todos') {
+      return this.eventos();
+    }
+
+    const configuracion = this.categorias.find(
+      elemento => elemento.nombre === categoria
+    );
+
+    if (!configuracion) {
+      return this.eventos();
+    }
+
+    return this.eventos().filter(evento =>
+      evento.categories.some(elemento =>
+        elemento.title.toLowerCase() ===
+        configuracion.nombreApi.toLowerCase()
+      )
+    );
+  });
+
+  eventosCercanos = computed<EventoEonet[]>(() => {
+    const distancias = this.distancias();
+
+    return this.eventosFiltrados()
+      .filter(evento => {
+        const distancia = distancias.get(evento.id);
+
+        return distancia !== undefined &&
+               distancia <= this.radioMaximo;
+      })
+      .sort((a, b) => {
+        const distanciaA = distancias.get(a.id) ?? Infinity;
+        const distanciaB = distancias.get(b.id) ?? Infinity;
+
+        return distanciaA - distanciaB;
+      });
+  });
 
   ngOnInit() {
     this.cargarEventos();
@@ -133,47 +174,6 @@ export class Tab3Page implements OnInit, OnDestroy {
     this.actualizarMarcadores();
   }
 
-  eventosFiltrados(): EventoEonet[] {
-    const categoria = this.categoriaSeleccionada();
-
-    if (categoria === 'Todos') {
-      return this.eventos();
-    }
-
-    const configuracion = this.categorias.find(
-      elemento => elemento.nombre === categoria
-    );
-
-    if (!configuracion) {
-      return this.eventos();
-    }
-
-    return this.eventos().filter(evento =>
-      evento.categories.some(elemento =>
-        elemento.title.toLowerCase() ===
-        configuracion.nombreApi.toLowerCase()
-      )
-    );
-  }
-
-  eventosCercanos(): EventoEonet[] {
-    const distancias = this.distancias();
-  
-    return this.eventosFiltrados()
-      .filter(evento => {
-        const distancia = distancias.get(evento.id);
-  
-        return distancia !== undefined &&
-               distancia <= this.radioMaximo;
-      })
-      .sort((a, b) => {
-        const distanciaA = distancias.get(a.id) ?? Infinity;
-        const distanciaB = distancias.get(b.id) ?? Infinity;
-  
-        return distanciaA - distanciaB;
-      });
-  }
-
   obtenerColorCategoria(evento: EventoEonet): string {
     const nombreApi = evento.categories[0]?.title;
 
@@ -252,7 +252,7 @@ export class Tab3Page implements OnInit, OnDestroy {
   // Funciones relacionadas a la ubicación
 
   async obtenerUbicacion() {
-    this.errorUbicacion.set(
+    this.mensajeUbicacion.set(
       'Buscando ubicación aproximada por IP...'
     );
 
@@ -264,7 +264,7 @@ export class Tab3Page implements OnInit, OnDestroy {
       this.calcularDistancias(lugar);
       this.actualizarMarcadores();
 
-      this.errorUbicacion.set(
+      this.mensajeUbicacion.set(
         'Ubicación obtenida. Se calcularon las distancias a los eventos.'
       );
 
@@ -274,7 +274,7 @@ export class Tab3Page implements OnInit, OnDestroy {
         error
       );
 
-      this.errorUbicacion.set(
+      this.mensajeUbicacion.set(
         'No se pudo obtener la ubicación por IP.'
       );
     }

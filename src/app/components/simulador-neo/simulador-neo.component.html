@@ -20,8 +20,10 @@
             <circle cx="180" cy="120" r="25" />
           </clipPath>
         </defs>
+
         <!-- Trayectoria del asteroide -->
-        <path [attr.d]="obtenerTrayectoria()" class="trayectoria" />
+        <path [attr.d]="trayectoria()" class="trayectoria" />
+
         <!-- Tierra: atmósfera -->
         <circle cx="180" cy="120" r="31" fill="url(#atmosferaGradient)" />
         <!-- Tierra: superficie -->
@@ -35,8 +37,9 @@
         </g>
         <!-- Brillo atmosférico exterior -->
         <circle cx="180" cy="120" r="26" class="borde-atmosferico" />
+        
         <!-- Asteroide -->
-        <circle [attr.cx]="obtenerPosicion().x" [attr.cy]="obtenerPosicion().y" r="7" class="asteroide"
+        <circle [attr.cx]="posicion().x" [attr.cy]="posicion().y" r="7" class="asteroide"
           [class.peligroso]="objeto.is_potentially_hazardous_asteroid"
           [class.no-peligroso]="!objeto.is_potentially_hazardous_asteroid" />
         </svg>

@@ -1,4 +1,3 @@
-
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>
@@ -30,8 +29,7 @@
             [src]="imagenUrl"
             [alt]="apod()?.alt || apod()?.title"
             loading="lazy"
-            decoding="async"
-            (click)="ampliarImagen()">
+            decoding="async">
           </div>
         }
         <!-- Video -->
