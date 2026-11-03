@@ -8,20 +8,16 @@ import { AuthService } from '../services/auth.service';
   providedIn: 'root'
 })
 export class AuthGuard implements CanActivate {
+
   private authService = inject(AuthService);
   private router = inject(Router);
 
+  canActivate(): Observable<boolean | import('@angular/router').UrlTree> {
 
-  canActivate(): Observable<boolean> {
     return this.authService.comprobarSesion().pipe(
       map(() => true),
-      catchError(() => {
-        this.router.navigateByUrl('/login', {
-          replaceUrl: true
-        });
-
-        return of(false);
-      })
+      catchError(() => of(this.router.createUrlTree(['/login'])))
     );
+
   }
 }
