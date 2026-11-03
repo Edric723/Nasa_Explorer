@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, signal } from '@angular/core';
+import { Component, OnInit, OnDestroy, signal, inject } from '@angular/core';
 import * as L from 'leaflet';
 
 import { EonetService } from '../../services/eonet.service';
@@ -15,6 +15,9 @@ import { CATEGORIAS_EONET } from '../../models/categoria-eonet.model';
 })
 
 export class Tab3Page implements OnInit, OnDestroy {
+  private eonetService = inject(EonetService);
+  private geolocationService = inject(GeolocationService);
+
 
   // Señales
   eventos = signal<EventoEonet[]>([]);
@@ -34,11 +37,6 @@ export class Tab3Page implements OnInit, OnDestroy {
   private marcadores = L.layerGroup();
 
   radioMaximo = 1200;
-
-  constructor(
-    private eonetService: EonetService,
-    private geolocationService: GeolocationService
-  ) {}
 
   ngOnInit() {
     this.cargarEventos();

@@ -1,127 +1,80 @@
 <div class="simulador">
 
-  <ng-container *ngIf="objeto; else visorVacio">
-
+  @if (objeto) {
     <div class="escenario">
-
-
       <svg viewBox="0 0 360 240" class="orbita">
-
         <defs>
-
           <!-- Degradado de la Tierra -->
           <radialGradient id="tierraGradient" cx="35%" cy="30%">
             <stop offset="0%" stop-color="#64c7ff" />
             <stop offset="55%" stop-color="#1765b5" />
             <stop offset="100%" stop-color="#071d46" />
           </radialGradient>
-
           <!-- Iluminación atmosférica -->
           <radialGradient id="atmosferaGradient">
             <stop offset="75%" stop-color="#55baff" stop-opacity="0" />
             <stop offset="100%" stop-color="#55baff" stop-opacity="0.35" />
           </radialGradient>
-
           <!-- Recorte de continentes dentro de la Tierra -->
           <clipPath id="tierraClip">
             <circle cx="180" cy="120" r="25" />
           </clipPath>
-
         </defs>
-
-
         <!-- Trayectoria del asteroide -->
         <path [attr.d]="obtenerTrayectoria()" class="trayectoria" />
-
-
         <!-- Tierra: atmósfera -->
         <circle cx="180" cy="120" r="31" fill="url(#atmosferaGradient)" />
-
-
         <!-- Tierra: superficie -->
         <circle cx="180" cy="120" r="25" fill="url(#tierraGradient)" class="tierra" />
-
-
         <!-- Continentes -->
         <g clip-path="url(#tierraClip)" class="continentes">
-
           <path d="M158 105 L164 99 L173 101 L177 107 L172 112 L166 111 L162 117 L157 113 Z" />
-
           <path d="M174 119 L181 120 L185 127 L183 134 L180 143 L176 137 L174 129 Z" />
-
           <path d="M187 104 L194 101 L202 106 L199 112 L192 114 L188 110 Z" />
-
           <path d="M188 116 L197 114 L202 120 L198 129 L192 134 L186 128 L184 121 Z" />
-
         </g>
-
-
         <!-- Brillo atmosférico exterior -->
         <circle cx="180" cy="120" r="26" class="borde-atmosferico" />
-
-
         <!-- Asteroide -->
         <circle [attr.cx]="obtenerPosicion().x" [attr.cy]="obtenerPosicion().y" r="7" class="asteroide"
           [class.peligroso]="objeto.is_potentially_hazardous_asteroid"
           [class.no-peligroso]="!objeto.is_potentially_hazardous_asteroid" />
-
-      </svg>
-
-
-
-
-      <div class="controles">
-
-        <ion-range min="0" max="100" step="1" [value]="progreso()" (ionChange)="cambiarProgreso($event.detail.value)">
-        </ion-range>
-
-        <div class="botones">
-
-          <ion-button fill="clear" (click)="reiniciar()">
-            <ion-icon name="refresh-outline"></ion-icon>
-          </ion-button>
-
-          <ion-button (click)="reproducir()" [disabled]="reproduciendo()">
-            <ion-icon name="play-outline" slot="start"></ion-icon>
-            Play
-          </ion-button>
-
-          <ion-button (click)="pausar()" [disabled]="!reproduciendo()">
-            <ion-icon name="pause-outline" slot="start"></ion-icon>
-            Pausar
-          </ion-button>
-
+        </svg>
+        <div class="controles">
+          <ion-range min="0" max="100" step="1" [value]="progreso()" (ionChange)="cambiarProgreso($event.detail.value)">
+          </ion-range>
+          <div class="botones">
+            <ion-button fill="clear" (click)="reiniciar()">
+              <ion-icon name="refresh-outline"></ion-icon>
+            </ion-button>
+            <ion-button (click)="reproducir()" [disabled]="reproduciendo()">
+              <ion-icon name="play-outline" slot="start"></ion-icon>
+              Play
+            </ion-button>
+            <ion-button (click)="pausar()" [disabled]="!reproduciendo()">
+              <ion-icon name="pause-outline" slot="start"></ion-icon>
+              Pausar
+            </ion-button>
+          </div>
+          <p>Progreso: {{ progreso() }}%</p>
         </div>
-
-        <p>Progreso: {{ progreso() }}%</p>
-
+        <div class="informacion-distancia">
+          <p>Distancia mínima registrada por NASA</p>
+          <h2>
+            {{ objeto.close_approach_data[0]?.miss_distance?.lunar | number:'1.1-2' }}
+            distancias lunares
+          </h2>
+          <p>
+            {{ objeto.close_approach_data[0]?.miss_distance?.kilometers | number:'1.0-0' }} km
+          </p>
+        </div>
       </div>
-
-      <div class="informacion-distancia">
-
-        <p>Distancia mínima registrada por NASA</p>
-
-        <h2>
-          {{ objeto.close_approach_data[0]?.miss_distance?.lunar | number:'1.1-2' }}
-          distancias lunares
-        </h2>
-
-        <p>
-          {{ objeto.close_approach_data[0]?.miss_distance?.kilometers | number:'1.0-0' }} km
-        </p>
-
+    } @else {
+      <div class="visor-vacio">
+        <ion-icon name="orbit-outline"></ion-icon>
+        <p>Seleccioná un asteroide para visualizar su trayectoria.</p>
       </div>
+    }
 
 
-    </div>
-
-  </ng-container>
-
-  <ng-template #visorVacio>
-    <div class="visor-vacio">
-      <ion-icon name="orbit-outline"></ion-icon>
-      <p>Seleccioná un asteroide para visualizar su trayectoria.</p>
-    </div>
-  </ng-template>
-
-</div>
+  </div>

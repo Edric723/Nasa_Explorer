@@ -1,4 +1,4 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, signal, inject } from '@angular/core';
 import { ApodService } from '../../services/apod.service';
 import { Apod } from '../../models/apod.model';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
@@ -12,6 +12,9 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
   standalone: false,
 })
 export class Tab1Page implements OnInit {
+  private apodService = inject(ApodService);
+  private sanitizer = inject(DomSanitizer);
+
 
   apod = signal<Apod | null>(null);
   videoUrl = signal('');
@@ -22,11 +25,6 @@ export class Tab1Page implements OnInit {
   esVideoYoutube = signal(false);
 
   imagenAmpliada = false;
-
-  constructor(
-    private apodService: ApodService,
-    private sanitizer: DomSanitizer
-  ) { }
 
   // Achicar la imagen del día por si es de un tamaño desmesurado.
   get imagenUrl(): string {

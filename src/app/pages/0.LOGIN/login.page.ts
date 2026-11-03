@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { AuthService } from '../../services/auth.service';
@@ -10,6 +10,9 @@ import { AuthService } from '../../services/auth.service';
   standalone: false
 })
 export class LoginPage {
+  private authService = inject(AuthService);
+  private router = inject(Router);
+
 
   modo: 'login' | 'registro' | 'confirmacion' | 'recuperacion' = 'login';
 
@@ -23,11 +26,6 @@ export class LoginPage {
   cargando = signal(false);
   error = signal('');
   mensaje = signal('');
-
-  constructor(
-    private authService: AuthService,
-    private router: Router
-  ) { }
 
   mostrarLogin() {
     this.modo = 'login';

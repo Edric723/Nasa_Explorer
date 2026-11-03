@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 
@@ -17,8 +17,8 @@ export interface UbicacionIP {
 })
 
 export class GeolocationService {
+  private http = inject(HttpClient);
 
-  constructor(private http: HttpClient) { }
 
 
   // Comprobar en movile luego---

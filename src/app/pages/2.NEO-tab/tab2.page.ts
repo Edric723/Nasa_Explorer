@@ -1,4 +1,4 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, signal, inject } from '@angular/core';
 import { NeoService } from '../../services/neo.service';
 import { ObjetoCercano } from '../../models/neo.model';
 
@@ -13,6 +13,8 @@ import { ObjetoCercano } from '../../models/neo.model';
 
 
 export class Tab2Page implements OnInit {
+  private neoService = inject(NeoService);
+
 
   // Señales
   objetos = signal<ObjetoCercano[]>([]);
@@ -22,8 +24,6 @@ export class Tab2Page implements OnInit {
   limiteObjetos = 10;
 
   objetoSeleccionado: ObjetoCercano | null = null;
-
-  constructor(private neoService: NeoService) { }
 
   ngOnInit() {
     this.cargarObjetos();

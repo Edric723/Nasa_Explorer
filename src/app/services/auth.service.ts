@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Observable, of, tap, map, catchError, throwError } from 'rxjs';
@@ -14,6 +14,9 @@ import {
   providedIn: 'root'
 })
 export class AuthService {
+  private http = inject(HttpClient);
+  private router = inject(Router);
+
 
   private url = COGNITO_URL;
   private clientId = COGNITO_CLIENT_ID;
@@ -25,10 +28,7 @@ export class AuthService {
   private temporizadorRenovacion:
     ReturnType<typeof setTimeout> | null = null;
 
-  constructor(
-    private http: HttpClient,
-    private router: Router
-  ) {
+  constructor() {
     this.recuperarSesion();
   }
 

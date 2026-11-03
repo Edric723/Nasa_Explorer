@@ -10,95 +10,93 @@
 <ion-content [fullscreen]="true">
 
   <!-- Estado de carga -->
-  <div *ngIf="cargando()" class="nasa-state">
-    <ion-spinner name="crescent"></ion-spinner>
-    <p>Recibiendo transmisión astronómica...</p>
-  </div>
+  @if (cargando()) {
+    <div class="nasa-state">
+      <ion-spinner name="crescent"></ion-spinner>
+      <p>Recibiendo transmisión astronómica...</p>
+    </div>
+  }
 
   <!-- Card de APOD -->
-  <ion-card
-    *ngIf="apod() && !cargando()"
-    class="nasa-card">
+  @if (apod() && !cargando()) {
+    <ion-card
+      class="nasa-card">
+      <!-- Imagen -->
+      @if (apod()?.media_type === 'image' && imagenUrl) {
+        <div
+          class="contenedor-imagen"
+          >
+          <img
+            [src]="imagenUrl"
+            [alt]="apod()?.alt || apod()?.title"
+            loading="lazy"
+            decoding="async"
+            (click)="ampliarImagen()">
+          </div>
+        }
+        <!-- Video -->
+        @if (apod()?.media_type === 'video') {
+          <div
+            class="contenedor-video"
+            >
+            <!-- Video MP4 -->
+            @if (videoUrl() && !esVideoYoutube()) {
+              <video
+                [src]="videoUrl()"
+                controls
+                playsinline
+                preload="metadata">
+              </video>
+            }
+            <!-- Video de YouTube -->
+            @if (esVideoYoutube() && videoYoutubeUrl()) {
+              <iframe
+                [src]="videoYoutubeUrl()"
+                title="Video astronómico del día"
+                loading="lazy"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowfullscreen>
+              </iframe>
+            }
+          </div>
+        }
+        <!-- Fecha y título -->
+        <ion-card-header>
+          <ion-card-subtitle>
+            {{ apod()?.date }}
+          </ion-card-subtitle>
+          <ion-card-title>
+            {{ apod()?.title }}
+          </ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <!-- Descripción -->
+          <div
+            class="descripcion"
+            [innerHTML]="apod()?.explanation">
+          </div>
+          <!-- Créditos -->
+          @if (apod()?.copyright) {
+            <div
+              class="creditos"
+              >
+              <strong>Copyright: </strong>
+              <span [innerHTML]="apod()?.copyright"></span>
+            </div>
+          }
+        </ion-card-content>
+      </ion-card>
+    }
 
-    <!-- Imagen -->
-    <div
-      class="contenedor-imagen"
-      *ngIf="apod()?.media_type === 'image' && imagenUrl">
-
-      <img
-        [src]="imagenUrl"
-        [alt]="apod()?.alt || apod()?.title"
-        loading="lazy"
-        decoding="async"
-        (click)="ampliarImagen()">
-    </div>
-
-    <!-- Video -->
-    <div
-      class="contenedor-video"
-      *ngIf="apod()?.media_type === 'video'">
-
-      <!-- Video MP4 -->
-      <video
-        *ngIf="videoUrl() && !esVideoYoutube()"
-        [src]="videoUrl()"
-        controls
-        playsinline
-        preload="metadata">
-      </video>
-
-      <!-- Video de YouTube -->
-      <iframe
-        *ngIf="esVideoYoutube() && videoYoutubeUrl()"
-        [src]="videoYoutubeUrl()"
-        title="Video astronómico del día"
-        loading="lazy"
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-        allowfullscreen>
-      </iframe>
-
-    </div>
-
-    <!-- Fecha y título -->
-    <ion-card-header>
-      <ion-card-subtitle>
-        {{ apod()?.date }}
-      </ion-card-subtitle>
-
-      <ion-card-title>
-        {{ apod()?.title }}
-      </ion-card-title>
-    </ion-card-header>
-
-    <ion-card-content>
-
-      <!-- Descripción -->
+    <!-- Estado de error -->
+    @if (error() && !cargando()) {
       <div
-        class="descripcion"
-        [innerHTML]="apod()?.explanation">
+        class="nasa-state error">
+        <ion-icon name="alert-circle-outline"></ion-icon>
+        <p>{{ error() }}</p>
       </div>
+    }
 
-      <!-- Créditos -->
-      <div
-        class="creditos"
-        *ngIf="apod()?.copyright">
+    <app-menu-global></app-menu-global>
 
-        <strong>Copyright: </strong>
-        <span [innerHTML]="apod()?.copyright"></span>
-      </div>
-
-    </ion-card-content>
-  </ion-card>
-
-  <!-- Estado de error -->
-  <div
-    *ngIf="error() && !cargando()"
-    class="nasa-state error">
-
-    <ion-icon name="alert-circle-outline"></ion-icon>
-    <p>{{ error() }}</p>
-  </div>
-
-  <app-menu-global></app-menu-global>
-
-</ion-content>
+  </ion-content>

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 
@@ -9,11 +9,9 @@ import { Router } from '@angular/router';
   standalone: false
 })
 export class MenuGlobalComponent {
+  private authService = inject(AuthService);
+  private router = inject(Router);
 
-  constructor(
-    private authService: AuthService,
-    private router: Router
-  ) {}
 
   cerrarSesion() {
     this.authService.cerrarSesion();

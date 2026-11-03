@@ -10,10 +10,12 @@
 <ion-content [fullscreen]="true">
 
   <!-- Estado de carga -->
-  <div *ngIf="cargando()" class="nasa-state">
-    <ion-spinner name="crescent"></ion-spinner>
-    <p>Rastreando objetos cercanos...</p>
-  </div>
+  @if (cargando()) {
+    <div class="nasa-state">
+      <ion-spinner name="crescent"></ion-spinner>
+      <p>Rastreando objetos cercanos...</p>
+    </div>
+  }
 
   <!-- Simulador de trayectoria -->
   <ion-card class="nasa-card">
@@ -21,144 +23,119 @@
       <ion-card-subtitle>Simulación de aproximación</ion-card-subtitle>
       <ion-card-title>Visor de trayectorias NEO</ion-card-title>
     </ion-card-header>
-  
+
     <ion-card-content>
       <app-simulador-neo
         [objeto]="objetoSeleccionado">
       </app-simulador-neo>
-  
-      <ion-button
-        *ngIf="objetoSeleccionado"
-        expand="block"
-        fill="outline"
-        color="medium"
-        (click)="objetoSeleccionado = null">
-  
-        <ion-icon name="close-outline" slot="start"></ion-icon>
-        Cerrar simulador
-      </ion-button>
+
+      @if (objetoSeleccionado) {
+        <ion-button
+          expand="block"
+          fill="outline"
+          color="medium"
+          (click)="objetoSeleccionado = null">
+          <ion-icon name="close-outline" slot="start"></ion-icon>
+          Cerrar simulador
+        </ion-button>
+      }
     </ion-card-content>
   </ion-card>
 
   <!-- Una tarjeta por cada objeto -->
-  <ion-card
-    *ngFor="let objeto of objetos(); trackBy: trackPorId"
-    class="nasa-card">
-
-    <ion-card-header>
-
-      <!-- Fecha y hora del máximo acercamiento -->
-      <ion-card-subtitle>
-        {{ objeto.close_approach_data[0]?.epoch_date_close_approach | date:'dd/MM/yyyy HH:mm' }} hs
-      </ion-card-subtitle>
-
-      <ion-card-title>
-        {{ objeto.name }}
-      </ion-card-title>
-
-      <!-- Año de descubrimiento y estado de la órbita -->
-      <p class="designacion">
-        {{ etiquetaObjeto(objeto.name) }}
-      </p>
-
-    </ion-card-header>
-
-    <ion-card-content>
-
-      <!-- Indicador de peligrosidad -->
-      <div
-        class="etiqueta"
-        [class.peligroso]="objeto.is_potentially_hazardous_asteroid">
-
-        <ion-icon
+  @for (objeto of objetos(); track trackPorId($index, objeto)) {
+    <ion-card
+      class="nasa-card">
+      <ion-card-header>
+        <!-- Fecha y hora del máximo acercamiento -->
+        <ion-card-subtitle>
+          {{ objeto.close_approach_data[0]?.epoch_date_close_approach | date:'dd/MM/yyyy HH:mm' }} hs
+        </ion-card-subtitle>
+        <ion-card-title>
+          {{ objeto.name }}
+        </ion-card-title>
+        <!-- Año de descubrimiento y estado de la órbita -->
+        <p class="designacion">
+          {{ etiquetaObjeto(objeto.name) }}
+        </p>
+      </ion-card-header>
+      <ion-card-content>
+        <!-- Indicador de peligrosidad -->
+        <div
+          class="etiqueta"
+          [class.peligroso]="objeto.is_potentially_hazardous_asteroid">
+          <ion-icon
           [name]="objeto.is_potentially_hazardous_asteroid
             ? 'warning-outline'
             : 'checkmark-circle-outline'">
-        </ion-icon>
-
-        <span>
-          {{ objeto.is_potentially_hazardous_asteroid
+          </ion-icon>
+          <span>
+            {{ objeto.is_potentially_hazardous_asteroid
             ? 'Potencialmente peligroso'
             : 'No clasificado como potencialmente peligroso' }}
-        </span>
-
-      </div>
-
-      <!-- Diámetro estimado -->
-      <div class="dato">
-        <span class="dato-nombre">Diámetro estimado</span>
-
-        <span class="dato-valor">
-          {{ objeto.estimated_diameter.meters.estimated_diameter_min | number:'1.0-0' }}
-          -
-          {{ objeto.estimated_diameter.meters.estimated_diameter_max | number:'1.0-0' }} m
-        </span>
-      </div>
-
-      <!-- Velocidad relativa -->
-      <div class="dato">
-        <span class="dato-nombre">Velocidad relativa</span>
-
-        <span class="dato-valor">
-          {{ objeto.close_approach_data[0]?.relative_velocity?.kilometers_per_hour | number:'1.0-0' }} km/h
-        </span>
-      </div>
-
-      <!-- Distancia mínima a la Tierra -->
-      <div class="dato">
-        <span class="dato-nombre">Distancia mínima a la Tierra</span>
-
-        <span class="dato-valor">
-          {{ objeto.close_approach_data[0]?.miss_distance?.kilometers | number:'1.0-0' }} km
-        </span>
-      </div>
-
-      <!-- Distancia Tierra-Luna -->
-      <div class="dato">
-        <span class="dato-nombre">Distancia equivalente a</span>
-
-        <span class="dato-valor">
-          {{ objeto.close_approach_data[0]?.miss_distance?.lunar | number:'1.1-1' }} distancias lunares
-        </span>
-      </div>
-
-      <!-- Abrir simulador -->
-      <ion-button
-        expand="block"
-        (click)="seleccionarObjeto(objeto)">
-
-        <ion-icon
-          name="orbit-outline"
-          slot="start">
-        </ion-icon>
-
-        Visualizar trayectoria
-
-      </ion-button>
-
-      <!-- Ficha oficial NASA -->
-      <div class="creditos">
-        <a
-          [href]="objeto.nasa_jpl_url"
-          target="_blank"
-          rel="noopener">
-
-          Consultar ficha orbital en JPL/NASA
-        </a>
-      </div>
-
-    </ion-card-content>
-  </ion-card>
+          </span>
+        </div>
+        <!-- Diámetro estimado -->
+        <div class="dato">
+          <span class="dato-nombre">Diámetro estimado</span>
+          <span class="dato-valor">
+            {{ objeto.estimated_diameter.meters.estimated_diameter_min | number:'1.0-0' }}
+            -
+            {{ objeto.estimated_diameter.meters.estimated_diameter_max | number:'1.0-0' }} m
+          </span>
+        </div>
+        <!-- Velocidad relativa -->
+        <div class="dato">
+          <span class="dato-nombre">Velocidad relativa</span>
+          <span class="dato-valor">
+            {{ objeto.close_approach_data[0]?.relative_velocity?.kilometers_per_hour | number:'1.0-0' }} km/h
+          </span>
+        </div>
+        <!-- Distancia mínima a la Tierra -->
+        <div class="dato">
+          <span class="dato-nombre">Distancia mínima a la Tierra</span>
+          <span class="dato-valor">
+            {{ objeto.close_approach_data[0]?.miss_distance?.kilometers | number:'1.0-0' }} km
+          </span>
+        </div>
+        <!-- Distancia Tierra-Luna -->
+        <div class="dato">
+          <span class="dato-nombre">Distancia equivalente a</span>
+          <span class="dato-valor">
+            {{ objeto.close_approach_data[0]?.miss_distance?.lunar | number:'1.1-1' }} distancias lunares
+          </span>
+        </div>
+        <!-- Abrir simulador -->
+        <ion-button
+          expand="block"
+          (click)="seleccionarObjeto(objeto)">
+          <ion-icon
+            name="orbit-outline"
+            slot="start">
+          </ion-icon>
+          Visualizar trayectoria
+        </ion-button>
+        <!-- Ficha oficial NASA -->
+        <div class="creditos">
+          <a
+            [href]="objeto.nasa_jpl_url"
+            target="_blank"
+            rel="noopener">
+            Consultar ficha orbital en JPL/NASA
+          </a>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  }
 
   <!-- Estado de error -->
-  <div
-    *ngIf="error() && !cargando()"
-    class="nasa-state error">
-
-    <ion-icon name="alert-circle-outline"></ion-icon>
-    <p>{{ error() }}</p>
-
-  </div>
+  @if (error() && !cargando()) {
+    <div
+      class="nasa-state error">
+      <ion-icon name="alert-circle-outline"></ion-icon>
+      <p>{{ error() }}</p>
+    </div>
+  }
 
   <app-menu-global></app-menu-global>
 
