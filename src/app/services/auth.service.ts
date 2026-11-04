@@ -17,7 +17,6 @@ export class AuthService {
   private http = inject(HttpClient);
   private router = inject(Router);
 
-
   private url = COGNITO_URL;
   private clientId = COGNITO_CLIENT_ID;
   private headers = new HttpHeaders(COGNITO_HEADERS);
@@ -33,7 +32,6 @@ export class AuthService {
   }
 
   // GUARDADO Y PERSISTENCIA DE SESION/TOKEN
-  // Guardado en storage para testeo web...
   private guardarSesion(respuesta: any) {
     this.sesion = respuesta;
 
@@ -47,7 +45,8 @@ export class AuthService {
   }
 
   recuperarSesion() {
-    const sesionGuardada = localStorage.getItem(
+    // CORRECCIÓN: Se cambia localStorage por sessionStorage
+    const sesionGuardada = sessionStorage.getItem(
       STORAGE_KEYS.SESION
     );
 
@@ -81,7 +80,8 @@ export class AuthService {
     this.sesion = null;
     this.expiracionAccessToken = 0;
 
-    localStorage.removeItem(STORAGE_KEYS.SESION);
+    // CORRECCIÓN: Se cambia localStorage por sessionStorage
+    sessionStorage.removeItem(STORAGE_KEYS.SESION);
   }
 
   private programarRenovacion() {
@@ -108,8 +108,7 @@ export class AuthService {
 
     this.temporizadorRenovacion = setTimeout(() => {
       this.renovarSesion().subscribe({
-        next: () => {
-        },
+        next: () => {},
         error: () => {
           this.router.navigateByUrl('/login', {
             replaceUrl: true
@@ -128,7 +127,7 @@ export class AuthService {
       );
     }
 
-        return this.llamarCognito('InitiateAuth', {
+    return this.llamarCognito('InitiateAuth', {
       AuthFlow: 'REFRESH_TOKEN_AUTH',
       ClientId: this.clientId,
       AuthParameters: {
@@ -186,7 +185,8 @@ export class AuthService {
   }
 
   private guardarSesionEnStorage() {
-    localStorage.setItem(
+    // CORRECCIÓN: Se cambia localStorage por sessionStorage
+    sessionStorage.setItem(
       STORAGE_KEYS.SESION,
       JSON.stringify({
         sesion: this.sesion,

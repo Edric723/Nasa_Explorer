@@ -23,12 +23,8 @@ const routes: Routes = [
     redirectTo: 'login',
     pathMatch: 'full'
   },
-  {
-    path: '',
-    canActivate: [authGuard],          
-    loadChildren: () => import('./pages-generales/pages-generales.module')
-      .then(m => m.PagesGeneralesModule)
-  },
+  
+
   {
     path: '**',
     redirectTo: 'login'

@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 import { TabsPage } from './tabs.page';
+import { authGuard } from '../auth/auth-guard';
 
 const routes: Routes = [
   {
@@ -26,7 +27,13 @@ const routes: Routes = [
         pathMatch: 'full'
       }
     ]
-  }
+  },
+  {
+    path: '',
+    canActivate: [authGuard],          
+    loadChildren: () => import('../pages-generales/pages-generales.module')
+      .then(m => m.PagesGeneralesModule)
+  },
 ];
 
 @NgModule({
