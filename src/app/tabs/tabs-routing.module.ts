@@ -8,6 +8,10 @@ const routes: Routes = [
     path: '',
     component: TabsPage,
     children: [
+      { 
+        path: '', 
+        redirectTo: 'tab1', 
+        pathMatch: 'full' },
       {
         path: 'tab1',
         loadChildren: () => import('../pages/1.APOD-tab/tab1.module')

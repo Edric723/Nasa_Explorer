@@ -148,24 +148,24 @@ export class Tab3Page implements OnInit, OnDestroy {
   private obtenerCoordenadas(
     evento: EventoEonet
   ): { latitud: number; longitud: number; fecha: string } | null {
-
-    for (const geometria of evento.geometry) {
-      const coordenadas = geometria.coordinates;
-
+  
+    for (let i = evento.geometry.length - 1; i >= 0; i--) {
+      const { type, coordinates, date } = evento.geometry[i];
+  
       if (
-        geometria.type === 'Point' &&
-        Array.isArray(coordenadas) &&
-        typeof coordenadas[0] === 'number' &&
-        typeof coordenadas[1] === 'number'
+        type === 'Point' &&
+        Array.isArray(coordinates) &&
+        typeof coordinates[0] === 'number' &&
+        typeof coordinates[1] === 'number'
       ) {
         return {
-          longitud: coordenadas[0],
-          latitud: coordenadas[1],
-          fecha: geometria.date || 'Sin fecha'
+          longitud: coordinates[0],
+          latitud: coordinates[1],
+          fecha: date || 'Sin fecha'
         };
       }
     }
-
+  
     return null;
   }
 
