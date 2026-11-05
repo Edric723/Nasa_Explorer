@@ -3,7 +3,7 @@
 ![Diagrama de arquitectura de Nasa Explorer](src/assets/img/backgrounds/diagram.png)
 
 
-¿Cómo funciona NASA Explorer?
+# ¿Cómo funciona NASA Explorer?
 
 Esta aplicación Ionic/Angular proporciona acceso autenticado a paneles temáticos de la NASA. Los usuarios inician sesión y luego pueden explorar:
 
