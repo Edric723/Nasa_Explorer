@@ -1,3 +1,3 @@
 ## Diagrama de arquitectura
 
-![Diagrama de arquitectura de Nasa Explorer](img/backgrounds/diagrama.png)
+![Diagrama de arquitectura de Nasa Explorer](src/assets/img/backgrounds/diagram.png)
