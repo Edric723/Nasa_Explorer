@@ -10,7 +10,7 @@
     </header>
 
     <!-- Inicio de sesión, una sola página que alterna entre modos según la acción -->
-    @if (modo === 'login') {
+    @if (modo() === 'login') {
       <section class="login-panel">
         <header class="panel-heading">
           <span class="eyebrow">ACCEDÉ A LA APP</span>
@@ -53,7 +53,7 @@
     }
 
     <!-- Modo REGISTRO-->
-    @if (modo === 'registro') {
+    @if (modo() === 'registro') {
       <section class="login-panel">
         <header class="panel-heading">
           <span class="eyebrow">NUEVA MISIÓN</span>
@@ -106,7 +106,7 @@
     }
 
     <!-- Confirmación de registro -->
-    @if (modo === 'confirmacion') {
+    @if (modo() === 'confirmacion') {
       <section class="login-panel">
         <header class="panel-heading">
           <div class="confirmation-icon">
@@ -142,7 +142,7 @@
     }
 
     <!-- Modo RECUPERACIÓN -->
-    @if (modo === 'recuperacion') {
+    @if (modo() === 'recuperacion') {
       <section class="login-panel">
         <header class="panel-heading">
           <span class="eyebrow">RECUPERAR ACCESO</span>

@@ -8,27 +8,27 @@ import { CATEGORIAS_EONET } from '../../models/categoria-eonet.model';
 
 
 @Component({
-  selector: 'app-tab3',
+  selector: 'app-eonet',
   templateUrl: 'eonet.page.html',
   styleUrls: ['eonet.page.scss'],
   standalone: false
 })
 
-export class Tab3Page implements OnInit, OnDestroy {
+export class EonetPage implements OnInit, OnDestroy {
   private eonetService = inject(EonetService);
   private geolocationService = inject(GeolocationService);
 
 
   // Señales
   eventos = signal<EventoEonet[]>([]);
-  cargando = signal<boolean>(false);
+  cargando = signal<boolean>(true);
   error = signal<string>('');
 
   ubicacion = signal<UbicacionIP | null>(null);
   mensajeUbicacion = signal<string>('');
   distancias = signal<Map<string, number>>(new Map());
 
-  categoriaSeleccionada = signal<string>('Todos');
+  categoriaSeleccionada = signal<string | null>(null);
   
   // Variables
   categorias = Object.values(CATEGORIAS_EONET);
@@ -41,7 +41,7 @@ export class Tab3Page implements OnInit, OnDestroy {
   eventosFiltrados = computed<EventoEonet[]>(() => {
     const categoria = this.categoriaSeleccionada();
 
-    if (categoria === 'Todos') {
+    if (!categoria) {
       return this.eventos();
     }
 
@@ -169,7 +169,7 @@ export class Tab3Page implements OnInit, OnDestroy {
     return null;
   }
 
-  filtrarPorCategoria(categoria: string) {
+  filtrarPorCategoria(categoria: string | null) {
     this.categoriaSeleccionada.set(categoria);
     this.actualizarMarcadores();
   }
@@ -268,12 +268,8 @@ export class Tab3Page implements OnInit, OnDestroy {
         'Ubicación obtenida. Se calcularon las distancias a los eventos.'
       );
 
-    } catch (error) {
-      console.error(
-        'Error al consultar ubicación por IP:',
-        error
-      );
-
+    } catch  {
+  
       this.mensajeUbicacion.set(
         'No se pudo obtener la ubicación por IP.'
       );

@@ -40,8 +40,7 @@
         </ion-button>
       }
 
-      <ion-button [fill]="categoriaSeleccionada() === 'Todos' ? 'solid' : 'outline'"
-        (click)="filtrarPorCategoria('Todos')">
+      <ion-button [fill]="!categoriaSeleccionada() ? 'solid' : 'outline'" (click)="filtrarPorCategoria(null)">
         Todos
       </ion-button>
 
@@ -80,7 +79,7 @@
       </div>
     </div>
 
-    <ion-button class="location-button" fill="outline" (click)="obtenerUbicacion()">
+    <ion-button class="nasa-button" fill="outline" (click)="obtenerUbicacion()">
       <ion-icon name="locate-outline" slot="start"></ion-icon>
 
       {{ ubicacion() ? 'Actualizar ubicación' : 'Cerca de mí' }}

@@ -1,16 +1,16 @@
-import { Component, OnInit, signal, inject } from '@angular/core';
+import { Component, OnInit, signal, inject, computed } from '@angular/core';
 import { ApodService } from '../../services/apod.service';
 import { Apod } from '../../models/apod.model';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 @Component({
-  selector: 'app-tab1',
+  selector: 'app-apod',
   templateUrl: 'apod.page.html',
   styleUrls: ['apod.page.scss'],
   standalone: false,
 })
 
-export class Tab1Page implements OnInit {
+export class ApodPage implements OnInit {
   private apodService = inject(ApodService);
   private sanitizer = inject(DomSanitizer);
 
@@ -24,41 +24,28 @@ export class Tab1Page implements OnInit {
 
   
   // Achicar la imagen del día por si es de un tamaño desmesurado.
-  get imagenUrl(): string {
-    const apod = this.apod();
-    const url = apod?.hdurl || apod?.url;
-
-    if (!url) return '';
-
-    return url.replace(/w=\d+/, 'w=1200').replace(/&h=\d+/, '');
-  }
+  imagenUrl = computed(() => {
+    const url = this.apod()?.hdurl || this.apod()?.url;
+  
+    return url ? url.replace(/w=\d+/, 'w=1200').replace(/&h=\d+/, '') : '';
+  });
 
 
   ngOnInit() {
 
     this.apodService.obtenerApod().subscribe({
-      next: (respuesta) => {
-
-        if (respuesta.length > 0) {
-
-          const apod = respuesta[0];
-
+      next: ([apod]) => {
+        if (apod) {
           this.apod.set(apod);
-
           this.detectarVideo(apod);
-
         } else {
-
-          this.apod.set(null);
-
+          this.error.set('No hay una imagen astronómica disponible por el momento.');
         }
-
+      
         this.cargando.set(false);
       },
 
-      error: (err) => {
-
-        console.error('Error al consultar APOD:', err);
+      error: () => {
 
         this.error.set('No se pudo cargar la imagen astronómica.');
         this.cargando.set(false);

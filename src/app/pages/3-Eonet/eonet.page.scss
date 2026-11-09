@@ -24,7 +24,10 @@ ion-content {
    INTRODUCCIÓN
 ======================================== */
 
-.intro {
+.intro,
+.map-section,
+.location-controls
+ {
   width: 90%;
   max-width: 700px;
   margin: 24px auto;
@@ -58,11 +61,6 @@ ion-content {
 ======================================== */
 
 .map-section {
-  width: 90%;
-  max-width: 700px;
-  margin: 24px auto;
-  padding: 20px;
-
   background: rgba(16, 24, 39, 0.96);
   border: 1px solid rgba(114, 215, 255, 0.28);
   border-radius: 18px;
@@ -163,11 +161,6 @@ ion-content {
   align-items: flex-start;
   gap: 14px;
 
-  width: 90%;
-  max-width: 700px;
-  margin: 24px auto;
-  padding: 20px;
-
   background: rgba(16, 24, 39, 0.94);
   border: 1px solid rgba(114, 215, 255, 0.25);
   border-radius: 18px;
@@ -207,30 +200,11 @@ ion-content {
 }
 
 
-/* Botón de ubicación */
-
-.location-button {
-  margin: 0;
-
-  --background: rgba(114, 215, 255, 0.1);
-  --background-hover: rgba(114, 215, 255, 0.2);
-  --color: var(--color-acento);
-  --border-color: rgba(114, 215, 255, 0.4);
-  --border-style: solid;
-  --border-width: 1px;
-  --border-radius: 12px;
-  --box-shadow: none;
-
-  font-weight: bold;
-  text-transform: none;
-}
-
-
 /* Mensaje de error de ubicación */
 
 .location-message {
   margin: 0;
-  color: #ffb4bf;
+  color: var(--color-error-suave);
   font-size: 13px;
   line-height: 1.5;
 }

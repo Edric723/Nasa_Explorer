@@ -9,6 +9,10 @@ import {
   COGNITO_HEADERS,
   STORAGE_KEYS
 } from '../auth/cognito.constants';
+import { SesionCognito } from '../models/sesion-cognito.model';
+
+const MARGEN_RENOVACION_MS = 60 * 1000;
+const DURACION_POR_DEFECTO_SEGUNDOS = 3600;
 
 @Injectable({
   providedIn: 'root'
@@ -21,33 +25,41 @@ export class AuthService {
   private clientId = COGNITO_CLIENT_ID;
   private headers = new HttpHeaders(COGNITO_HEADERS);
 
-  private sesion: any = null;
+  private sesion: SesionCognito | null = null;
   private expiracionAccessToken = 0;
-
-  private temporizadorRenovacion:
-    ReturnType<typeof setTimeout> | null = null;
+  private temporizadorRenovacion: ReturnType<typeof setTimeout> | null = null;
 
   constructor() {
     this.recuperarSesion();
   }
 
-  // GUARDADO Y PERSISTENCIA DE SESION/TOKEN
-  private guardarSesion(respuesta: any) {
-    this.sesion = respuesta;
+  // Sesión y tokens
 
-    const duracion = respuesta.ExpiresIn || 3600;
+  private establecerSesion(tokens: Partial<SesionCognito>): SesionCognito {
+    this.sesion = {
+      ...this.sesion,
+      ...tokens,
+      RefreshToken: tokens.RefreshToken || this.sesion?.RefreshToken
+    } as SesionCognito;
 
     this.expiracionAccessToken =
-      Date.now() + duracion * 1000;
+      Date.now() + (tokens.ExpiresIn || DURACION_POR_DEFECTO_SEGUNDOS) * 1000;
 
-    this.guardarSesionEnStorage();
+    sessionStorage.setItem(
+      STORAGE_KEYS.SESION,
+      JSON.stringify({
+        sesion: this.sesion,
+        expiracionAccessToken: this.expiracionAccessToken
+      })
+    );
+
     this.programarRenovacion();
+
+    return this.sesion;
   }
 
   private recuperarSesion() {
-    const sesionGuardada = sessionStorage.getItem(
-      STORAGE_KEYS.SESION
-    );
+    const sesionGuardada = sessionStorage.getItem(STORAGE_KEYS.SESION);
 
     if (!sesionGuardada) {
       return;
@@ -57,10 +69,9 @@ export class AuthService {
       const datos = JSON.parse(sesionGuardada);
 
       this.sesion = datos.sesion;
-      this.expiracionAccessToken =
-        datos.expiracionAccessToken || 0;
+      this.expiracionAccessToken = datos.expiracionAccessToken || 0;
 
-      if (this.sesion && this.sesion.RefreshToken) {
+      if (this.sesion?.RefreshToken) {
         this.programarRenovacion();
       } else {
         this.cerrarSesion();
@@ -71,59 +82,45 @@ export class AuthService {
   }
 
   cerrarSesion() {
-    if (this.temporizadorRenovacion !== null) {
-      clearTimeout(this.temporizadorRenovacion);
-      this.temporizadorRenovacion = null;
-    }
+    this.cancelarRenovacion();
 
     this.sesion = null;
     this.expiracionAccessToken = 0;
 
-    // CORRECCIÓN: Se cambia localStorage por sessionStorage
     sessionStorage.removeItem(STORAGE_KEYS.SESION);
   }
 
-  private programarRenovacion() {
+  private cancelarRenovacion() {
     if (this.temporizadorRenovacion !== null) {
       clearTimeout(this.temporizadorRenovacion);
       this.temporizadorRenovacion = null;
     }
+  }
 
-    if (!this.sesion || !this.sesion.RefreshToken) {
+  private programarRenovacion() {
+    this.cancelarRenovacion();
+
+    if (!this.sesion?.RefreshToken) {
       return;
     }
 
-    const tiempoRestante =
-      this.expiracionAccessToken - Date.now();
-
-    const margenRenovacion = 60 * 1000;
-
-    let tiempoEspera =
-      tiempoRestante - margenRenovacion;
-
-    if (tiempoEspera < 0) {
-      tiempoEspera = 0;
-    }
+    const tiempoEspera = Math.max(
+      0,
+      this.expiracionAccessToken - Date.now() - MARGEN_RENOVACION_MS
+    );
 
     this.temporizadorRenovacion = setTimeout(() => {
       this.renovarSesion().subscribe({
-        next: () => {},
-        error: () => {
-          this.router.navigateByUrl('/login', {
-            replaceUrl: true
-          });
-        }
+        error: () => this.router.navigateByUrl('/login', { replaceUrl: true })
       });
     }, tiempoEspera);
   }
 
-  renovarSesion(): Observable<any> {
-    if (!this.sesion || !this.sesion.RefreshToken) {
+  renovarSesion(): Observable<SesionCognito> {
+    if (!this.sesion?.RefreshToken) {
       this.cerrarSesion();
 
-      return throwError(
-        () => new Error('No hay un Refresh Token disponible.')
-      );
+      return throwError(() => new Error('No hay un Refresh Token disponible.'));
     }
 
     return this.llamarCognito('InitiateAuth', {
@@ -135,31 +132,10 @@ export class AuthService {
     }).pipe(
       map(respuesta => {
         if (!respuesta.AuthenticationResult) {
-          throw new Error(
-            'Cognito no devolvió nuevos tokens.'
-          );
+          throw new Error('Cognito no devolvió nuevos tokens.');
         }
 
-        const tokensNuevos =
-          respuesta.AuthenticationResult;
-
-        this.sesion = {
-          ...this.sesion,
-          ...tokensNuevos,
-          RefreshToken: tokensNuevos.RefreshToken
-            || this.sesion.RefreshToken
-        };
-
-        const duracion =
-          tokensNuevos.ExpiresIn || 3600;
-
-        this.expiracionAccessToken =
-          Date.now() + duracion * 1000;
-
-        this.guardarSesionEnStorage();
-        this.programarRenovacion();
-
-        return this.sesion;
+        return this.establecerSesion(respuesta.AuthenticationResult);
       }),
       catchError(error => {
         this.cerrarSesion();
@@ -169,11 +145,9 @@ export class AuthService {
     );
   }
 
-  comprobarSesion(): Observable<any> {
+  comprobarSesion(): Observable<SesionCognito> {
     if (!this.sesion) {
-      return throwError(
-        () => new Error('No hay una sesión iniciada.')
-      );
+      return throwError(() => new Error('No hay una sesión iniciada.'));
     }
 
     if (Date.now() < this.expiracionAccessToken) {
@@ -183,18 +157,8 @@ export class AuthService {
     return this.renovarSesion();
   }
 
-  private guardarSesionEnStorage() {
-    sessionStorage.setItem(
-      STORAGE_KEYS.SESION,
-      JSON.stringify({
-        sesion: this.sesion,
-        expiracionAccessToken:
-          this.expiracionAccessToken
-      })
-    );
-  }
+  // Llamadas a Cognito
 
-  // Llamada genérica a la API de Cognito
   private llamarCognito<T = any>(accion: string, cuerpo: object): Observable<T> {
     return this.http.post<T>(this.url, cuerpo, {
       headers: this.headers.set(
@@ -241,7 +205,7 @@ export class AuthService {
     }).pipe(
       tap(respuesta => {
         if (respuesta.AuthenticationResult) {
-          this.guardarSesion(respuesta.AuthenticationResult);
+          this.establecerSesion(respuesta.AuthenticationResult);
         }
       })
     );

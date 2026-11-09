@@ -10,27 +10,27 @@ const routes: Routes = [
     children: [
       { 
         path: '', 
-        redirectTo: 'tab1', 
+        redirectTo: 'apod', 
         pathMatch: 'full' },
       {
-        path: 'tab1',
+        path: 'apod',
         loadChildren: () => import('../pages/1-Apod/apod.module')
           .then(m => m.ApodPageModule)
       },
       {
-        path: 'tab2',
+        path: 'neo',
         loadChildren: () => import('../pages/2-Neo/neo.module')
           .then(m => m.NeoPageModule)
       },
       {
-        path: 'tab3',
+        path: 'eonet',
         loadChildren: () => import('../pages/3-Eonet/eonet.module')
           .then(m => m.EonetPageModule)
       },
       {
-        path: '',
-        loadChildren: () => import('../pages-generales/pages-generales.module')
-          .then(m => m.PagesGeneralesModule)
+        path: 'menu',
+        loadChildren: () => import('../pages/Menu/menu.module')
+          .then(m => m.MenuPageModule)
       }
     ]
   }

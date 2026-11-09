@@ -15,7 +15,7 @@ La vista de eventos incluye filtrado por categoría, un mapa y cálculos de dist
 
 La autenticación admite registro, confirmación de cuenta y recuperación de contraseña.
 
-El proyecto también conserva las páginas de menú y acerca de, y el simulador de NEO.
+El proyecto también conserva las páginas de integrantes y acerca de (dentro del botón de menú), y el simulador de NEO.
 
 Algunas implementaciones de servicios y módulos de interfaz de usuario no se extrajeron. Por eso, sus enlaces de datos externos solo se muestran cuando son directamente compatibles o están identificados como no verificados.
 
@@ -31,7 +31,7 @@ Algunas implementaciones de servicios y módulos de interfaz de usuario no se ex
 
 ### 2. Identidad y acceso
 
-- Inicio de sesión y registro: `src/app/pages/0.LOGIN/login.page.ts`
+- Inicio de sesión y registro: `src/app/pages/0-Login/login.page.ts`
 - Servicio de autenticación: `src/app/services/auth.service.ts`
 - Guardias de ruta: `src/app/auth/auth-guard.ts`
 - Almacenamiento de sesión: `src/app/services/auth.service.ts`
@@ -39,12 +39,12 @@ Algunas implementaciones de servicios y módulos de interfaz de usuario no se ex
 ### 3. Paneles de astronomía
 
 **APOD**
-- Panel de control: `src/app/pages/1.APOD-tab/tab1.page.ts`
+- Panel de control: `src/app/pages/1-Apod/apod.page.ts`
 - Servicio: `src/app/services/apod.service.ts`
 - Modelo de datos: `src/app/models/apod.model.ts`
 
 **NEO**
-- Panel de control: `src/app/pages/2.NEO-tab/tab2.page.ts`
+- Panel de control: `src/app/pages/2-Neo/neo.page.ts`
 - Servicio: `src/app/services/neo.service.ts`
 - Modelo de datos: `src/app/models/neo.model.ts`
 - Simulador NEO: `src/app/components/simulador-neo/simulador-neo.component.ts`
@@ -54,7 +54,7 @@ Algunas implementaciones de servicios y módulos de interfaz de usuario no se ex
 
 ### 4. Eventos naturales
 
-- Panel de eventos: `src/app/pages/3.EONET-tab/tab3.page.ts`
+- Panel de eventos: `src/app/pages/3-Eonet/eonet.page.ts`
 - Servicio EONET: `src/app/services/eonet.service.ts`
 - Modelo de eventos: `src/app/models/event-eonet.model.ts`
 - Categorías de eventos: `src/app/models/categoria-eonet.model.ts`
@@ -81,4 +81,4 @@ Algunas implementaciones de servicios y módulos de interfaz de usuario no se ex
 10. El panel de eventos utiliza el servicio EONET, los modelos de datos y las categorías para mostrar y filtrar eventos.
 11. La geolocalización IP obtiene información de ubicación para los cálculos de distancia.
 12. El mapa utiliza mosaicos de OpenStreetMap.
-13. El menú global permite abrir las páginas Acerca de y Léame.
+13. El menú global permite abrir las páginas Acerca de e integrantes.

@@ -9,7 +9,7 @@ export const loginGuard: CanActivateFn = () => {
   const router = inject(Router);
 
   return authService.comprobarSesion().pipe(
-    map(() => router.parseUrl('/tabs/tab1')),
+    map(() => router.parseUrl('/tabs/apod')),
     catchError(() => of(true))
   );
 };

@@ -4,7 +4,7 @@ import { ObjetoCercano } from '../../models/neo.model';
 
 
 @Component({
-  selector: 'app-tab2',
+  selector: 'app-neo',
   templateUrl: 'neo.page.html',
   styleUrls: ['neo.page.scss'],
   standalone: false,
@@ -12,18 +12,18 @@ import { ObjetoCercano } from '../../models/neo.model';
 
 
 
-export class Tab2Page implements OnInit {
+export class NeoPage implements OnInit {
   private neoService = inject(NeoService);
 
 
   // Señales
   objetos = signal<ObjetoCercano[]>([]);
-  cargando = signal<boolean>(false);
+  cargando = signal<boolean>(true);
   error = signal<string>('');
 
   limiteObjetos = 10;
 
-  objetoSeleccionado: ObjetoCercano | null = null;
+  objetoSeleccionado = signal<ObjetoCercano | null>(null);
 
   ngOnInit() {
     this.cargarObjetos();
@@ -49,6 +49,10 @@ export class Tab2Page implements OnInit {
             (a.close_approach_data[0]?.epoch_date_close_approach ?? 0) -
             (b.close_approach_data[0]?.epoch_date_close_approach ?? 0)
           );
+
+          if (lista.length === 0) {
+            this.error.set('No hay objetos cercanos registrados para estos días.');
+          }
 
           this.objetos.set(lista.slice(0, this.limiteObjetos));
           this.cargando.set(false);
@@ -85,6 +89,6 @@ export class Tab2Page implements OnInit {
   }
 
   seleccionarObjeto(objeto: ObjetoCercano) {
-    this.objetoSeleccionado = objeto;
+    this.objetoSeleccionado.set(objeto);
   }
 }

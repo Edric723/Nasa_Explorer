@@ -1,7 +1,7 @@
 import { IonicModule } from '@ionic/angular/lazy';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Tab2Page } from './neo.page';
+import { NeoPage } from './neo.page';
 
 import { NeoPageRoutingModule } from './neo-routing.module';
 import { SimuladorNeoComponent } from '../../components/simulador-neo/simulador-neo.component';
@@ -14,6 +14,6 @@ import { MenuGlobalModule } from '../../components/menu-global/menu-global.modul
     NeoPageRoutingModule,
     MenuGlobalModule
   ],
-  declarations: [Tab2Page, SimuladorNeoComponent]
+  declarations: [NeoPage, SimuladorNeoComponent]
 })
 export class NeoPageModule {}

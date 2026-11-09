@@ -12,11 +12,6 @@ ion-content {
    TARJETAS DE OBJETOS
 ======================================== */
 
-ion-card {
-  overflow: hidden;
-}
-
-
 /* ========================================
    NIVEL DE PELIGROSIDAD
 ======================================== */
@@ -38,7 +33,7 @@ ion-card {
 /* Objetos potencialmente peligrosos */
 
 .etiqueta.peligroso {
-  color: #ff7185;
+  color: var(--color-error);
   border-color: rgba(255, 113, 133, 0.5);
 }
 

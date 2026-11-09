@@ -18,7 +18,7 @@
     --background: transparent;
     --background-focused: rgba(57, 210, 255, 0.25);
     --color: #8295ad;
-    --color-selected: #42ddff;
+    --color-selected: var(--color-acento)
     --ripple-color: rgba(66, 221, 255, 0.15);
   
     font-size: 11px;
@@ -54,7 +54,7 @@
     height: 3px;
   
     border-radius: 0 0 8px 8px;
-    background: #42ddff;
+    background: var(--color-acento);
     box-shadow:
       0 0 7px rgba(66, 221, 255, 0.9),
       0 0 16px rgba(66, 221, 255, 0.5);
@@ -65,7 +65,7 @@
   
   /* Pestaña seleccionada */
   .space-tab-bar ion-tab-button.tab-selected {
-    --color: #42ddff;
+    color: var(--color-acento);
   }
   
   /* Animación del indicador */
@@ -81,7 +81,7 @@
   
   /* Realce del texto activo */
   .space-tab-bar ion-tab-button.tab-selected ion-label {
-    color: #42ddff;
+    color: var(--color-acento);
     font-weight: 600;
   }
   

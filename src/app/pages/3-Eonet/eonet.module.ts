@@ -1,7 +1,7 @@
 import { IonicModule } from '@ionic/angular/lazy';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Tab3Page } from './eonet.page';
+import { EonetPage } from './eonet.page';
 
 import { EonetPageRoutingModule } from './eonet-routing.module';
 import { MenuGlobalModule } from '../../components/menu-global/menu-global.module';
@@ -13,6 +13,6 @@ import { MenuGlobalModule } from '../../components/menu-global/menu-global.modul
     EonetPageRoutingModule,
     MenuGlobalModule
   ],
-  declarations: [Tab3Page]
+  declarations: [EonetPage]
 })
 export class EonetPageModule {}

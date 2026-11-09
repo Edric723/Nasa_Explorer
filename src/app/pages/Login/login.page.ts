@@ -1,6 +1,7 @@
 import { Component, signal, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
+import { finalize } from 'rxjs';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
@@ -13,8 +14,7 @@ export class LoginPage {
   private authService = inject(AuthService);
   private router = inject(Router);
 
-
-  modo: 'login' | 'registro' | 'confirmacion' | 'recuperacion' = 'login';
+  modo = signal<'login' | 'registro' | 'confirmacion' | 'recuperacion'>('login');
 
   email = '';
   password = '';
@@ -28,12 +28,12 @@ export class LoginPage {
   mensaje = signal('');
 
   mostrarLogin() {
-    this.modo = 'login';
+    this.modo.set('login');
     this.limpiarMensajes();
   }
 
   mostrarRegistro() {
-    this.modo = 'registro';
+    this.modo.set('registro');
     this.limpiarMensajes();
   }
 
@@ -44,22 +44,17 @@ export class LoginPage {
     this.authService.iniciarSesion(
       this.email,
       this.password
+    ).pipe(
+      finalize(() => this.cargando.set(false))
     ).subscribe({
       next: (respuesta) => {
-        this.cargando.set(false);
-
         if (respuesta.AuthenticationResult) {
-          this.router.navigateByUrl('/tabs/tab1');
+          this.router.navigateByUrl('/tabs/apod');
         } else {
-          this.error.set(
-            'Cognito requiere un paso adicional de autenticación.'
-          );
+          this.error.set('Cognito requiere un paso adicional de autenticación.');
         }
       },
-      error: (error: HttpErrorResponse) => {
-        this.cargando.set(false);
-        this.mostrarError(error);
-      }
+      error: (error: HttpErrorResponse) => this.mostrarError(error)
     });
   }
 
@@ -72,19 +67,14 @@ export class LoginPage {
       this.password,
       this.nickname,
       this.fechaNacimiento
+    ).pipe(
+      finalize(() => this.cargando.set(false))
     ).subscribe({
       next: () => {
-        this.cargando.set(false);
-        this.modo = 'confirmacion';
-
-        this.mensaje.set(
-          'Cuenta creada. Revisá tu correo para obtener el código.'
-        );
+        this.modo.set('confirmacion');
+        this.mensaje.set('Cuenta creada. Revisá tu correo para obtener el código.');
       },
-      error: (error: HttpErrorResponse) => {
-        this.cargando.set(false);
-        this.mostrarError(error);
-      }
+      error: (error: HttpErrorResponse) => this.mostrarError(error)
     });
   }
 
@@ -95,40 +85,18 @@ export class LoginPage {
     this.authService.confirmarRegistro(
       this.email,
       this.codigo
+    ).pipe(
+      finalize(() => this.cargando.set(false))
     ).subscribe({
       next: () => {
-        this.cargando.set(false);
-        this.modo = 'login';
+        this.modo.set('login');
         this.password = '';
         this.codigo = '';
-
-        this.mensaje.set(
-          '¡Cuenta confirmada! Ya podés iniciar sesión.'
-        );
+        this.mensaje.set('¡Cuenta confirmada! Ya podés iniciar sesión.');
       },
-      error: (error: HttpErrorResponse) => {
-        this.cargando.set(false);
-        this.mostrarError(error);
-      }
+      error: (error: HttpErrorResponse) => this.mostrarError(error)
     });
   }
-
-  private mostrarError(error: HttpErrorResponse) {
-    if (error.error && error.error.message) {
-      this.error.set(error.error.message);
-    } else {
-      this.error.set(
-        'No se pudo completar la operación. Intentá nuevamente.'
-      );
-    }
-  }
-
-
-  private limpiarMensajes() {
-    this.error.set('');
-    this.mensaje.set('');
-  }
-
 
   recuperarContrasena() {
     this.limpiarMensajes();
@@ -142,43 +110,47 @@ export class LoginPage {
 
     this.authService.recuperarContrasena(
       this.email
+    ).pipe(
+      finalize(() => this.cargando.set(false))
     ).subscribe({
       next: () => {
-        this.cargando.set(false);
-        this.modo = 'recuperacion';
-
-        this.mensaje.set(
-          'Te enviaremos un código de recuperación a tu correo electrónico.'
-        );
+        this.modo.set('recuperacion');
+        this.mensaje.set('Te enviaremos un código de recuperación a tu correo electrónico.');
       },
-      error: (error: HttpErrorResponse) => {
-        this.cargando.set(false);
-        this.mostrarError(error);
-      }
+      error: (error: HttpErrorResponse) => this.mostrarError(error)
     });
   }
 
   confirmarRecuperacion() {
+    this.limpiarMensajes();
     this.cargando.set(true);
 
     this.authService.confirmarRecuperacion(
       this.email,
       this.codigo,
       this.nuevaPassword
+    ).pipe(
+      finalize(() => this.cargando.set(false))
     ).subscribe({
       next: () => {
-        this.cargando.set(false);
-        this.modo = 'login';
+        this.modo.set('login');
         this.password = '';
         this.codigo = '';
         this.nuevaPassword = '';
         this.mensaje.set('Contraseña actualizada correctamente.');
       },
-      error: (error: HttpErrorResponse) => {
-        this.cargando.set(false);
-        this.mostrarError(error);
-      }
+      error: (error: HttpErrorResponse) => this.mostrarError(error)
     });
   }
 
+  private mostrarError(error: HttpErrorResponse) {
+    this.error.set(
+      error.error?.message || 'No se pudo completar la operación. Intentá nuevamente.'
+    );
+  }
+
+  private limpiarMensajes() {
+    this.error.set('');
+    this.mensaje.set('');
+  }
 }

@@ -25,15 +25,15 @@
 
     <ion-card-content>
       <app-simulador-neo
-        [objeto]="objetoSeleccionado">
+        [objeto]="objetoSeleccionado()">
       </app-simulador-neo>
 
-      @if (objetoSeleccionado) {
+      @if (objetoSeleccionado()) {
         <ion-button
           expand="block"
           fill="outline"
           color="medium"
-          (click)="objetoSeleccionado = null">
+          (click)="objetoSeleccionado.set(null)">
           <ion-icon name="close-outline" slot="start"></ion-icon>
           Cerrar simulador
         </ion-button>
@@ -43,8 +43,7 @@
 
   <!-- Una tarjeta por cada objeto -->
   @for (objeto of objetos(); track objeto.id) {
-    <ion-card
-      class="nasa-card">
+    <ion-card class="nasa-card">
       <ion-card-header>
         <!-- Fecha y hora del máximo acercamiento -->
         <ion-card-subtitle>

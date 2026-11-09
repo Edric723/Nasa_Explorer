@@ -4,7 +4,7 @@ export interface CategoriaEonet {
     color: string;
   }
   
-  export const CATEGORIAS_EONET: { [key: string]: CategoriaEonet } = {
+  export const CATEGORIAS_EONET: Record<string, CategoriaEonet> = {
     incendios: {
       nombre: 'Incendios',
       nombreApi: 'Wildfires',
