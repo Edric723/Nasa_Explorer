@@ -92,7 +92,8 @@ ion-header ion-toolbar ion-title {
   width: 90%;
   max-width: 500px;
   margin: 24px auto;
-
+  overflow: hidden;
+  
   color: var(--color-texto);
   background: rgba(16, 24, 39, 0.94);
 
@@ -227,7 +228,6 @@ ion-header ion-toolbar ion-title {
   .nasa-card {
     width: 92%;
     margin: 20px auto;
-    overflow: hidden;
   }
 
   .nasa-card ion-card-title {

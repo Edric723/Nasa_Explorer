@@ -30,7 +30,9 @@
               name="password" autocomplete="current-password" required>
               <ion-input-password-toggle slot="end"></ion-input-password-toggle>
             </ion-input>
-            <span class="recuperar" (click)="recuperarContrasena()">¿Olvidaste tu contraseña?</span>
+            <button type="button" class="text-button recuperar" (click)="recuperarContrasena()">
+              ¿Olvidaste tu contraseña?
+            </button>
           </label>
           <!-- Botón de iniciar sesión -->
           <ion-button class="primary-button" type="submit" expand="block" [disabled]="cargando()">

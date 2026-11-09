@@ -33,11 +33,10 @@
     <div class="category-filters">
 
       @for (categoria of categorias; track categoria.nombre) {
-        <ion-button
-          [fill]="categoriaSeleccionada() === categoria.nombre ? 'solid' : 'outline'"
-          (click)="filtrarPorCategoria(categoria.nombre)">
-          {{ categoria.nombre }}
-        </ion-button>
+      <ion-button [fill]="categoriaSeleccionada() === categoria.nombre ? 'solid' : 'outline'"
+        (click)="filtrarPorCategoria(categoria.nombre)">
+        {{ categoria.nombre }}
+      </ion-button>
       }
 
       <ion-button [fill]="!categoriaSeleccionada() ? 'solid' : 'outline'" (click)="filtrarPorCategoria(null)">
@@ -65,16 +64,10 @@
       <div>
         <h2>Eventos cercanos</h2>
 
-        @if (!ubicacion()) {
-          <p>
-            Explorá los eventos según su ubicación geográfica.
-          </p>
-        }
-
         @if (ubicacion(); as lugar) {
-          <p>
-            Ubicación aproximada: {{ lugar.city }}, {{ lugar.country_name }}
-          </p>
+        <p>Ubicación aproximada: {{ lugar.city }}, {{ lugar.country_name }}</p>
+        } @else {
+        <p>Explorá los eventos según su ubicación geográfica.</p>
         }
       </div>
     </div>
@@ -87,9 +80,9 @@
 
     <!-- Error de ubicación -->
     @if (mensajeUbicacion()) {
-      <p class="location-message" aria-live="polite">
-        {{ mensajeUbicacion() }}
-      </p>
+    <p class="location-message" aria-live="polite">
+      {{ mensajeUbicacion() }}
+    </p>
     }
 
     <p class="location-disclaimer">
@@ -100,82 +93,88 @@
 
   <!-- Estado de carga -->
   @if (cargando()) {
-    <section class="nasa-state">
-      <ion-spinner name="crescent"></ion-spinner>
-      <p>Consultando eventos naturales...</p>
-    </section>
+  <section class="nasa-state">
+    <ion-spinner name="crescent"></ion-spinner>
+    <p>Consultando eventos naturales...</p>
+  </section>
   }
 
   <!-- Estado de error -->
   @if (error()) {
-    <section class="nasa-state error">
-      <ion-icon name="alert-circle-outline"></ion-icon>
-      <p>{{ error() }}</p>
-      <ion-button class="nasa-button" fill="outline" (click)="cargarEventos()">
-        Reintentar
-      </ion-button>
-    </section>
+  <section class="nasa-state error">
+    <ion-icon name="alert-circle-outline"></ion-icon>
+    <p>{{ error() }}</p>
+    <ion-button class="nasa-button" fill="outline" (click)="cargarEventos()">
+      Reintentar
+    </ion-button>
+  </section>
   }
 
+  <!-- Eventos cercanos a la ubicación -->
   @if (ubicacion() && !cargando() && !error()) {
-    <section
-      class="map-section nearby-events">
-      <div class="map-heading">
-        <div>
-          <span class="eyebrow">SEGÚN TU UBICACIÓN</span>
-          <h2>Eventos en un radio de {{ radioMaximo }} km</h2>
-        </div>
-        <ion-icon name="radar-outline"></ion-icon>
+  <section class="map-section">
+
+    <div class="map-heading">
+      <div>
+        <span class="eyebrow">SEGÚN TU UBICACIÓN</span>
+        <h2>Eventos en un radio de {{ radioMaximo }} km</h2>
       </div>
-      <p>
-        Estos son los eventos naturales más cercanos,
-        ordenados por distancia.
-      </p>
-      @for (evento of eventosCercanos(); track evento.id) {
-        <ion-card>
-          <ion-card-header>
-            <ion-card-subtitle>
-              {{ evento.categories[0]?.title || 'Sin categoría' }}
-            </ion-card-subtitle>
-            <ion-card-title>
-              {{ evento.title }}
-            </ion-card-title>
-          </ion-card-header>
-          <ion-card-content>
-            <p>
-              {{ evento.description ||
-              'No hay una descripción adicional disponible para este evento.' }}
-            </p>
-            <p>
-              <ion-icon name="navigate-outline"></ion-icon>
-              {{ distancias().get(evento.id)?.toFixed(1) }} km
-            </p>
-            @if (evento.geometry.length > 0) {
-              <p>
-                <ion-icon name="calendar-outline"></ion-icon>
-                {{ evento.geometry[evento.geometry.length - 1].date | date:'dd/MM/yyyy' }}
-              </p>
-            }
-            @if (evento.link) {
-              <ion-button
-                [href]="evento.link"
-                target="_blank"
-                rel="noopener noreferrer"
-                fill="clear">
-                Más información
-                <ion-icon name="open-outline" slot="end"></ion-icon>
-              </ion-button>
-            }
-          </ion-card-content>
-        </ion-card>
-      }
-      @if (eventosCercanos().length === 0) {
+
+      <ion-icon name="radar-outline"></ion-icon>
+    </div>
+
+    <p>
+      Estos son los eventos naturales más cercanos,
+      ordenados por distancia.
+    </p>
+
+    @for (evento of eventosCercanos(); track evento.id) {
+    <ion-card class="nasa-card">
+      <ion-card-header>
+        <ion-card-subtitle>
+          {{ evento.categories[0]?.title || 'Sin categoría' }}
+        </ion-card-subtitle>
+        <ion-card-title>
+          {{ evento.title }}
+        </ion-card-title>
+      </ion-card-header>
+
+      <ion-card-content>
         <p>
-          No se encontraron eventos dentro de este radio
-          con la categoría seleccionada.
+          {{ evento.description ||
+          'No hay una descripción adicional disponible para este evento.' }}
         </p>
-      }
-    </section>
+
+        <p>
+          <ion-icon name="navigate-outline"></ion-icon>
+          {{ distancias().get(evento.id)?.toFixed(1) }} km
+        </p>
+
+        @if (evento.geometry.length > 0) {
+        <p>
+          <ion-icon name="calendar-outline"></ion-icon>
+          {{ evento.geometry[evento.geometry.length - 1].date | date:'dd/MM/yyyy' }}
+        </p>
+        }
+
+        @if (evento.link) {
+        <ion-button [href]="evento.link" target="_blank" rel="noopener noreferrer" fill="clear">
+          Más información
+          <ion-icon name="open-outline" slot="end"></ion-icon>
+        </ion-button>
+        }
+      </ion-card-content>
+    </ion-card>
+    }
+
+    @if (eventosCercanos().length === 0) {
+    <p>
+      No se encontraron eventos dentro de este radio
+      con la categoría seleccionada.
+    </p>
+    }
+
+  </section>
   }
 
   <app-menu-global></app-menu-global>
