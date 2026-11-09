@@ -44,8 +44,7 @@ export class AuthService {
     this.programarRenovacion();
   }
 
-  recuperarSesion() {
-    // CORRECCIÓN: Se cambia localStorage por sessionStorage
+  private recuperarSesion() {
     const sesionGuardada = sessionStorage.getItem(
       STORAGE_KEYS.SESION
     );
@@ -185,7 +184,6 @@ export class AuthService {
   }
 
   private guardarSesionEnStorage() {
-    // CORRECCIÓN: Se cambia localStorage por sessionStorage
     sessionStorage.setItem(
       STORAGE_KEYS.SESION,
       JSON.stringify({

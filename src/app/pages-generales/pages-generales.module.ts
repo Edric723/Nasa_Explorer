@@ -4,8 +4,8 @@ import { IonicModule } from '@ionic/angular/lazy';
 
 import { PagesGeneralesRoutingModule } from './pages-generales-routing.module';
 
-import { AboutPage } from '../pages/4.Menu/about/about.page';
-import { ReadmePage } from '../pages/4.Menu/readme/readme.page';
+import { AboutPage } from '../pages/4-Menu/integrantes/integrantes.page';
+import { ReadmePage } from '../pages/4-Menu/acerca-de/acerca-de.page';
 
 @NgModule({
   imports: [

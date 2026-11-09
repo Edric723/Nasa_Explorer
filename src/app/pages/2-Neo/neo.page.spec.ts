@@ -1,8 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RouterModule } from '@angular/router';
 
-import { Tab2PageModule } from './tab2.module';
-import { Tab2Page } from './tab2.page';
+import { Tab2PageModule } from './neo.module';
+import { Tab2Page } from './neo.page';
 
 describe('Tab2Page', () => {
   let component: Tab2Page;

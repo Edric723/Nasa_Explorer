@@ -5,8 +5,8 @@ import { ObjetoCercano } from '../../models/neo.model';
 
 @Component({
   selector: 'app-tab2',
-  templateUrl: 'tab2.page.html',
-  styleUrls: ['tab2.page.scss'],
+  templateUrl: 'neo.page.html',
+  styleUrls: ['neo.page.scss'],
   standalone: false,
 })
 

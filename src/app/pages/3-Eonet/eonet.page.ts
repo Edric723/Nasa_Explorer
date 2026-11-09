@@ -9,8 +9,8 @@ import { CATEGORIAS_EONET } from '../../models/categoria-eonet.model';
 
 @Component({
   selector: 'app-tab3',
-  templateUrl: 'tab3.page.html',
-  styleUrls: ['tab3.page.scss'],
+  templateUrl: 'eonet.page.html',
+  styleUrls: ['eonet.page.scss'],
   standalone: false
 })
 

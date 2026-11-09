@@ -2,8 +2,8 @@ import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-about',
-  templateUrl: './about.page.html',
-  styleUrls: ['./about.page.scss'],
+  templateUrl: './integrantes.page.html',
+  styleUrls: ['./integrantes.page.scss'],
   standalone: false
 })
 export class AboutPage {}

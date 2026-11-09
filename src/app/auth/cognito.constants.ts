@@ -16,6 +16,3 @@ export const STORAGE_KEYS = {
   SESION: 'nasa_explorer_sesion'
 };
 
-
-// Por el momento la sesiòn se guarda en el localstorage, para testear en formato web.
-// Hay q revisar luego cuando pasemos a android dònde guardar los datos de sesiòn para mantener la misma andando.
