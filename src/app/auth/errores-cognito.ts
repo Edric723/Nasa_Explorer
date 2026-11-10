@@ -13,6 +13,11 @@ const MENSAJES: Record<string, string> = {
   TooManyRequestsException: 'Demasiados intentos. Esperá unos minutos e intentá de nuevo.'
 };
 
+/**
+ * @description Devuelve un mensaje de error según el error recibido desde Cognito.
+ * @param error 
+ * @returns string
+ */
 export function mensajeErrorCognito(error: HttpErrorResponse): string {
   if (error.status === 0) {
     return 'No hay conexión. Revisá tu internet e intentá nuevamente.';

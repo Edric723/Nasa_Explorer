@@ -15,7 +15,7 @@ export class FavoritosService {
 
   private db = this.iniciarFirestore();
 
-  // Evita "Firestore has already been started" si el servicio se crea más de una vez (tests, HMR).
+
   private iniciarFirestore() {
     if (getApps().length > 0) {
       return getFirestore(getApp());
