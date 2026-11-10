@@ -94,25 +94,6 @@
 
   </section>
 
-  <!-- Estado de carga -->
-  @if (cargando()) {
-  <section class="nasa-state">
-    <ion-spinner name="crescent"></ion-spinner>
-    <p>Consultando eventos naturales...</p>
-  </section>
-  }
-
-  <!-- Estado de error -->
-  @if (error()) {
-  <section class="nasa-state error">
-    <ion-icon name="alert-circle-outline"></ion-icon>
-    <p>{{ error() }}</p>
-    <ion-button class="nasa-button" fill="outline" (click)="cargarEventos()">
-      Reintentar
-    </ion-button>
-  </section>
-  }
-
   <!-- Eventos cercanos a la ubicación -->
   @if (ubicacion() && !cargando() && !error()) {
   <section class="map-section">

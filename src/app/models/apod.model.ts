@@ -12,3 +12,9 @@ export interface Apod {
     hdurl?: string;
     basic_html?: string;
   }
+
+  export function urlImagen(apod: Apod, ancho = 1200): string {
+    const url = apod.hdurl || apod.url;
+  
+    return url ? url.replace(/w=\d+/, `w=${ancho}`).replace(/&h=\d+/, '') : '';
+  }

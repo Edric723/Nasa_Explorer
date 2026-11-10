@@ -1,9 +1,11 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>
-      Imagen Astronómica del Día
-    </ion-title>
+    <ion-title>Imagen Astronómica del Día</ion-title>
+
     <ion-buttons slot="end">
+      <ion-button routerLink="/tabs/apod/favoritos">
+        <ion-icon name="heart-outline" slot="icon-only"></ion-icon>
+      </ion-button>
       <app-menu-global></app-menu-global>
     </ion-buttons>
   </ion-toolbar>
@@ -73,11 +75,18 @@
           </ion-card-title>
         </ion-card-header>
         <ion-card-content>
+
           <!-- Descripción -->
           <div
             class="descripcion"
             [innerHTML]="apod()?.explanation">
           </div>
+
+          <ion-button class="nasa-button" expand="block" (click)="alternarFavorito()">
+            <ion-icon [name]="esFavorito() ? 'heart' : 'heart-outline'" slot="start"></ion-icon>
+            {{ esFavorito() ? 'Quitar de favoritos' : 'Guardar en favoritos' }}
+          </ion-button>
+
           <!-- Créditos -->
           @if (apod()?.copyright) {
             <div

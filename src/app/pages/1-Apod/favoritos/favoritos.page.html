@@ -1,0 +1,61 @@
+<ion-header [translucent]="true">
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-back-button defaultHref="/tabs/apod"></ion-back-button>
+      </ion-buttons>
+      <ion-title>Favoritos</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  
+  <ion-content [fullscreen]="true">
+  
+    @if (cargando()) {
+      <div class="nasa-state">
+        <ion-spinner name="crescent"></ion-spinner>
+        <p>Cargando tus favoritos...</p>
+      </div>
+    }
+  
+    @if (error() && !cargando()) {
+      <div class="nasa-state error">
+        <ion-icon name="alert-circle-outline"></ion-icon>
+        <p>{{ error() }}</p>
+      </div>
+    }
+  
+    @if (!cargando() && !error() && favoritos().length === 0) {
+      <div class="nasa-state">
+        <ion-icon name="heart-outline"></ion-icon>
+        <p>Todavía no guardaste ninguna imagen astronómica.</p>
+      </div>
+    }
+  
+    @for (favorito of favoritos(); track favorito.post_id) {
+      <ion-card class="nasa-card">
+        @if (favorito.media_type === 'image' && urlImagen(favorito)) {
+            <img
+              class="imagen"
+              [src]="urlImagen(favorito, 800)"
+              [alt]="favorito.alt || favorito.title"
+              loading="lazy">
+          }
+        
+        
+  
+        <ion-card-header>
+          <ion-card-subtitle>{{ favorito.date }}</ion-card-subtitle>
+          <ion-card-title>{{ favorito.title }}</ion-card-title>
+        </ion-card-header>
+
+        <div class="descripcion" [innerHTML]="favorito.explanation"></div>
+  
+        <ion-card-content>
+          <ion-button class="nasa-button" expand="block" (click)="quitar(favorito)">
+            <ion-icon name="heart-dislike-outline" slot="start"></ion-icon>
+            Quitar de favoritos
+          </ion-button>
+        </ion-card-content>
+      </ion-card>
+    }
+  
+  </ion-content>

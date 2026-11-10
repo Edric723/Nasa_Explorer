@@ -1,7 +1,8 @@
 import { Component, OnInit, signal, inject, computed } from '@angular/core';
 import { ApodService } from '../../services/apod.service';
-import { Apod } from '../../models/apod.model';
+import { Apod, urlImagen } from '../../models/apod.model';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { FavoritosService } from '../../services/favoritos.service';
 
 @Component({
   selector: 'app-apod',
@@ -13,9 +14,11 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 export class ApodPage implements OnInit {
   private apodService = inject(ApodService);
   private sanitizer = inject(DomSanitizer);
+  private favoritosService = inject(FavoritosService);
 
   apod = signal<Apod | null>(null);
   videoUrl = signal('');
+  esFavorito = signal(false);
   cargando = signal(true);
   error = signal('');
 
@@ -25,9 +28,9 @@ export class ApodPage implements OnInit {
   
   // Achicar la imagen del día por si es de un tamaño desmesurado.
   imagenUrl = computed(() => {
-    const url = this.apod()?.hdurl || this.apod()?.url;
+    const apod = this.apod();
   
-    return url ? url.replace(/w=\d+/, 'w=1200').replace(/&h=\d+/, '') : '';
+    return apod ? urlImagen(apod) : '';
   });
 
 
@@ -38,6 +41,7 @@ export class ApodPage implements OnInit {
         if (apod) {
           this.apod.set(apod);
           this.detectarVideo(apod);
+          this.favoritosService.esFavorito(apod).then(valor => this.esFavorito.set(valor));
         } else {
           this.error.set('No hay una imagen astronómica disponible por el momento.');
         }
@@ -101,5 +105,25 @@ export class ApodPage implements OnInit {
 
   this.esVideoYoutube.set(true);
 
+  }
+
+  async alternarFavorito() {
+    const apod = this.apod();
+  
+    if (!apod) {
+      return;
+    }
+  
+    try {
+      if (this.esFavorito()) {
+        await this.favoritosService.eliminar(apod);
+      } else {
+        await this.favoritosService.agregar(apod);
+      }
+  
+      this.esFavorito.set(!this.esFavorito());
+    } catch {
+      this.error.set('No se pudo actualizar tus favoritos.');
+    }
   }
 }

@@ -17,6 +17,7 @@ const DURACION_POR_DEFECTO_SEGUNDOS = 3600;
 @Injectable({
   providedIn: 'root'
 })
+
 export class AuthService {
   private http = inject(HttpClient);
   private router = inject(Router);
@@ -35,6 +36,11 @@ export class AuthService {
 
   // Sesión y tokens
 
+  /**
+   * 
+   * @param tokens 
+   * @returns 
+   */
   private establecerSesion(tokens: Partial<SesionCognito>): SesionCognito {
     this.sesion = {
       ...this.sesion,
@@ -229,5 +235,18 @@ export class AuthService {
       ConfirmationCode: codigo,
       Password: nuevaPassword
     });
+  }
+
+  // Obtener ID de usuario desde el token para los favoritos.
+  obtenerIdUsuario(): string | null {
+    const token = this.sesion?.IdToken;
+  
+    if (!token) {
+      return null;
+    }
+  
+    const cuerpo = token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
+  
+    return JSON.parse(atob(cuerpo)).sub;
   }
 }
