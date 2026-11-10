@@ -4,6 +4,7 @@ import { of, catchError, map } from 'rxjs';
 
 import { AuthService } from '../services/auth.service';
 
+// Guard para proteger rutas que requieren autenticación, evita volver al login.
 export const loginGuard: CanActivateFn = () => {
   const authService = inject(AuthService);
   const router = inject(Router);

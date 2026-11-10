@@ -70,6 +70,7 @@ export class ApodPage implements OnInit {
   }
 
 
+// Sincroniza el estado de favorito con la base de datos.
   private sincronizarFavorito() {
     const apod = this.apod();
 

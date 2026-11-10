@@ -37,7 +37,7 @@ export class AuthService {
   // Sesión y tokens
 
   /**
-   * 
+   * Establece la sesión con los tokens obtenidos de Cognito.    
    * @param tokens 
    * @returns 
    */
@@ -103,6 +103,10 @@ export class AuthService {
     }
   }
 
+
+  /**
+   * Programa la renovación automática del Access Token antes de que expire.
+   */
   private programarRenovacion() {
     this.cancelarRenovacion();
 
@@ -122,6 +126,11 @@ export class AuthService {
     }, tiempoEspera);
   }
 
+
+  /**
+   * Renueva la sesión utilizando el Refresh Token.
+   * @returns Observable con la nueva sesión.
+   */
   renovarSesion(): Observable<SesionCognito> {
     if (!this.sesion?.RefreshToken) {
       this.cerrarSesion();
@@ -151,6 +160,10 @@ export class AuthService {
     );
   }
 
+  /**
+   * Comprueba si hay una sesión activa y válida.
+   * @returns Observable con la sesión activa o un error si no hay sesión.
+   */
   comprobarSesion(): Observable<SesionCognito> {
     if (!this.sesion) {
       return throwError(() => new Error('No hay una sesión iniciada.'));
@@ -163,7 +176,13 @@ export class AuthService {
     return this.renovarSesion();
   }
 
-  // Llamadas a Cognito
+
+  /**
+   * Realiza una llamada a la API de Cognito con la acción y el cuerpo especificados.
+   * @param accion Acción de Cognito (ej. 'SignUp', 'InitiateAuth').
+   * @param cuerpo Objeto con los parámetros de la acción.
+   * @returns Observable con la respuesta de Cognito.
+   */
 
   private llamarCognito<T = any>(accion: string, cuerpo: object): Observable<T> {
     return this.http.post<T>(this.url, cuerpo, {
@@ -237,16 +256,19 @@ export class AuthService {
     });
   }
 
-  // Obtener ID de usuario desde el token para los favoritos.
+  /**
+   * Obtiene el ID del usuario a partir del IdToken de la sesión.
+   * @returns El ID del usuario o null si no hay sesión activa.
+   */
   obtenerIdUsuario(): string | null {
     const token = this.sesion?.IdToken;
-  
+
     if (!token) {
       return null;
     }
-  
+
     const cuerpo = token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
-  
+
     return JSON.parse(atob(cuerpo)).sub;
   }
 }

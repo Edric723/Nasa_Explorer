@@ -30,6 +30,8 @@ export class GeolocationService {
   //   });
   // }
 
+
+  // Función para obtener la ubicación aproximada por IP (para versión web)
   async obtenerUbicacionPorIP(): Promise<UbicacionIP> {
     return await firstValueFrom(
       this.http.get<UbicacionIP>(
