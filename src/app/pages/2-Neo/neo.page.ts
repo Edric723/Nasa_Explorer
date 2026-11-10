@@ -29,6 +29,9 @@ export class NeoPage implements OnInit {
     this.cargarObjetos();
   }
 
+  /**
+   * Carga los objetos cercanos a la Tierra para el rango de fechas especificado.
+   */
   cargarObjetos() {
     this.cargando.set(true);
     this.error.set('');
@@ -64,7 +67,12 @@ export class NeoPage implements OnInit {
       });
   }
 
-  //Año de descubrimiento, estado de la órbita
+
+  /**
+   * Devuelve una etiqueta que describe el estado del objeto cercano.
+   * @param nombre Nombre del objeto cercano (ej. "2021 AB")
+   * @returns Descripción   
+   */
   etiquetaObjeto(nombre: string): string {
     const texto = nombre.trim();
 

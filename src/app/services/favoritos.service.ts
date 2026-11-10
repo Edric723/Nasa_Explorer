@@ -15,7 +15,7 @@ export class FavoritosService {
 
   private db = this.iniciarFirestore();
 
-
+  // Inicializa Firestore, reutilizando la instancia si ya existe.
   private iniciarFirestore() {
     if (getApps().length > 0) {
       return getFirestore(getApp());
@@ -27,7 +27,7 @@ export class FavoritosService {
     );
   }
 
-  // usuarios/{id de Cognito}/favoritos
+  // Obtiene la referencia a la colección de favoritos del usuario actual.
   private coleccion() {
     const idUsuario = this.authService.obtenerIdUsuario();
 

@@ -9,7 +9,7 @@ Esta aplicación Ionic/Angular proporciona acceso autenticado a paneles temátic
 
 - Imagen Astronómica del Día (APOD).
 - Objetos cercanos a la Tierra (NEO).
-- Eventos naturales (EONET).
+- Eventos globales (EONET).
 
 La vista de eventos incluye filtrado por categoría, un mapa y cálculos de distancia aproximada mediante la ubicación IP.
 
@@ -31,7 +31,7 @@ Algunas implementaciones de servicios y módulos de interfaz de usuario no se ex
 
 ### 2. Identidad y acceso
 
-- Inicio de sesión y registro: `src/app/pages/0-Login/login.page.ts`
+- Inicio de sesión y registro: `src/app/pages/Login/login.page.ts`
 - Servicio de autenticación: `src/app/services/auth.service.ts`
 - Guardias de ruta: `src/app/auth/auth-guard.ts`
 - Almacenamiento de sesión: `src/app/services/auth.service.ts`
@@ -74,11 +74,11 @@ Algunas implementaciones de servicios y módulos de interfaz de usuario no se ex
 3. Después de la autenticación se cargan las pestañas del panel de control.
 4. Las guardias de ruta verifican la sesión mediante el servicio de autenticación.
 5. El servicio de autenticación se comunica con Amazon Cognito y conserva los tokens de sesión.
-6. Las pestañas del panel de control permiten acceder a APOD, NEO y eventos naturales.
+6. Las pestañas del panel de control permiten acceder a imágen del día (APOD), elementos cercanos (NEO) y eventos globales (EONET).
 7. APOD utiliza su servicio y modelo de datos para solicitar y presentar información.
 8. NEO utiliza su servicio, modelo de datos y simulador.
 9. Los servicios APOD y NEO consultan la configuración de API.
 10. El panel de eventos utiliza el servicio EONET, los modelos de datos y las categorías para mostrar y filtrar eventos.
 11. La geolocalización IP obtiene información de ubicación para los cálculos de distancia.
 12. El mapa utiliza mosaicos de OpenStreetMap.
-13. El menú global permite abrir las páginas Acerca de e integrantes.
+13. El menú global permite abrir las páginas Acerca de, Integrantes y Logout.

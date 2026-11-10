@@ -22,7 +22,11 @@ export class SimuladorNeoComponent implements OnChanges, OnDestroy {
   // Parámetros de la trayectoria
   private parametros = signal({ angulo: 0, curvatura: 0, sentido: 1 });
 
-  // Puntos de la curva (inicio, control y final)
+
+  /**
+   * Calcula los puntos de control de la trayectoria según los parámetros.
+   * @returns Puntos de control (inicio, final y control) de la trayectoria.
+   */
   private puntos = computed(() => {
     const { angulo, curvatura, sentido } = this.parametros();
 
@@ -36,14 +40,22 @@ export class SimuladorNeoComponent implements OnChanges, OnDestroy {
     };
   });
 
-  // Recorrido SVG
+
+  /**
+   * Genera la cadena de comandos SVG para la trayectoria del objeto.
+   * @returns Comandos SVG para la trayectoria.
+   */
   trayectoria = computed(() => {
     const p = this.puntos();
 
     return `M ${p.inicioX} ${p.inicioY} Q ${p.controlX} ${p.controlY} ${p.finalX} ${p.finalY}`;
   });
 
-  // Posición actual del asteroide
+
+  /**   
+   * Calcula la posición del objeto en la trayectoria según el progreso.
+   * @returns Coordenadas (x, y) del objeto en la trayectoria.
+   */
   posicion = computed(() => {
     const t = this.progreso() / 100;
     const p = this.puntos();
@@ -118,7 +130,7 @@ export class SimuladorNeoComponent implements OnChanges, OnDestroy {
   }
 
 
-  // Permite cambiar manualmente el progreso
+  // Permite cambiar manualmente el progreso, ya sea mediante un control deslizante o un rango de valores.
   cambiarProgreso(valor: number | { lower: number; upper: number }) {
     if (typeof valor === 'number') {
       this.pausar();
@@ -127,7 +139,9 @@ export class SimuladorNeoComponent implements OnChanges, OnDestroy {
   }
 
 
-  // Calcula los parámetros de la trayectoria
+  /**
+   * Genera la trayectoria del objeto según sus parámetros.
+   */
   generarTrayectoria() {
     const id = Number(this.objeto?.id);
 

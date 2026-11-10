@@ -29,7 +29,7 @@ export class EonetPage implements OnInit, OnDestroy {
   distancias = signal<Map<string, number>>(new Map());
 
   categoriaSeleccionada = signal<string | null>(null);
-  
+
   // Variables
   categorias = Object.values(CATEGORIAS_EONET);
 
@@ -38,6 +38,9 @@ export class EonetPage implements OnInit, OnDestroy {
 
   radioMaximo = 1200;
 
+  /**
+   * Obtiene los eventos filtrados por categoría.
+   */
   eventosFiltrados = computed<EventoEonet[]>(() => {
     const categoria = this.categoriaSeleccionada();
 
@@ -61,6 +64,10 @@ export class EonetPage implements OnInit, OnDestroy {
     );
   });
 
+
+  /**
+   * Obtiene los eventos cercanos a la ubicación del usuario.
+   */
   eventosCercanos = computed<EventoEonet[]>(() => {
     const distancias = this.distancias();
 
@@ -69,7 +76,7 @@ export class EonetPage implements OnInit, OnDestroy {
         const distancia = distancias.get(evento.id);
 
         return distancia !== undefined &&
-               distancia <= this.radioMaximo;
+          distancia <= this.radioMaximo;
       })
       .sort((a, b) => {
         const distanciaA = distancias.get(a.id) ?? Infinity;
@@ -93,6 +100,7 @@ export class EonetPage implements OnInit, OnDestroy {
     this.actualizarMarcadores();
   }
 
+  // Funciones relacionadas al mapa
   private inicializarMapa() {
     if (this.mapa) {
       this.mapa.invalidateSize();
@@ -145,13 +153,18 @@ export class EonetPage implements OnInit, OnDestroy {
     });
   }
 
+  /**
+   * Obtiene las coordenadas del evento EONET.
+   * @param evento El evento EONET.
+   * @returns Un objeto con latitud, longitud y fecha, o null si no se encuentran coordenadas válidas.
+   */
   private obtenerCoordenadas(
     evento: EventoEonet
   ): { latitud: number; longitud: number; fecha: string } | null {
-  
+
     for (let i = evento.geometry.length - 1; i >= 0; i--) {
       const { type, coordinates, date } = evento.geometry[i];
-  
+
       if (
         type === 'Point' &&
         Array.isArray(coordinates) &&
@@ -165,7 +178,7 @@ export class EonetPage implements OnInit, OnDestroy {
         };
       }
     }
-  
+
     return null;
   }
 
@@ -186,6 +199,9 @@ export class EonetPage implements OnInit, OnDestroy {
     return configuracion?.color || '#72d7ff';
   }
 
+  /**
+   * Actualiza los marcadores en el mapa según los eventos filtrados.
+   */
   private actualizarMarcadores() {
     if (!this.mapa) {
       return;
@@ -250,7 +266,6 @@ export class EonetPage implements OnInit, OnDestroy {
   }
 
   // Funciones relacionadas a la ubicación
-
   async obtenerUbicacion() {
     this.mensajeUbicacion.set(
       'Buscando ubicación aproximada por IP...'
@@ -268,14 +283,16 @@ export class EonetPage implements OnInit, OnDestroy {
         'Ubicación obtenida. Se calcularon las distancias a los eventos.'
       );
 
-    } catch  {
-  
+    } catch {
+
       this.mensajeUbicacion.set(
         'No se pudo obtener la ubicación por IP.'
       );
     }
   }
 
+
+  // Funciones relacionadas a la distancia
   private calcularDistancias(lugar: UbicacionIP) {
     const distancias = new Map<string, number>();
 
@@ -299,6 +316,14 @@ export class EonetPage implements OnInit, OnDestroy {
     this.distancias.set(distancias);
   }
 
+  /**
+   * Calcula la distancia entre dos puntos en la superficie de la Tierra.
+   * @param latitud1 Latitud del primer punto.
+   * @param longitud1 Longitud del primer punto.
+   * @param latitud2 Latitud del segundo punto.
+   * @param longitud2 Longitud del segundo punto.
+   * @returns La distancia en kilómetros.
+   */
   private calcularDistancia(
     latitud1: number,
     longitud1: number,
@@ -331,6 +356,12 @@ export class EonetPage implements OnInit, OnDestroy {
     return radioTierra * angulo;
   }
 
+
+  /** 
+     * Ignora caracteres especiales en un texto para evitar problemas de seguridad.
+     * @param texto El texto a escapar.
+     * @returns El texto escapado.
+     */
   private escaparHtml(texto: string): string {
     const caracteres: Record<string, string> = {
       '&': '&amp;',
