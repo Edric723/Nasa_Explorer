@@ -8,22 +8,9 @@ ion-content {
 
 
 /* ========================================
-   ESTILO GENERAL
+   PANELES (mapa y ubicación)
 ======================================== */
 
-.eyebrow {
-  display: block;
-  color: var(--color-acento);
-  font-size: 11px;
-  letter-spacing: 2px;
-}
-
-
-/* ========================================
-   PANELES (introducción, mapa y ubicación)
-======================================== */
-
-.intro,
 .map-section,
 .location-controls {
   width: 90%;
@@ -34,31 +21,6 @@ ion-content {
   border: 1px solid rgba(114, 215, 255, 0.28);
   border-radius: 18px;
   box-shadow: 0 0 18px rgba(0, 0, 0, 0.3);
-}
-
-
-/* ========================================
-   INTRODUCCIÓN
-======================================== */
-
-.intro {
-  padding: 22px;
-  text-align: center;
-}
-
-.intro h1 {
-  margin: 12px 0;
-  color: var(--color-texto);
-  font-family: 'Nasalization', sans-serif;
-  font-size: 25px;
-  line-height: 1.4;
-}
-
-.intro p {
-  margin: 0;
-  color: var(--color-secundario);
-  font-size: 14px;
-  line-height: 1.6;
 }
 
 

@@ -215,6 +215,45 @@ ion-header ion-toolbar ion-title {
   color: var(--color-error-suave);
 }
 
+/* ========================================
+   INTRODUCCIÓN (el header previo a las cards)
+======================================== */
+
+.eyebrow {
+  display: block;
+  color: var(--color-acento);
+  font-size: 11px;
+  letter-spacing: 2px;
+}
+
+.intro {
+  padding: 22px;
+  text-align: center;
+  width: 90%;
+  max-width: 700px;
+  margin: 24px auto;
+
+  background: rgba(16, 24, 39, 0.94);
+  border: 1px solid rgba(114, 215, 255, 0.28);
+  border-radius: 18px;
+  box-shadow: 0 0 18px rgba(0, 0, 0, 0.3);
+}
+
+.intro h1 {
+  margin: 12px 0;
+  color: var(--color-texto);
+  font-family: 'Nasalization', sans-serif;
+  font-size: 25px;
+  line-height: 1.4;
+}
+
+.intro p {
+  margin: 0;
+  color: var(--color-secundario);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
 
 /* ========================================
    RESPONSIVE GLOBAL
