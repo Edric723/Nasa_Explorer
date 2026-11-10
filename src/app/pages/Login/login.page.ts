@@ -14,7 +14,7 @@ export class LoginPage {
   private authService = inject(AuthService);
   private router = inject(Router);
 
-  modo = signal<'login' | 'registro' | 'confirmacion' | 'recuperacion'>('login');
+  modo = signal<'login' | 'registro' | 'confirmacion' | 'solicitud-recuperacion' | 'recuperacion'>('login');
 
   email = '';
   password = '';
@@ -98,24 +98,29 @@ export class LoginPage {
     });
   }
 
+  mostrarSolicitudRecuperacion() {
+    this.limpiarMensajes();
+    this.modo.set('solicitud-recuperacion');
+  }
+  
   recuperarContrasena() {
     this.limpiarMensajes();
-
+  
     if (!this.email.trim()) {
-      this.error.set('Ingresá tu correo electrónico para recuperar tu contraseña.');
+      this.error.set('Ingresá tu correo electrónico.');
       return;
     }
-
+  
     this.cargando.set(true);
-
+  
     this.authService.recuperarContrasena(
-      this.email
+      this.email.trim()
     ).pipe(
       finalize(() => this.cargando.set(false))
     ).subscribe({
       next: () => {
         this.modo.set('recuperacion');
-        this.mensaje.set('Te enviaremos un código de recuperación a tu correo electrónico.');
+        this.mensaje.set('Te enviamos un código de recuperación a tu correo electrónico.');
       },
       error: (error: HttpErrorResponse) => this.mostrarError(error)
     });

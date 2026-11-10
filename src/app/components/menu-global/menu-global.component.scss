@@ -1,13 +1,17 @@
-ion-fab {
-    margin: 12px;
-  }
-  
-  ion-fab-button {
-    --background: #17243c;
-    --color: var(--color-acento);
-    --background-hover: #263b5c;
-  }
-  
-  ion-fab-button[activated] {
-    --background: #263b5c;
-  }
+:host {
+  display: contents;
+}
+
+ion-button {
+  --color: var(--color-acento);
+}
+
+ion-popover {
+  --background: #17243c;
+  --width: 220px;
+}
+
+ion-popover ion-item {
+  --background: transparent;
+  --color: var(--color-texto);
+}

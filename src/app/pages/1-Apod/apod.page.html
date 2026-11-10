@@ -1,10 +1,15 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>
-      Imagen Astronómica del Día (APOD)
+      Imagen Astronómica del Día
     </ion-title>
+    <ion-buttons slot="end">
+      <app-menu-global></app-menu-global>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
+
+
 
 <ion-content [fullscreen]="true">
 
@@ -94,7 +99,5 @@
         <p>{{ error() }}</p>
       </div>
     }
-
-    <app-menu-global></app-menu-global>
 
   </ion-content>

@@ -1,8 +1,11 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>
-      Objetos cercanos a la Tierra
+      Objetos cercanos
     </ion-title>
+    <ion-buttons slot="end">
+      <app-menu-global></app-menu-global>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -134,7 +137,5 @@
       <p>{{ error() }}</p>
     </div>
   }
-
-  <app-menu-global></app-menu-global>
 
 </ion-content>

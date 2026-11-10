@@ -9,178 +9,256 @@
       <span class="brand-subtitle">EXPLORÁ EL UNIVERSO</span>
     </header>
 
-    <!-- Inicio de sesión, una sola página que alterna entre modos según la acción -->
+    <!-- INICIO DE SESIÓN -->
     @if (modo() === 'login') {
-      <section class="login-panel">
-        <header class="panel-heading">
-          <span class="eyebrow">ACCEDÉ A LA APP</span>
-          <h1>Bienvenido</h1>
-          <p>Iniciá sesión para descubrir el universo.</p>
-        </header>
-        <form (ngSubmit)="login()">
-          <label class="field">
-            <span>Correo electrónico</span>
-            <ion-input class="custom-input" type="email" placeholder="tu@email.com" [(ngModel)]="email" name="email"
-              autocomplete="email" required>
-            </ion-input>
-          </label>
-          <label class="field">
-            <span>Contraseña</span>
-            <ion-input class="custom-input" type="password" placeholder="Ingresá tu contraseña" [(ngModel)]="password"
-              name="password" autocomplete="current-password" required>
-              <ion-input-password-toggle slot="end"></ion-input-password-toggle>
-            </ion-input>
-            <button type="button" class="text-button recuperar" (click)="recuperarContrasena()">
-              ¿Olvidaste tu contraseña?
-            </button>
-          </label>
-          <!-- Botón de iniciar sesión -->
-          <ion-button class="primary-button" type="submit" expand="block" [disabled]="cargando()">
-            @if (!cargando()) {
-              <span>Iniciar sesión</span>
-            }
-            @if (cargando()) {
-              <ion-spinner name="crescent"></ion-spinner>
-            }
-          </ion-button>
-        </form>
-        <ng-container *ngTemplateOutlet="feedback"></ng-container>
-        <footer class="panel-footer">
-          ¿No te registraste?
-          <button type="button" class="text-button" (click)="mostrarRegistro()">
-            Crear cuenta
+    <section class="login-panel">
+      <header class="panel-heading">
+        <span class="eyebrow">ACCEDÉ A LA APP</span>
+        <h1>Bienvenido</h1>
+        <p>Iniciá sesión para descubrir el universo.</p>
+      </header>
+
+      <form (ngSubmit)="login()">
+        <label class="field">
+          <span>Correo electrónico</span>
+          <ion-input class="custom-input" type="email" placeholder="tu@email.com" [(ngModel)]="email" name="email"
+            autocomplete="email" required>
+          </ion-input>
+        </label>
+
+        <label class="field">
+          <span>Contraseña</span>
+          <ion-input class="custom-input" type="password" placeholder="Ingresá tu contraseña" [(ngModel)]="password"
+            name="password" autocomplete="current-password" required>
+            <ion-input-password-toggle slot="end"></ion-input-password-toggle>
+          </ion-input>
+
+          <button type="button" class="text-button recuperar" (click)="mostrarSolicitudRecuperacion()">
+            ¿Olvidaste tu contraseña?
           </button>
-        </footer>
-      </section>
+        </label>
+
+        <ion-button class="primary-button" type="submit" expand="block" [disabled]="cargando()">
+
+          @if (!cargando()) {
+          <span>Iniciar sesión</span>
+          }
+
+          @if (cargando()) {
+          <ion-spinner name="crescent"></ion-spinner>
+          }
+        </ion-button>
+      </form>
+
+      <ng-container *ngTemplateOutlet="feedback"></ng-container>
+
+      <footer class="panel-footer">
+        ¿No te registraste?
+        <button type="button" class="text-button" (click)="mostrarRegistro()">
+          Crear cuenta
+        </button>
+      </footer>
+    </section>
     }
 
-    <!-- Modo REGISTRO-->
+    <!-- REGISTRO -->
     @if (modo() === 'registro') {
-      <section class="login-panel">
-        <header class="panel-heading">
-          <span class="eyebrow">NUEVA MISIÓN</span>
-          <h1>Crear cuenta</h1>
-          <p>Registrate para comenzar tu aventura espacial.</p>
-        </header>
-        <form (ngSubmit)="registrar()">
-          <label class="field">
-            <span>Correo electrónico</span>
-            <ion-input class="custom-input" type="email" placeholder="tu@email.com" [(ngModel)]="email"
-              name="emailRegistro" autocomplete="email" required>
-            </ion-input>
-          </label>
-          <label class="field">
-            <span>Nombre de usuario</span>
-            <ion-input class="custom-input" type="text" placeholder="Cómo querés que te llamemos" [(ngModel)]="nickname"
-              name="nickname" autocomplete="nickname" required>
-            </ion-input>
-          </label>
-          <label class="field">
-            <span>Fecha de nacimiento</span>
-            <ion-input class="custom-input" type="date" [(ngModel)]="fechaNacimiento" name="fechaNacimiento" required>
-            </ion-input>
-          </label>
-          <label class="field">
-            <span>Contraseña</span>
-            <ion-input class="custom-input" type="password" placeholder="Creá una contraseña" [(ngModel)]="password"
-              name="passwordRegistro" autocomplete="new-password" required>
-              <ion-input-password-toggle slot="end"></ion-input-password-toggle>
-            </ion-input>
-          </label>
-          <!-- Botón del registro -->
-          <ion-button class="primary-button" type="submit" expand="block" [disabled]="cargando()">
-            @if (!cargando()) {
-              <span>Crear mi cuenta</span>
-            }
-            @if (cargando()) {
-              <ion-spinner name="crescent"></ion-spinner>
-            }
-          </ion-button>
-        </form>
-        <ng-container *ngTemplateOutlet="feedback"></ng-container>
-        <footer class="panel-footer">
-          ¿Ya tenés una cuenta?
-          <button type="button" class="text-button" (click)="mostrarLogin()">
-            Iniciar sesión
-          </button>
-        </footer>
-      </section>
+    <section class="login-panel">
+      <header class="panel-heading">
+        <span class="eyebrow">NUEVA MISIÓN</span>
+        <h1>Crear cuenta</h1>
+        <p>Registrate para comenzar tu aventura espacial.</p>
+      </header>
+
+      <form (ngSubmit)="registrar()">
+        <label class="field">
+          <span>Correo electrónico</span>
+          <ion-input class="custom-input" type="email" placeholder="tu@email.com" [(ngModel)]="email"
+            name="emailRegistro" autocomplete="email" required>
+          </ion-input>
+        </label>
+
+        <label class="field">
+          <span>Nombre de usuario</span>
+          <ion-input class="custom-input" type="text" placeholder="Cómo querés que te llamemos" [(ngModel)]="nickname"
+            name="nickname" autocomplete="nickname" required>
+          </ion-input>
+        </label>
+
+        <label class="field">
+          <span>Fecha de nacimiento</span>
+          <ion-input class="custom-input" type="date" [(ngModel)]="fechaNacimiento" name="fechaNacimiento" required>
+          </ion-input>
+        </label>
+
+        <label class="field">
+          <span>Contraseña</span>
+          <ion-input class="custom-input" type="password" placeholder="Creá una contraseña" [(ngModel)]="password"
+            name="passwordRegistro" autocomplete="new-password" required>
+            <ion-input-password-toggle slot="end"></ion-input-password-toggle>
+          </ion-input>
+        </label>
+
+        <ion-button class="primary-button" type="submit" expand="block" [disabled]="cargando()">
+
+          @if (!cargando()) {
+          <span>Crear mi cuenta</span>
+          }
+
+          @if (cargando()) {
+          <ion-spinner name="crescent"></ion-spinner>
+          }
+        </ion-button>
+      </form>
+
+      <ng-container *ngTemplateOutlet="feedback"></ng-container>
+
+      <footer class="panel-footer">
+        ¿Ya tenés una cuenta?
+        <button type="button" class="text-button" (click)="mostrarLogin()">
+          Iniciar sesión
+        </button>
+      </footer>
+    </section>
     }
 
-    <!-- Confirmación de registro -->
+    <!-- CONFIRMACIÓN DE REGISTRO -->
     @if (modo() === 'confirmacion') {
-      <section class="login-panel">
-        <header class="panel-heading">
-          <div class="confirmation-icon">
-            <ion-icon name="mail-open-outline"></ion-icon>
-          </div>
-          <span class="eyebrow">VERIFICACIÓN DE IDENTIDAD</span>
-          <h1>Revisá tu correo</h1>
-          <p>Ingresá el código que te enviamos para activar tu cuenta.</p>
-        </header>
-        <form (ngSubmit)="confirmarRegistro()">
-          <label class="field">
-            <span>Código de confirmación</span>
-            <ion-input class="custom-input code-input" type="text" placeholder="Ingresá el código" [(ngModel)]="codigo"
-              name="codigo" autocomplete="one-time-code" required>
-            </ion-input>
-          </label>
-          <ion-button class="primary-button" type="submit" expand="block" [disabled]="cargando()">
-            @if (!cargando()) {
-              <span>Confirmar cuenta</span>
-            }
-            @if (cargando()) {
-              <ion-spinner name="crescent"></ion-spinner>
-            }
-          </ion-button>
-        </form>
-        <ng-container *ngTemplateOutlet="feedback"></ng-container>
-        <footer class="panel-footer">
-          <button type="button" class="text-button" (click)="mostrarLogin()">
-            Volver al inicio de sesión
-          </button>
-        </footer>
-      </section>
+    <section class="login-panel">
+      <header class="panel-heading">
+        <div class="confirmation-icon">
+          <ion-icon name="mail-open-outline"></ion-icon>
+        </div>
+
+        <span class="eyebrow">VERIFICACIÓN DE IDENTIDAD</span>
+        <h1>Revisá tu correo</h1>
+        <p>Ingresá el código que te enviamos para activar tu cuenta.</p>
+      </header>
+
+      <form (ngSubmit)="confirmarRegistro()">
+        <label class="field">
+          <span>Código de confirmación</span>
+          <ion-input class="custom-input code-input" type="text" placeholder="Ingresá el código" [(ngModel)]="codigo"
+            name="codigo" autocomplete="one-time-code" required>
+          </ion-input>
+        </label>
+
+        <ion-button class="primary-button" type="submit" expand="block" [disabled]="cargando()">
+
+          @if (!cargando()) {
+          <span>Confirmar cuenta</span>
+          }
+
+          @if (cargando()) {
+          <ion-spinner name="crescent"></ion-spinner>
+          }
+        </ion-button>
+      </form>
+
+      <ng-container *ngTemplateOutlet="feedback"></ng-container>
+
+      <footer class="panel-footer">
+        <button type="button" class="text-button" (click)="mostrarLogin()">
+          Volver al inicio de sesión
+        </button>
+      </footer>
+    </section>
     }
 
-    <!-- Modo RECUPERACIÓN -->
+    <!-- SOLICITUD DE RECUPERACIÓN -->
+    @if (modo() === 'solicitud-recuperacion') {
+    <section class="login-panel">
+      <header class="panel-heading">
+        <div class="confirmation-icon">
+          <ion-icon name="mail-outline"></ion-icon>
+        </div>
+
+        <span class="eyebrow">RECUPERAR ACCESO</span>
+        <h1>¿Olvidaste tu contraseña?</h1>
+        <p>
+          Confirmá tu dirección de correo electrónico.
+          Te enviaremos un código para restablecer tu contraseña.
+        </p>
+      </header>
+
+      <form (ngSubmit)="recuperarContrasena()">
+        <label class="field">
+          <span>Correo electrónico</span>
+          <ion-input class="custom-input" type="email" placeholder="tu@email.com" [(ngModel)]="email"
+            name="emailRecuperacion" autocomplete="email" required>
+          </ion-input>
+        </label>
+
+        <ion-button class="primary-button" type="submit" expand="block" [disabled]="cargando()">
+
+          @if (!cargando()) {
+          <span>Enviar código</span>
+          }
+
+          @if (cargando()) {
+          <ion-spinner name="crescent"></ion-spinner>
+          }
+        </ion-button>
+      </form>
+
+      <ng-container *ngTemplateOutlet="feedback"></ng-container>
+
+      <footer class="panel-footer">
+        <button type="button" class="text-button" (click)="mostrarLogin()">
+          Volver al inicio de sesión
+        </button>
+      </footer>
+    </section>
+    }
+
+    <!-- RECUPERACIÓN DE CONTRASEÑA -->
     @if (modo() === 'recuperacion') {
-      <section class="login-panel">
-        <header class="panel-heading">
-          <span class="eyebrow">RECUPERAR ACCESO</span>
-          <h1>Nueva contraseña</h1>
-          <p>Ingresá el código que recibiste por mail y generá una nueva contraseña.</p>
-        </header>
-        <form (ngSubmit)="confirmarRecuperacion()">
-          <label class="field">
-            <span>Código de recuperación</span>
-            <ion-input class="custom-input" type="text" placeholder="Ingresá el código" [(ngModel)]="codigo"
-              name="codigoRecuperacion" required>
-            </ion-input>
-          </label>
-          <label class="field">
-            <span>Nueva contraseña</span>
-            <ion-input class="custom-input" type="password" placeholder="Ingresá tu nueva contraseña"
-              [(ngModel)]="nuevaPassword" name="nuevaPassword" required>
-              <ion-input-password-toggle slot="end"></ion-input-password-toggle>
-            </ion-input>
-          </label>
-          <ion-button class="primary-button" type="submit" expand="block" [disabled]="cargando()">
-            @if (!cargando()) {
-              <span>Cambiar contraseña</span>
-            }
-            @if (cargando()) {
-              <ion-spinner name="crescent"></ion-spinner>
-            }
-          </ion-button>
-        </form>
-        <ng-container *ngTemplateOutlet="feedback"></ng-container>
-        <footer class="panel-footer">
-          <button type="button" class="text-button" (click)="mostrarLogin()">
-            Volver al inicio de sesión
-          </button>
-        </footer>
-      </section>
+    <section class="login-panel">
+      <header class="panel-heading">
+        <span class="eyebrow">RECUPERAR ACCESO</span>
+        <h1>Nueva contraseña</h1>
+        <p>
+          Ingresá el código que recibiste por mail
+          y generá una nueva contraseña.
+        </p>
+      </header>
+
+      <form (ngSubmit)="confirmarRecuperacion()">
+        <label class="field">
+          <span>Código de recuperación</span>
+          <ion-input class="custom-input" type="text" placeholder="Ingresá el código" [(ngModel)]="codigo"
+            name="codigoRecuperacion" autocomplete="one-time-code" required>
+          </ion-input>
+        </label>
+
+        <label class="field">
+          <span>Nueva contraseña</span>
+          <ion-input class="custom-input" type="password" placeholder="Ingresá tu nueva contraseña"
+            [(ngModel)]="nuevaPassword" name="nuevaPassword" autocomplete="new-password" required>
+            <ion-input-password-toggle slot="end"></ion-input-password-toggle>
+          </ion-input>
+        </label>
+
+        <ion-button class="primary-button" type="submit" expand="block" [disabled]="cargando()">
+
+          @if (!cargando()) {
+          <span>Cambiar contraseña</span>
+          }
+
+          @if (cargando()) {
+          <ion-spinner name="crescent"></ion-spinner>
+          }
+        </ion-button>
+      </form>
+
+      <ng-container *ngTemplateOutlet="feedback"></ng-container>
+
+      <footer class="panel-footer">
+        <button type="button" class="text-button" (click)="mostrarLogin()">
+          Volver al inicio de sesión
+        </button>
+      </footer>
+    </section>
     }
 
     <footer class="login-footer">
@@ -190,20 +268,20 @@
 
   </main>
 
-  <!-- Feedback de los formularios -->
+  <!-- FEEDBACK DE LOS FORMULARIOS -->
   <ng-template #feedback>
     @if (error()) {
-      <div class="form-feedback error-message">
-        <ion-icon name="alert-circle-outline"></ion-icon>
-        <span>{{ error() }}</span>
-      </div>
+    <div class="form-feedback error-message">
+      <ion-icon name="alert-circle-outline"></ion-icon>
+      <span>{{ error() }}</span>
+    </div>
     }
 
     @if (mensaje()) {
-      <div class="form-feedback success-message">
-        <ion-icon name="checkmark-circle-outline"></ion-icon>
-        <span>{{ mensaje() }}</span>
-      </div>
+    <div class="form-feedback success-message">
+      <ion-icon name="checkmark-circle-outline"></ion-icon>
+      <span>{{ mensaje() }}</span>
+    </div>
     }
   </ng-template>
 
