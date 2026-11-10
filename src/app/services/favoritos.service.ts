@@ -1,36 +1,41 @@
 import { Injectable, inject } from '@angular/core';
-import { initializeApp } from 'firebase/app';
+import { getApp, getApps, initializeApp } from 'firebase/app';
 import {
-  collection,
-  deleteDoc,
-  doc,
-  getDoc,
-  getDocs,
-  initializeFirestore,
-  setDoc
+  collection, deleteDoc, doc, getDoc, getDocs,
+  getFirestore, initializeFirestore, setDoc
 } from 'firebase/firestore';
 
+import { environment } from '../../environments/environment';
 import { Apod } from '../models/apod.model';
 import { AuthService } from './auth.service';
-import { firebaseConfig } from '../../environments/environment.prod';
 
 @Injectable({ providedIn: 'root' })
 export class FavoritosService {
   private authService = inject(AuthService);
 
-  private db = initializeFirestore(
-    initializeApp(firebaseConfig),
-    { ignoreUndefinedProperties: true }
-  );
+  private db = this.iniciarFirestore();
+
+  // Evita "Firestore has already been started" si el servicio se crea más de una vez (tests, HMR).
+  private iniciarFirestore() {
+    if (getApps().length > 0) {
+      return getFirestore(getApp());
+    }
+
+    return initializeFirestore(
+      initializeApp(environment.firebase),
+      { ignoreUndefinedProperties: true }
+    );
+  }
 
   // usuarios/{id de Cognito}/favoritos
   private coleccion() {
-    return collection(
-      this.db,
-      'usuarios',
-      this.authService.obtenerIdUsuario()!,
-      'favoritos'
-    );
+    const idUsuario = this.authService.obtenerIdUsuario();
+
+    if (!idUsuario) {
+      throw new Error('No hay un usuario con sesión iniciada.');
+    }
+
+    return collection(this.db, 'usuarios', idUsuario, 'favoritos');
   }
 
   private referencia(apod: Apod) {

@@ -1,43 +1,10 @@
-
-/* ========================================
-   FONDO DE LA PÁGINA
-======================================== */
-
-ion-content {
-  --background: url('/assets/img/backgrounds/Fondo_1.jpg') no-repeat center center / cover;
-}
-
-/* ========================================
-   IMAGEN
-======================================== */
-
-.contenedor-imagen,
-.contenedor-video {
-  width: 100%;
-  overflow: hidden;
-  background: #050912;
-}
-
-/* Separación entre imagen y contenido */
-
-.contenedor-imagen {
-  border-bottom: 1px solid rgba(114, 215, 255, 0.25);
-}
-
-.contenedor-imagen img {
-  display: block;
-  width: 100%;
-  max-height: 400px;
-  margin: 0 auto;
-  object-fit: contain;
-}
-
-
 /* ========================================
    VIDEO
 ======================================== */
 
 .contenedor-video {
+  width: 100%;
+  overflow: hidden;
   aspect-ratio: 16 / 9;
   background: #010101;
 }
@@ -52,34 +19,13 @@ ion-content {
 
 
 /* ========================================
-   DESCRIPCIÓN
+   CRÉDITOS
 ======================================== */
-
-.descripcion {
-  color: var(--color-secundario);
-  line-height: 1.7;
-  overflow-wrap: anywhere;
-}
-
-.descripcion strong {
-  color: var(--color-texto);
-}
-
-
-/* ========================================
-   ENLACES Y CRÉDITOS
-======================================== */
-
-.descripcion a,
-.creditos a {
-  color: var(--color-acento);
-  text-decoration: none;
-}
 
 .creditos {
   margin-top: 20px;
   padding-top: 14px;
-  border-top: 1px solid rgba(114, 215, 255, 0.18);
+  border-top: 1px solid rgba(var(--color-acento-rgb), 0.18);
 
   color: var(--color-secundario);
   font-size: 13px;
@@ -88,15 +34,4 @@ ion-content {
 
 .creditos strong {
   color: var(--color-acento);
-}
-
-
-/* ========================================
-   ADAPTACIÓN A PANTALLAS CHICAS
-======================================== */
-
-@media (max-width: 480px) {
-  .contenedor-imagen img {
-    max-height: 320px;
-  }
 }

@@ -1,40 +1,10 @@
 /* ========================================
-   FONDO
-======================================== */
-
-ion-content {
-  --background: url('/assets/img/backgrounds/Fondo_3.jpg') no-repeat center center / cover;
-}
-
-
-/* ========================================
-   PANELES (mapa y ubicación)
-======================================== */
-
-.map-section,
-.location-controls {
-  width: 90%;
-  max-width: 700px;
-  margin: 24px auto;
-  box-sizing: border-box;
-
-  background: rgba(16, 24, 39, 0.94);
-  border: 1px solid rgba(114, 215, 255, 0.28);
-  border-radius: 18px;
-  box-shadow: 0 0 18px rgba(0, 0, 0, 0.3);
-}
-
-
-/* ========================================
    SECCIÓN DEL MAPA
 ======================================== */
 
 .map-section {
   padding: 20px;
 }
-
-
-/* Encabezado del mapa */
 
 .map-heading {
   display: flex;
@@ -52,14 +22,16 @@ ion-content {
   line-height: 1.5;
 }
 
-.map-heading>ion-icon {
+.map-heading > ion-icon {
   flex-shrink: 0;
   color: var(--color-acento);
   font-size: 28px;
 }
 
 
-/* Filtros por categoría */
+/* ========================================
+   FILTROS POR CATEGORÍA
+======================================== */
 
 .category-filters {
   display: flex;
@@ -72,9 +44,9 @@ ion-content {
   margin: 0;
 
   --border-radius: 20px;
-  --border-color: rgba(114, 215, 255, 0.4);
+  --border-color: rgba(var(--color-acento-rgb), 0.4);
   --color: var(--color-acento);
-  --background: rgba(114, 215, 255, 0.08);
+  --background: rgba(var(--color-acento-rgb), 0.08);
   --box-shadow: none;
 
   font-size: 12px;
@@ -82,21 +54,20 @@ ion-content {
 }
 
 
-/* Mapa Leaflet */
+/* ========================================
+   MAPA LEAFLET
+======================================== */
 
 #mapa-eventos {
   width: 100%;
   height: 350px;
   overflow: hidden;
 
-  background: #101827;
-  border: 1px solid rgba(114, 215, 255, 0.3);
+  background: var(--color-superficie);
+  border: 1px solid rgba(var(--color-acento-rgb), 0.3);
   border-radius: 14px;
   box-shadow: 0 0 12px rgba(0, 0, 0, 0.25);
 }
-
-
-/* Texto de ayuda */
 
 .map-caption {
   display: flex;
@@ -129,9 +100,6 @@ ion-content {
   padding: 20px;
 }
 
-
-/* Descripción de ubicación */
-
 .location-description {
   display: flex;
   align-items: flex-start;
@@ -139,7 +107,7 @@ ion-content {
   width: 100%;
 }
 
-.location-description>ion-icon {
+.location-description > ion-icon {
   flex-shrink: 0;
   margin-top: 3px;
   color: var(--color-acento);
@@ -161,18 +129,12 @@ ion-content {
   line-height: 1.6;
 }
 
-
-/* Mensaje de error de ubicación */
-
 .location-message {
   margin: 0;
   color: var(--color-error-suave);
   font-size: 13px;
   line-height: 1.5;
 }
-
-
-/* Aviso sobre precisión */
 
 .location-disclaimer {
   display: flex;
@@ -193,52 +155,10 @@ ion-content {
 
 
 /* ========================================
-   PERSONALIZACIÓN DE LEAFLET
-======================================== */
-
-/* Marcadores personalizados */
-
-:host ::ng-deep .marcador-nasa {
-  width: 14px;
-  height: 14px;
-
-  background: var(--color-marcador, #72d7ff);
-  border: 2px solid #ffffff;
-  border-radius: 50%;
-
-  box-shadow:
-    0 0 8px var(--color-marcador, #72d7ff),
-    0 0 16px var(--color-marcador, rgba(114, 215, 255, 0.7));
-}
-
-
-/* Apariencia oscura de las teselas */
-
-:host ::ng-deep #mapa-eventos .leaflet-tile {
-  filter: brightness(0.65) invert(1) contrast(0.85) hue-rotate(180deg);
-}
-
-
-/* ========================================
-   DISEÑO RESPONSIVE
+   RESPONSIVE
 ======================================== */
 
 @media (max-width: 480px) {
-
-  .intro,
-  .map-section,
-  .location-controls {
-    width: 92%;
-  }
-
-  .intro {
-    padding: 18px;
-  }
-
-  .intro h1 {
-    font-size: 21px;
-  }
-
   .map-section,
   .location-controls {
     padding: 16px;

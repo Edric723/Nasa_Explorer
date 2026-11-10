@@ -1,12 +1,3 @@
-
-/* ========================================
-   FONDO DE LA PÁGINA
-======================================== */
-
-ion-content {
-  --background: url('/assets/img/backgrounds/Fondo_2.jpg') no-repeat center center / cover;
-}
-
 /* ========================================
    NIVEL DE PELIGROSIDAD
 ======================================== */
@@ -21,11 +12,9 @@ ion-content {
   color: var(--color-acento);
   font-size: 13px;
 
-  border: 1px solid rgba(114, 215, 255, 0.35);
+  border: 1px solid rgba(var(--color-acento-rgb), 0.35);
   border-radius: 999px;
 }
-
-/* Objetos potencialmente peligrosos */
 
 .etiqueta.peligroso {
   color: var(--color-error);
@@ -43,7 +32,7 @@ ion-content {
   gap: 12px;
   padding: 8px 0;
 
-  border-bottom: 1px solid rgba(114, 215, 255, 0.12);
+  border-bottom: 1px solid rgba(var(--color-acento-rgb), 0.12);
 }
 
 .dato-nombre {
@@ -75,9 +64,4 @@ ion-content {
 .creditos {
   margin-top: 16px;
   font-size: 13px;
-}
-
-.creditos a {
-  color: var(--color-acento);
-  text-decoration: none;
 }

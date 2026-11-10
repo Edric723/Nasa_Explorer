@@ -1,26 +1,13 @@
-// This file can be replaced during build by using the `fileReplacements` array.
-// `ng build` replaces `environment.ts` with `environment.prod.ts`.
-// The list of file replacements can be found in `angular.json`.
-
 export const environment = {
   production: false,
-  nasaApiKey: 'W8g6nDJFMQHfpKP77hNHmbJNTgtdJmCBnzwJJ8HQ'
+  nasaApiKey: 'W8g6nDJFMQHfpKP77hNHmbJNTgtdJmCBnzwJJ8HQ',
+  firebase: {
+    apiKey: "AIzaSyC4nTyl7kJAWZhQ1vIejAjrD2lOzIEAGO8",
+    authDomain: "nasa-explorer-ifts11.firebaseapp.com",
+    projectId: "nasa-explorer-ifts11",
+    storageBucket: "nasa-explorer-ifts11.firebasestorage.app",
+    messagingSenderId: "723878427314",
+    appId: "1:723878427314:web:8053878d4b1e15ea57a7ab",
+    measurementId: "G-K7R6F24HZG"
+  }
 };
-
-export const firebaseConfig = {
-  apiKey: "AIzaSyC4nTyl7kJAWZhQ1vIejAjrD2lOzIEAGO8",
-  authDomain: "nasa-explorer-ifts11.firebaseapp.com",
-  projectId: "nasa-explorer-ifts11",
-  storageBucket: "nasa-explorer-ifts11.firebasestorage.app",
-  messagingSenderId: "723878427314",
-  appId: "1:723878427314:web:8053878d4b1e15ea57a7ab",
-  measurementId: "G-K7R6F24HZG"
-};
-/*
- * For easier debugging in development mode, you can import the following file
- * to ignore zone related error stack frames such as `zone.run`, `zoneDelegate.invokeTask`.
- *
- * This import should be commented out in production mode because it will have a negative impact
- * on performance if an error is thrown.
- */
-// import 'zone.js/plugins/zone-error';  // Included with Angular CLI.

@@ -1,16 +1,15 @@
 :host {
-  --fondo: var(--color-fondo);
   --panel: rgba(15, 22, 42, 0.68);
   --violeta: #9b7bff;
-  --cian: var(--color-acento);
-  --texto: var(--color-texto);
-  --texto-secundario: var(--color-secundario);
 }
 
-/* Fondo y estructura */
+
+/* ========================================
+   FONDO Y ESTRUCTURA
+======================================== */
 
 .login-content {
-  --background: var(--fondo);
+  --background: var(--color-fondo);
   font-family: 'Nasalization', sans-serif;
 }
 
@@ -38,7 +37,10 @@
     url('/assets/img/backgrounds/login.jpg') center / cover no-repeat;
 }
 
-/*  NASA Explorer intento de identidad de marca */
+
+/* ========================================
+   MARCA
+======================================== */
 
 .login-brand {
   display: flex;
@@ -58,36 +60,39 @@
   width: 64px;
   height: 64px;
   margin-bottom: 15px;
-  border: 1px solid rgba(114, 215, 255, 0.38);
+  border: 1px solid rgba(var(--color-acento-rgb), 0.38);
   border-radius: 20px;
-  background: rgba(114, 215, 255, 0.07);
-  box-shadow: 0 0 35px rgba(114, 215, 255, 0.1);
+  background: rgba(var(--color-acento-rgb), 0.07);
+  box-shadow: 0 0 35px rgba(var(--color-acento-rgb), 0.1);
 
   ion-icon {
-    color: var(--cian);
+    color: var(--color-acento);
     font-size: 36px;
   }
 }
 
 .brand-name {
-  color: var(--texto);
+  color: var(--color-texto);
   font-size: 22px;
   letter-spacing: 4px;
 
   strong {
-    color: var(--cian);
+    color: var(--color-acento);
     font-weight: 700;
   }
 }
 
 .brand-subtitle {
   margin-top: 9px;
-  color: var(--texto-secundario);
+  color: var(--color-secundario);
   font-size: 10px;
   letter-spacing: 3px;
 }
 
-/* Panel del login */
+
+/* ========================================
+   PANEL
+======================================== */
 
 .login-panel {
   width: 100%;
@@ -109,7 +114,7 @@
 
   h1 {
     margin: 0;
-    color: var(--texto);
+    color: var(--color-texto);
     font-size: 29px;
     font-weight: 650;
     letter-spacing: -0.8px;
@@ -117,22 +122,22 @@
 
   p {
     margin: 12px 0 0;
-    color: var(--texto-secundario);
+    color: var(--color-secundario);
     font-size: 13px;
     line-height: 1.7;
   }
+
+  .eyebrow {
+    margin-bottom: 13px;
+    font-size: 10px;
+    font-weight: 700;
+  }
 }
 
-.eyebrow {
-  display: inline-block;
-  margin-bottom: 13px;
-  color: var(--cian);
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 2px;
-}
 
-/* Campos del formulario */
+/* ========================================
+   CAMPOS DEL FORMULARIO
+======================================== */
 
 .field {
   display: block;
@@ -143,15 +148,15 @@
   font-size: 12px;
 }
 
-.field>span {
+.field > span {
   display: block;
   margin-bottom: 10px;
-
 }
 
 .recuperar {
   margin-top: 16px;
-  text-align: center;}
+  text-align: center;
+}
 
 .custom-input {
   display: block;
@@ -160,13 +165,13 @@
   box-sizing: border-box;
 
   --background: rgba(7, 12, 27, 0.82);
-  --color: var(--texto);
+  --color: var(--color-texto);
   --placeholder-color: #8792b0;
   --placeholder-opacity: 1;
   --border-color: rgba(139, 157, 208, 0.3);
   --border-radius: 11px;
-  --highlight-color-focused: var(--cian);
-  --highlight-color-valid: var(--cian);
+  --highlight-color-focused: var(--color-acento);
+  --highlight-color-valid: var(--color-acento);
   --padding-start: 15px;
   --padding-end: 12px;
   --padding-top: 0;
@@ -178,8 +183,8 @@
 }
 
 .custom-input.ion-focused {
-  --border-color: var(--cian);
-  box-shadow: 0 0 12px rgba(114, 215, 255, 0.12);
+  --border-color: var(--color-acento);
+  box-shadow: 0 0 12px rgba(var(--color-acento-rgb), 0.12);
 }
 
 .code-input {
@@ -187,7 +192,10 @@
   letter-spacing: 3px;
 }
 
-/* Botón principal (iniciar o registrar) */
+
+/* ========================================
+   BOTÓN PRINCIPAL
+======================================== */
 
 .primary-button {
   margin: 27px 0 0;
@@ -213,7 +221,10 @@
   }
 }
 
-/* Mensajes de estado, para el feedback del formulario */
+
+/* ========================================
+   MENSAJES DE ESTADO
+======================================== */
 
 .form-feedback {
   display: flex;
@@ -245,7 +256,10 @@
   color: #76e9c3;
 }
 
-/* Enlaces del footer de login */
+
+/* ========================================
+   ENLACES DEL PANEL
+======================================== */
 
 .panel-footer {
   display: flex;
@@ -256,7 +270,7 @@
   margin-top: 26px;
   padding-top: 22px;
   border-top: 1px solid rgba(139, 157, 208, 0.14);
-  color: var(--texto-secundario);
+  color: var(--color-secundario);
   font-family: Arial, sans-serif;
   font-size: 12px;
   text-align: center;
@@ -266,7 +280,7 @@
   padding: 4px;
   border: 0;
   background: transparent;
-  color: var(--cian);
+  color: var(--color-acento);
   font: inherit;
   font-weight: 700;
   cursor: pointer;
@@ -276,7 +290,10 @@
   }
 }
 
-/* Confirmación de cuenta */
+
+/* ========================================
+   CONFIRMACIÓN DE CUENTA
+======================================== */
 
 .confirmation-icon {
   width: 66px;
@@ -292,7 +309,10 @@
   }
 }
 
-/* Footer debajo del login */
+
+/* ========================================
+   FOOTER
+======================================== */
 
 .login-footer {
   display: flex;
@@ -311,7 +331,10 @@
   }
 }
 
-/* Tamaño móviles */
+
+/* ========================================
+   RESPONSIVE
+======================================== */
 
 @media (max-width: 480px) {
   .login-container {
@@ -332,4 +355,3 @@
     font-size: 26px;
   }
 }
-

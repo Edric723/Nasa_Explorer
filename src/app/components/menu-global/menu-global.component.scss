@@ -7,7 +7,7 @@ ion-button {
 }
 
 ion-popover {
-  --background: #17243c;
+  --background: var(--color-popover);
   --width: 220px;
 }
 

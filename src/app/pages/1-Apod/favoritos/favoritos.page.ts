@@ -6,7 +6,6 @@ import { FavoritosService } from '../../../services/favoritos.service';
 @Component({
   selector: 'app-favoritos',
   templateUrl: './favoritos.page.html',
-  styleUrls: ['./favoritos.page.scss'],
   standalone: false
 })
 

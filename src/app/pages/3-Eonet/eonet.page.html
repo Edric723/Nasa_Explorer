@@ -1,13 +1,13 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>Eventos Naturales</ion-title>
+    <ion-title>Eventos Globales</ion-title>
     <ion-buttons slot="end">
       <app-menu-global></app-menu-global>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
+<ion-content [fullscreen]="true" class="fondo-3">
 
   <!-- Introducción -->
   <section class="intro">
@@ -19,6 +19,21 @@
       Enterate de los eventos naturales que ocurren en el planeta, como incendios, tormentas, erupciones volcánicas y más. Podés explorar los eventos según su ubicación geográfica y categoría.
     </p>
   </section>
+
+  @if (cargando()) {
+    <div class="nasa-state">
+      <ion-spinner name="crescent"></ion-spinner>
+      <p>Escaneando la superficie terrestre...</p>
+    </div>
+  }
+  
+  @if (error() && !cargando()) {
+    <div class="nasa-state error">
+      <ion-icon name="alert-circle-outline"></ion-icon>
+      <p>{{ error() }}</p>
+      <ion-button class="nasa-button" (click)="cargarEventos()">Reintentar</ion-button>
+    </div>
+  }
 
   <!-- Mapa y filtros -->
   <section class="map-section">

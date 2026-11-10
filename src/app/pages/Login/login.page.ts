@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { finalize } from 'rxjs';
 import { AuthService } from '../../services/auth.service';
+import { mensajeErrorCognito } from '../../auth/errores-cognito';
 
 @Component({
   selector: 'app-login',
@@ -149,9 +150,7 @@ export class LoginPage {
   }
 
   private mostrarError(error: HttpErrorResponse) {
-    this.error.set(
-      error.error?.message || 'No se pudo completar la operación. Intentá nuevamente.'
-    );
+    this.error.set(mensajeErrorCognito(error));
   }
 
   private limpiarMensajes() {
