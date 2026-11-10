@@ -83,7 +83,11 @@
         <h2>Eventos cercanos</h2>
 
         @if (ubicacion(); as lugar) {
-        <p>Ubicación aproximada: {{ lugar.city }}, {{ lugar.country_name }}</p>
+          @if (lugar.origen === 'gps') {
+          <p>Ubicación obtenida por GPS.</p>
+          } @else {
+          <p>Ubicación aproximada: {{ lugar.city }}, {{ lugar.country_name }}</p>
+          }
         } @else {
         <p>Explorá los eventos según su ubicación geográfica.</p>
         }
@@ -96,16 +100,19 @@
       {{ ubicacion() ? 'Actualizar ubicación' : 'Cerca de mí' }}
     </ion-button>
 
-    <!-- Error de ubicación -->
+    <!-- Mensaje de ubicación -->
     @if (mensajeUbicacion()) {
     <p class="location-message" aria-live="polite">
       {{ mensajeUbicacion() }}
     </p>
     }
 
+
+    @if (ubicacion()?.origen !== 'gps') {
     <p class="location-disclaimer">
       La ubicación por IP es aproximada y puede no coincidir con tu posición exacta.
     </p>
+    }
 
   </section>
 

@@ -265,32 +265,34 @@ export class EonetPage implements OnInit, OnDestroy {
     this.mapa.invalidateSize();
   }
 
-  // Funciones relacionadas a la ubicación
+  /**
+   * @description Obtiene la ubicación del usuario (GPS en el celular, IP en la web
+   * o si el GPS no está disponible), calcula la distancia a cada evento y
+   * actualiza los marcadores del mapa.
+   */
   async obtenerUbicacion() {
-    this.mensajeUbicacion.set(
-      'Buscando ubicación aproximada por IP...'
-    );
+    this.mensajeUbicacion.set('Buscando tu ubicación...');
 
     try {
-      const lugar =
-        await this.geolocationService.obtenerUbicacionPorIP();
+      const lugar = await this.geolocationService.obtenerUbicacion();
 
       this.ubicacion.set(lugar);
       this.calcularDistancias(lugar);
       this.actualizarMarcadores();
 
       this.mensajeUbicacion.set(
-        'Ubicación obtenida. Se calcularon las distancias a los eventos.'
+        lugar.origen === 'gps'
+          ? 'Ubicación obtenida por GPS. Se calcularon las distancias a los eventos.'
+          : 'Ubicación aproximada obtenida por IP. Se calcularon las distancias a los eventos.'
       );
 
     } catch {
 
       this.mensajeUbicacion.set(
-        'No se pudo obtener la ubicación por IP.'
+        'No se pudo obtener tu ubicación.'
       );
     }
   }
-
 
   // Funciones relacionadas a la distancia
   private calcularDistancias(lugar: UbicacionIP) {
